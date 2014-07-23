@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of the grapheneSbmlApp
  */
-angular.module('grapheneSbmlApp')
+angular.module('sg.graphene.sbml')
   .controller('MainCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',

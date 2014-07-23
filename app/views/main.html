@@ -1,23 +1,25 @@
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
-</div>
-
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
+<div ng-init="
+  sbmlUrl='Glycolysis.xml';
+  charge=-2500;
+  gravity=0.5;
+  linkDistance=5;
+  nodeSize = {
+    width: 90,
+    height: 30
+  };
+  height=800;
+  ">
+  <div ng-controller="sgSbmlDataCtrl">
+    Allow unstick <input type="checkbox" ng-model="exports.allowUnstick"></input>
+    Show reaction nodes <input type="checkbox" ng-model="exports.showReactionNodes"></input>
+    Show arcs <input type="checkbox" ng-model="exports.showArcs"></input>
+    Charge <input type="number" ng-model="charge" step="10" min="-5000" max="0"></input>
+    Gravity <input type="number" ng-model="gravity" min="0" max="1" step="0.1"></input>
+    Link Distance <input type="number" ng-model="linkDistance" min="0" max="100" step="1"></input>
+    Max Links In <input type="number" ng-model="max.links.in" min="1" max="100" step="1"></input>
+    Max Links Out <input type="number" ng-model="max.links.out" min="1" max="100" step="1"></input>
+    Zoom <input type="checkbox" ng-model="exports.zoom"></input>
+    Show Modifiers <input type="checkbox" ng-model="linkModifiers"></input>
+    <sg-graphene imports="exports" template="templates/sbml.html"></sg-graphene>
+  </div>
 </div>

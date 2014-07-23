@@ -9,4 +9,4 @@
  * Main module of the application.
  */
 angular
-  .module('grapheneSbmlApp', []);
+  .module('sg.graphene.sbml', ['sg.graphene']);
