@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sg.graphene.sbml')
-  .controller('sgSbmlLayoutCtrl', function($scope, sgSbml, sgGeo) {
+  .controller('SbmlLayoutCtrl', function($scope, sgSbml, sgGeo) {
 
     var nodeLookup;
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sg.graphene.sbml')
-  .controller('sgSbmlDataCtrl', function($scope, $http, $window, sgSbml, $log) {
+  .controller('SbmlDataCtrl', function($scope, $http, $window, sgSbml, $log) {
 
     $scope.exports = {};
 
