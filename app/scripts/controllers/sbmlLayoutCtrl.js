@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('sg.graphene.sbml')
-  .controller('SbmlLayoutCtrl', function($scope, sgSbml, sgGeo) {
-
-    var nodeLookup;
+  .controller('SbmlLayoutCtrl', function($scope, sgSbml, sgGeo, SgSbmlModel, SgLayout) {
 
     $scope.textVisibilityLookup = {
       species: true,
@@ -22,163 +20,59 @@ angular.module('sg.graphene.sbml')
       }
     };
 
-    $scope.sizeLookup = {
-      species: 30,
-      reaction: 5
-    };
-
-    var getReactionPosition = function(link) {
-      var reaction = link.reaction;
-      var species = _.union(reaction.products, reaction.reactants);
-      if (species.length <= 1) {
-        return reaction;
-      } else {
-
-        var sumX = 0;
-        var sumY = 0;
-        angular.forEach(species, function(s) {
-          sumX += s.x;
-          sumY += s.y;
-        });
-        return {
-          x: sumX / species.length,
-          y: sumY / species.length
-        };
-      }
-    };
-
-    $scope.linkArc = function(d) {
-      var dx = d.x2 - d.x1,
-      dy = d.y2 - d.y1,
-      dr = Math.sqrt(dx * dx + dy * dy);
-      return 'M' + d.x1 + ',' + d.y1 + 'A' + dr + ',' + dr + ' 0 0,1 ' + d.x2 + ',' + d.y2;
-    };
+    $scope.linkArc = sgGeo.linkArc;
+    $scope.extendPoint = sgGeo.extendPoint;
+    $scope.arrow = sgGeo.arrow;
 
     $scope.clickLink = function(link) {
-      _.each($scope.imports.reactions, function(r) {
+      _.each($scope.model.nodes.reactions, function(r) {
         r.selected = false;
       });
       link.reaction.selected = true;
     };
 
     $scope.clickNode = function(node) {
-      _.each($scope.imports.reactions, function(r) {
+      _.each($scope.model.nodes.reactions, function(r) {
         r.selected = false;
       });
       node.selected = true;
     };
 
-    $scope.extendPoint = function(start, end, distance) {
-      // var slope = (end.y - start.y) / (end.x - start.x);
-      var length = Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y -
-        start.y, 2));
-      return {
-        x: end.x + (end.x - start.x) / length * distance,
-        y: end.y + (end.y - start.y) / length * distance
-      };
-    };
-
-    $scope.arrow = d3.svg.symbol().size(function(d) {
-      return d.size;
-    }).type(function(d) {
-      return d.type;
-    });
-
-    // COMPUTED LINK PROPERTY
-    var updateLinkPosition = function(link) {
-      var reactionPosition = getReactionPosition(link);
-      var reactionNode = link.reaction;
-      reactionNode.x = reactionPosition.x;
-      reactionNode.y = reactionPosition.y;
-
-      var sourceSpacer, targetSpacer;
-      if (_.isEqual(link.source.width, 0)) {
-        sourceSpacer = 0;
-      } else {
-        sourceSpacer = 8;
-      }
-      if (_.isEqual(link.target.width, 0)) {
-        targetSpacer = 0;
-      } else {
-        targetSpacer = 15;
-      }
-      var targetToSource = sgGeo.getLineIntersectionWithRectangle({
-        x1: link.target.x,
-        y1: link.target.y,
-        x2: link.source.x,
-        y2: link.source.y
-      }, {
-        x1: link.source.x - (link.source.width / 2 + sourceSpacer),
-        y1: link.source.y - (link.source.height / 2 + sourceSpacer),
-        x2: link.source.x + (link.source.width / 2 + sourceSpacer),
-        y2: link.source.y + (link.source.height / 2 + sourceSpacer)
-      });
-      var sourceToTarget = sgGeo.getLineIntersectionWithRectangle({
-        x1: link.source.x,
-        y1: link.source.y,
-        x2: link.target.x,
-        y2: link.target.y
-      }, {
-        x1: link.target.x - (link.target.width / 2 + targetSpacer),
-        y1: link.target.y - (link.target.height / 2 + targetSpacer),
-        x2: link.target.x + (link.target.width / 2 + targetSpacer),
-        y2: link.target.y + (link.target.height / 2 + targetSpacer)
-      });
-
-      if(_.contains(link.classes, 'modifier')) {
-        var newPoint = $scope.extendPoint(targetToSource, sourceToTarget, -15);
-        link.x1 = targetToSource.x;
-        link.y1 = targetToSource.y;
-        link.x2 = newPoint.x;
-        link.y2 = newPoint.y;
-        link.cp1 = $scope.extendPoint(sourceToTarget, targetToSource, -20);
-        link.cp2 = $scope.extendPoint(targetToSource, sourceToTarget, -20);
-      } else {
-        link.x1 = targetToSource.x;
-        link.y1 = targetToSource.y;
-        link.x2 = sourceToTarget.x;
-        link.y2 = sourceToTarget.y;
-        link.cp1 = $scope.extendPoint(sourceToTarget, targetToSource, -20);
-        link.cp2 = $scope.extendPoint(targetToSource, sourceToTarget, -20);
-      }
-
-    };
-
-    var updateReactionNode = function(n) {
-      // update centroids for reactants and products
-      n.centroid = {};
-      n.centroid.reactants = _.reduce(n.reactants, function(centroid, r) {
-        var x = centroid.x + r.x / n.reactants.length;
-        var y = centroid.y + r.y / n.reactants.length;
-        return {
-          x: x,
-          y: y
-        };
-      }, {x: 0, y: 0});
-      n.centroid.products = _.reduce(n.products, function(centroid, p) {
-        var x = centroid.x + p.x / n.products.length;
-        var y = centroid.y + p.y / n.products.length;
-        return {
-          x: x,
-          y: y
-        };
-      }, {x: 0, y: 0});
-
-      n.deg = 180 / Math.PI * Math.atan((n.y - n.centroid.reactants.y)/(n.centroid.reactants.x - n.x));
-      if (n.centroid.reactants.x < n.x) {
-        n.deg += 180;
-      }
-    };
 
     /*
      * Watchers
      */
 
+    $scope.$watch('imports.sbml', function(newVal) {
+      if (newVal) {
+        $scope.model = new SgSbmlModel(newVal);
+        $scope.model.setNodeSize({
+          species: {
+            height: 30,
+            width: 80
+          },
+          reactions: {
+            height: 0,
+            width: 0
+          }
+        });
+        $scope.layout = new SgLayout(
+          $scope.model.getAllNodes(),
+          $scope.model.getAllLinks()
+        );
+        $scope.layout.addToTick(function() {
+          $scope.$digest();
+          $scope.started = true;
+        });
+        $scope.layout.start();
+      }
+    });
+
     var linkWatchers = []; // storing node watchers to be removed if unnecessary
     var nodeWatchers = []; // storing node watchers to be removed if unnecessary
 
-    $scope.$watchCollection('imports.links', function(newVal) {
-      if (newVal) {
+    $scope.$watchCollection('model.links', function(val) {
+      if (val) {
         /*
          * unwatch all link watchers
          */
@@ -186,33 +80,28 @@ angular.module('sg.graphene.sbml')
           w();
         });
         linkWatchers = [];
-        $scope.links = $scope.imports.links;
-        nodeLookup = $scope.imports.nodeLookup; //generateIdLookup($scope.imports.nodes); //sometimes run before node watcher
-        $scope.lines = sgSbml.classifyLinks($scope.links, nodeLookup);
-        _.each($scope.links, function(l) {
+        _.each($scope.model.getAllLinks(), function(l) {
           var watch = $scope.$watch(function() {
             return l.source.x + l.source.y + l.target.x + l.target.y;
           }, function() {
-            updateLinkPosition(l);
+            if ($scope.started) {
+              $scope.model.updateLinkPosition(l);
+            }
           });
-          updateLinkPosition(l);
+          $scope.model.updateLinkPosition(l);
           linkWatchers.push(watch);
         });
       }
     });
 
-    $scope.$watchCollection('imports.nodes', function(newVal) {
-      if (newVal) {
+    $scope.$watchCollection('model.nodes', function(val) {
+      if (val) {
         _.each(nodeWatchers, function(w) {
           w();
         });
         nodeWatchers = [];
-        $scope.nodes = $scope.imports.nodes;
-        $scope.species = $scope.imports.species;
-        $scope.reactions = $scope.imports.reactions;
-        nodeLookup = $scope.imports.nodeLookup; //generateIdLookup($scope.nodes);
 
-        _.each($scope.imports.reactions, function(n) {
+        _.each($scope.model.nodes.reactions, function(n) {
           var watch = $scope.$watch(function() {
             var total = 0;
             _.each(n.reactants, function(r) {
@@ -223,17 +112,34 @@ angular.module('sg.graphene.sbml')
             });
             return total;
           }, function() {
-            updateReactionNode(n);
+            if ($scope.started) {
+              $scope.model.updateReactionNode(n);
+            }
           });
           nodeWatchers.push(watch);
         });
-       // $scope.species = _.filter($scope.nodes, function(n) {
-       //   return _.contains(n.classes, 'species');
-       // });
-       // $scope.reactions = _.filter($scope.nodes, function(n) {
-       //   return _.contains(n.classes, 'reaction');
-       // });
       }
     });
+
+    // var watchList = ['charge', 'linkDistance', 'gravity'];
+    // _.each(watchList, function(w) {
+    //   $scope.$watch(w, function(newVal) {
+    //     if (newVal && $scope.ngModel) {
+    //       if ($scope.force) {
+    //         console.log('Change %s to ' + newVal, w);
+    //         $scope.force[w](newVal).start();
+    //       }
+    //     }
+    //   });
+    // });
+
+    // var watchListRestart = ['linkModifiers', 'max.links', 'width', 'height'];
+    // _.each(watchListRestart, function(w) {
+    //   $scope.$watch(w, function(newVal) {
+    //     if (newVal && $scope.ngModel) {
+    //       $scope.force = runForceLayout();
+    //     }
+    //   }, true);
+    // });
 
   });

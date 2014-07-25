@@ -2,7 +2,7 @@
   zoomable
   ng-controller="SbmlLayoutCtrl"
   xmlns="http://www.w3.org/2000/svg"
-  ng-attr-height="{{imports.height || '100%'}}"
+  ng-attr-height="{{imports.height || '800px'}}"
   ng-attr-width="{{imports.width || '100%'}}"
   >
   <style>
@@ -104,7 +104,8 @@
   </defs>
   <g ng-attr-transform="translate({{translate.x || 0}}, {{translate.y || 0}})scale({{scale || 1}})">
     <g 
-      ng-repeat="link in lines.production"
+      class="link"
+      ng-repeat="link in model.links.product"
       ng-switch on="imports.showArcs"
       ng-click="clickLink(link)"
       >
@@ -112,7 +113,7 @@
         ng-attr-d="
           M {{link.x1}} {{link.y1}}
           C
-          {{link.reaction.getCp2().x}} {{link.reaction.getCp2().y}}
+          {{link.reaction.getCp(2).x}} {{link.reaction.getCp(2).y}}
           {{link.cp2.x}} {{link.cp2.y}}
           {{link.x2}} {{link.y2}}
         "
@@ -153,7 +154,8 @@
       </line>
     </g>
     <g 
-      ng-repeat="link in lines.reactant" 
+      class="link"
+      ng-repeat="link in model.links.reactant" 
       ng-switch on="imports.showArcs"
       ng-click="clickLink(link)"
     >
@@ -162,7 +164,7 @@
           M {{link.x1}} {{link.y1}}
           C 
           {{link.cp1.x}} {{link.cp1.y}}
-          {{link.reaction.getCp1().x}} {{link.reaction.getCp1().y}}
+          {{link.reaction.getCp(1).x}} {{link.reaction.getCp(1).y}}
           {{link.x2}} {{link.y2}}
         "
         fill="none"
@@ -266,7 +268,7 @@
     </g>
     <g 
       draggable 
-      ng-repeat="node in species" 
+      ng-repeat="node in model.nodes.species" 
       ng-click="imports.events.click(node, this, $event)"
       ng-mouseover="imports.events.mouseover(node, this, $event)"
       ng-mouseleave="imports.events.mouseleave(node, this, $event)"
@@ -308,22 +310,22 @@
         <line
           stroke="red"
           stroke-dasharray="1, 1"
-          ng-attr-x1="{{node.getCp1().x}}"
-          ng-attr-y1="{{node.getCp1().y}}"
-          ng-attr-x2="{{node.getCp2().x}}"
-          ng-attr-y2="{{node.getCp2().y}}"
+          ng-attr-x1="{{node.getCp(1).x}}"
+          ng-attr-y1="{{node.getCp(1).y}}"
+          ng-attr-x2="{{node.getCp(2).x}}"
+          ng-attr-y2="{{node.getCp(2).y}}"
         />
         <circle
           stroke="red"
-          ng-attr-cx="{{node.getCp1().x}}"
-          ng-attr-cy="{{node.getCp1().y}}"
+          ng-attr-cx="{{node.getCp(1).x}}"
+          ng-attr-cy="{{node.getCp(1).y}}"
           ng-attr-r="{{7}}"
           fill="none"
         />
         <circle
           stroke="red"
-          ng-attr-cx="{{node.getCp2().x}}"
-          ng-attr-cy="{{node.getCp2().y}}"
+          ng-attr-cx="{{node.getCp(2).x}}"
+          ng-attr-cy="{{node.getCp(2).y}}"
           ng-attr-r="{{7}}"
           fill="none"
         />
