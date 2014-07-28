@@ -45,7 +45,7 @@ angular.module('sg.graphene.sbml')
       this.deg = Math.atan(- y / x) * 180 / Math.PI;
     };
 
-    SgNodeReaction.prototype.update = function() {
+    SgNodeReaction.prototype.updateCentroid = function() {
       // update centroids for reactants and products
       this.centroid = {};
       this.centroid.reactants = _.reduce(this.reactants, function(centroid, r) {
@@ -75,6 +75,22 @@ angular.module('sg.graphene.sbml')
       if (this.centroid.reactants.x < this.x) {
         this.deg += 180;
       }
+    };
+
+    SgNodeReaction.prototype.updatePosition = function() {
+      var species = _.union(this.products, this.reactants);
+      if (species.length > 1) {
+        var sumX = 0;
+        var sumY = 0;
+        angular.forEach(species, function(s) {
+          sumX += s.x;
+          sumY += s.y;
+        });
+
+        this.x = sumX / species.length;
+        this.y = sumY / species.length;
+      }
+      return this;
     };
 
     return SgNodeReaction;

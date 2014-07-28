@@ -16,11 +16,6 @@ angular.module('sg.graphene.sbml')
     SgSbmlLink.prototype = new SgLink();
 
     SgSbmlLink.prototype.update = function() {
-      var reactionPosition = this.getReactionPosition();
-      var reactionNode = this.reaction;
-      reactionNode.x = reactionPosition.x;
-      reactionNode.y = reactionPosition.y;
-
       var sourceSpacer, targetSpacer;
       if (_.isEqual(this.source.width, 0)) {
         sourceSpacer = 0;
@@ -72,28 +67,6 @@ angular.module('sg.graphene.sbml')
         this.cp2 = sgGeo.extendPoint(targetToSource, sourceToTarget, -20);
       }
     };
-
-
-    SgSbmlLink.prototype.getReactionPosition = function() {
-      var reaction = this.reaction;
-      var species = _.union(reaction.products, reaction.reactants);
-      if (species.length <= 1) {
-        return reaction;
-      } else {
-
-        var sumX = 0;
-        var sumY = 0;
-        angular.forEach(species, function(s) {
-          sumX += s.x;
-          sumY += s.y;
-        });
-        return {
-          x: sumX / species.length,
-          y: sumY / species.length
-        };
-      }
-    };
-
 
     return SgSbmlLink;
 
