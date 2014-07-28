@@ -15,5 +15,10 @@ angular.module('sg.graphene.sbml')
     };
     SgNodeSpecies.prototype = new SgNode();
 
+    SgNodeSpecies.prototype.updatePosition = function(pos) {
+      this.x = pos.x;
+      this.y = pos.y;
+    };
+
     return SgNodeSpecies;
   });

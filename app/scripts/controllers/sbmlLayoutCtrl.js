@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('sg.graphene.sbml')
-  .controller('SbmlLayoutCtrl', function($scope, sgSbml, sgGeo, SgSbmlModel, SgLayout) {
+  .controller('SbmlLayoutCtrl', function($scope, sgSbml, sgGeo, SgSbmlModel, SgLayout, SgLink, SgNode, AppState) {
+
+    $scope.AppState = AppState;
 
     $scope.textVisibilityLookup = {
       species: true,
@@ -32,10 +34,33 @@ angular.module('sg.graphene.sbml')
     };
 
     $scope.clickNode = function(node) {
-      _.each($scope.model.nodes.reactions, function(r) {
-        r.selected = false;
+      _.each($scope.model.getAllNodes(), function(n) {
+        n.selected = false;
       });
       node.selected = true;
+    };
+
+    $scope.toggleProperty = function(obj) {
+      var prop = AppState.clickMode;
+      var setAllOthers = AppState.clickModeToggleAll[prop];
+      if (!_.isUndefined(setAllOthers)) {
+        var allObjs;
+        if (obj instanceof SgNode) {
+          allObjs = $scope.model.getAllNodes();
+        } else if (obj instanceof SgLink) {
+          allObjs = $scope.model.getAllLinks();
+        }
+
+        if (allObjs) {
+          _.each(allObjs, function(n) {
+            if (n !== obj) {
+              n[prop] = setAllOthers;
+            }
+          });
+        }
+      }
+
+      obj[prop] = !obj[prop];
     };
 
 

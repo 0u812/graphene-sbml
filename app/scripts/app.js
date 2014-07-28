@@ -9,4 +9,4 @@
  * Main module of the application.
  */
 angular
-  .module('sg.graphene.sbml', ['sg.graphene']);
+  .module('sg.graphene.sbml', ['sg.graphene', 'ui.bootstrap']);
