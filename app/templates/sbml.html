@@ -290,7 +290,7 @@
     </g>
     <g 
       draggable 
-      ng-repeat="node in reactions" 
+      ng-repeat="node in model.nodes.reactions" 
       ng-click="clickNode(node)"
     >
       <circle 
@@ -316,18 +316,24 @@
           ng-attr-y2="{{node.getCp(2).y}}"
         />
         <circle
+          sg-drag
+          sg-drag-begin="node.getCp(1)"
+          sg-drag-move="node.updateCp1.bind(node)"
           stroke="red"
           ng-attr-cx="{{node.getCp(1).x}}"
           ng-attr-cy="{{node.getCp(1).y}}"
           ng-attr-r="{{7}}"
-          fill="none"
+          fill="white"
         />
         <circle
+          sg-drag
+          sg-drag-begin="node.getCp(2)"
+          sg-drag-move="node.updateCp2.bind(node)"
           stroke="red"
           ng-attr-cx="{{node.getCp(2).x}}"
           ng-attr-cy="{{node.getCp(2).y}}"
           ng-attr-r="{{7}}"
-          fill="none"
+          fill="white"
         />
       </g>
       <text class="node-label">{{}}</text>

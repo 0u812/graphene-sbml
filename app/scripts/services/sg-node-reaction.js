@@ -34,6 +34,49 @@ angular.module('sg.graphene.sbml')
       }
     };
 
+    SgNodeReaction.prototype.updateCp1 = function(newPos) {
+      var y = this.y - (newPos.y);
+      var x = this.x - (newPos.x);
+      this.deg = Math.atan(- y / x) * 180 / Math.PI;
+    };
+    SgNodeReaction.prototype.updateCp2 = function(newPos) {
+      var y = this.y - (newPos.y);
+      var x = this.x - (newPos.x);
+      this.deg = Math.atan(- y / x) * 180 / Math.PI;
+    };
+
+    SgNodeReaction.prototype.update = function() {
+      // update centroids for reactants and products
+      this.centroid = {};
+      this.centroid.reactants = _.reduce(this.reactants, function(centroid, r) {
+        var x = centroid.x + r.x / this.reactants.length;
+        var y = centroid.y + r.y / this.reactants.length;
+        return {
+          x: x,
+          y: y
+        };
+      }, {
+        x: 0,
+        y: 0
+      }, this);
+      this.centroid.products = _.reduce(this.products, function(centroid, p) {
+        var x = centroid.x + p.x / this.products.length;
+        var y = centroid.y + p.y / this.products.length;
+        return {
+          x: x,
+          y: y
+        };
+      }, {
+        x: 0,
+        y: 0
+      }, this);
+
+      this.deg = 180 / Math.PI * Math.atan(-(this.y - this.centroid.reactants.y) / (this.x - this.centroid.reactants.x));
+      if (this.centroid.reactants.x < this.x) {
+        this.deg += 180;
+      }
+    };
+
     return SgNodeReaction;
 
   });

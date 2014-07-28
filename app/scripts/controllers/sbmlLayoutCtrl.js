@@ -85,10 +85,10 @@ angular.module('sg.graphene.sbml')
             return l.source.x + l.source.y + l.target.x + l.target.y;
           }, function() {
             if ($scope.started) {
-              $scope.model.updateLinkPosition(l);
+              l.update();
             }
           });
-          $scope.model.updateLinkPosition(l);
+          l.update();
           linkWatchers.push(watch);
         });
       }
@@ -113,7 +113,7 @@ angular.module('sg.graphene.sbml')
             return total;
           }, function() {
             if ($scope.started) {
-              $scope.model.updateReactionNode(n);
+              n.update();
             }
           });
           nodeWatchers.push(watch);

@@ -8,7 +8,7 @@
  * Service in the sg.graphene.sbml.
  */
 angular.module('sg.graphene.sbml')
-  .factory('SgSbmlModel', function(SgNodeReaction, SgNodeSpecies, SgLink, sgGeo) {
+  .factory('SgSbmlModel', function(SgNodeReaction, SgNodeSpecies, SgSbmlLink) {
 
     var x2js = new X2JS();
     var arrayify = function(s) {
@@ -155,119 +155,9 @@ angular.module('sg.graphene.sbml')
     };
 
     SgSbmlModel.prototype.addLink = function(type, source, target) {
-      var newLink = new SgLink(source, target);
+      var newLink = new SgSbmlLink(source, target);
       this.links[type].push(newLink);
       return newLink;
-    };
-
-    SgSbmlModel.prototype.updateLinkPosition = function(link) {
-      var reactionPosition = this.getReactionPosition(link);
-      var reactionNode = link.reaction;
-      reactionNode.x = reactionPosition.x;
-      reactionNode.y = reactionPosition.y;
-
-      var sourceSpacer, targetSpacer;
-      if (_.isEqual(link.source.width, 0)) {
-        sourceSpacer = 0;
-      } else {
-        sourceSpacer = 8;
-      }
-      if (_.isEqual(link.target.width, 0)) {
-        targetSpacer = 0;
-      } else {
-        targetSpacer = 15;
-      }
-      var targetToSource = sgGeo.getLineIntersectionWithRectangle({
-        x1: link.target.x,
-        y1: link.target.y,
-        x2: link.source.x,
-        y2: link.source.y
-      }, {
-        x1: link.source.x - (link.source.width / 2 + sourceSpacer),
-        y1: link.source.y - (link.source.height / 2 + sourceSpacer),
-        x2: link.source.x + (link.source.width / 2 + sourceSpacer),
-        y2: link.source.y + (link.source.height / 2 + sourceSpacer)
-      });
-      var sourceToTarget = sgGeo.getLineIntersectionWithRectangle({
-        x1: link.source.x,
-        y1: link.source.y,
-        x2: link.target.x,
-        y2: link.target.y
-      }, {
-        x1: link.target.x - (link.target.width / 2 + targetSpacer),
-        y1: link.target.y - (link.target.height / 2 + targetSpacer),
-        x2: link.target.x + (link.target.width / 2 + targetSpacer),
-        y2: link.target.y + (link.target.height / 2 + targetSpacer)
-      });
-
-      if (_.contains(link.classes, 'modifier')) {
-        var newPoint = sgGeo.extendPoint(targetToSource, sourceToTarget, -15);
-        link.x1 = targetToSource.x;
-        link.y1 = targetToSource.y;
-        link.x2 = newPoint.x;
-        link.y2 = newPoint.y;
-        link.cp1 = sgGeo.extendPoint(sourceToTarget, targetToSource, -20);
-        link.cp2 = sgGeo.extendPoint(targetToSource, sourceToTarget, -20);
-      } else {
-        link.x1 = targetToSource.x;
-        link.y1 = targetToSource.y;
-        link.x2 = sourceToTarget.x;
-        link.y2 = sourceToTarget.y;
-        link.cp1 = sgGeo.extendPoint(sourceToTarget, targetToSource, -20);
-        link.cp2 = sgGeo.extendPoint(targetToSource, sourceToTarget, -20);
-      }
-    };
-
-    SgSbmlModel.prototype.updateReactionNode = function(n) {
-      // update centroids for reactants and products
-      n.centroid = {};
-      n.centroid.reactants = _.reduce(n.reactants, function(centroid, r) {
-        var x = centroid.x + r.x / n.reactants.length;
-        var y = centroid.y + r.y / n.reactants.length;
-        return {
-          x: x,
-          y: y
-        };
-      }, {
-        x: 0,
-        y: 0
-      });
-      n.centroid.products = _.reduce(n.products, function(centroid, p) {
-        var x = centroid.x + p.x / n.products.length;
-        var y = centroid.y + p.y / n.products.length;
-        return {
-          x: x,
-          y: y
-        };
-      }, {
-        x: 0,
-        y: 0
-      });
-
-      n.deg = 180 / Math.PI * Math.atan((n.y - n.centroid.reactants.y) / (n.centroid.reactants.x - n.x));
-      if (n.centroid.reactants.x < n.x) {
-        n.deg += 180;
-      }
-    };
-
-    SgSbmlModel.prototype.getReactionPosition = function(link) {
-      var reaction = link.reaction;
-      var species = _.union(reaction.products, reaction.reactants);
-      if (species.length <= 1) {
-        return reaction;
-      } else {
-
-        var sumX = 0;
-        var sumY = 0;
-        angular.forEach(species, function(s) {
-          sumX += s.x;
-          sumY += s.y;
-        });
-        return {
-          x: sumX / species.length,
-          y: sumY / species.length
-        };
-      }
     };
 
     SgSbmlModel.prototype.getAllLinks = function() {
