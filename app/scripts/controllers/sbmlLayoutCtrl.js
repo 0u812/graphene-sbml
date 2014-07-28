@@ -4,41 +4,7 @@ angular.module('sg.graphene.sbml')
   .controller('SbmlLayoutCtrl', function($scope, sgSbml, sgGeo, SgSbmlModel, SgLayout, SgLink, SgNode, AppState) {
 
     $scope.AppState = AppState;
-
-    $scope.textVisibilityLookup = {
-      species: true,
-      reaction: false
-    };
-
-    $scope.lookupMarkerId = function(classes) {
-      if (_.every(classes, function(c) {
-        return _.contains(['reaction', 'production'], c);
-      })) {
-        return 'reactionProduction';
-      } else if (_.every(classes, function(c) {
-        return _.contains(['reaction', 'production'], c);
-      })) {
-        return 'reactionConsumption';
-      }
-    };
-
-    $scope.linkArc = sgGeo.linkArc;
-    $scope.extendPoint = sgGeo.extendPoint;
-    $scope.arrow = sgGeo.arrow;
-
-    $scope.clickLink = function(link) {
-      _.each($scope.model.nodes.reactions, function(r) {
-        r.selected = false;
-      });
-      link.reaction.selected = true;
-    };
-
-    $scope.clickNode = function(node) {
-      _.each($scope.model.getAllNodes(), function(n) {
-        n.selected = false;
-      });
-      node.selected = true;
-    };
+    $scope.sgGeo = sgGeo;
 
     $scope.toggleProperty = function(obj) {
       var prop = AppState.clickMode;

@@ -42,6 +42,13 @@ angular.module('sg.graphene.sbml')
     };
 
     SgLayout.prototype.start = function() {
+
+      // Fix for making sure px/py are same as x and y for nodes
+      _.each(this.nodes, function(n) {
+        n.px = n.x;
+        n.py = n.y;
+      });
+
       this.force
         .charge(this.charge)
         .linkDistance(this.linkDistance)

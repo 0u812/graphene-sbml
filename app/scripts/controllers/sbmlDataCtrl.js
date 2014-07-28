@@ -6,7 +6,6 @@ angular.module('sg.graphene.sbml')
     $scope.linkModifers = true;
     $scope.allowUnstick = false;
     $scope.showReactionNodes = false;
-    $scope.zoom = true;
     $scope.max = {
       links: {
         in : 1,
@@ -15,7 +14,6 @@ angular.module('sg.graphene.sbml')
     };
 
     $scope.exports = {
-      zoom: $scope.zoom,
       linkModifiers: $scope.linkModifiers,
       showReactionNodes: $scope.showReactionNodes,
       allowUnstick: $scope.allowUnstick,
