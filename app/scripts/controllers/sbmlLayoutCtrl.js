@@ -55,7 +55,11 @@ angular.module('sg.graphene.sbml')
           $scope.$digest();
           $scope.started = true;
         });
-        $scope.layout.start();
+        if ($scope.model.getJdesignerLayout()) {
+
+        } else {
+          $scope.layout.start();
+        }
       }
     });
 

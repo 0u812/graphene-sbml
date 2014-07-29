@@ -313,6 +313,30 @@
           <title>ID: {{node.id}}, Name: {{node.name}}</title>
         </g>
         <g 
+          sg-drag
+          sg-drag-begin="node"
+          sg-drag-move="node.updatePosition.bind(node)"
+          ng-repeat="node in model.nodes.alias"
+          ng-click="toggleProperty(node)"
+          ng-attr-opacity="{{node.opacity}}"
+          ng-attr-transform="translate({{node.x}},{{node.y}})"
+          style="cursor: pointer;"
+          >
+          <rect 
+            ng-class="{fixed: node.fixed, selected: node.selected}"
+            class="species node"
+            ng-attr-x="{{-node.width/2}}"
+            ng-attr-y="{{-node.height/2}}"
+            ng-attr-width="{{node.width}}" 
+            ng-attr-height="{{node.height}}"
+            ng-attr-ry="{{node.height/2}}"
+            fill="url(#gradient)"
+            >
+          </rect>
+          <text class="node-label">{{node.aliasOf.id | truncateTo:8}}</text>
+          <title>ID: {{node.id}}, Name: {{node.name}}</title>
+        </g>
+        <g 
           draggable 
           ng-repeat="node in model.nodes.reactions" 
         >
