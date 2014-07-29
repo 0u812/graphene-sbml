@@ -156,7 +156,11 @@
               ng-attr-cx="{{link.cp2.x}}"
               ng-attr-cy="{{link.cp2.y}}"
               ng-attr-r="{{7}}"
-              fill="none"
+              fill="white"
+              sg-drag
+              sg-drag-begin="link.cp2"
+              sg-drag-move="link.updateCp2.bind(link)"
+              style="cursor: pointer;"
             />
           </g>
           <line
@@ -205,8 +209,11 @@
               ng-attr-cx="{{link.cp1.x}}"
               ng-attr-cy="{{link.cp1.y}}"
               ng-attr-r="{{7}}"
-              fill="none"
-              
+              fill="white"
+              sg-drag
+              sg-drag-begin="link.cp1"
+              sg-drag-move="link.updateCp1.bind(link)"
+              style="cursor: pointer;"
             />
           </g>
           <line 

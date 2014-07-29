@@ -8,9 +8,9 @@
  * Service in the sg.graphene.sbml.
  */
 angular.module('sg.graphene.sbml')
-  .factory('SgNodeReaction', function (SgNode) {
+  .factory('SgNodeReaction', function(SgNode) {
 
-    var SgNodeReaction = function(){
+    var SgNodeReaction = function() {
       SgNode.apply(this, arguments);
       this.d = 30;
       this.deg = 0;
@@ -37,12 +37,12 @@ angular.module('sg.graphene.sbml')
     SgNodeReaction.prototype.updateCp1 = function(newPos) {
       var y = this.y - (newPos.y);
       var x = this.x - (newPos.x);
-      this.deg = Math.atan(- y / x) * 180 / Math.PI;
+      this.deg = Math.atan(-y / x) * 180 / Math.PI;
     };
     SgNodeReaction.prototype.updateCp2 = function(newPos) {
       var y = this.y - (newPos.y);
       var x = this.x - (newPos.x);
-      this.deg = Math.atan(- y / x) * 180 / Math.PI;
+      this.deg = Math.atan(-y / x) * 180 / Math.PI;
     };
 
     SgNodeReaction.prototype.updateCentroid = function() {
@@ -71,24 +71,28 @@ angular.module('sg.graphene.sbml')
         y: 0
       }, this);
 
-      this.deg = 180 / Math.PI * Math.atan(-(this.y - this.centroid.reactants.y) / (this.x - this.centroid.reactants.x));
-      if (this.centroid.reactants.x < this.x) {
-        this.deg += 180;
+      if (!this.fixed) {
+        this.deg = 180 / Math.PI * Math.atan(-(this.y - this.centroid.reactants.y) / (this.x - this.centroid.reactants.x));
+        if (this.centroid.reactants.x < this.x) {
+          this.deg += 180;
+        }
       }
     };
 
     SgNodeReaction.prototype.updatePosition = function() {
-      var species = _.union(this.products, this.reactants);
-      if (species.length > 1) {
-        var sumX = 0;
-        var sumY = 0;
-        angular.forEach(species, function(s) {
-          sumX += s.x;
-          sumY += s.y;
-        });
+      if (!this.fixed) {
+        var species = _.union(this.products, this.reactants);
+        if (species.length > 1) {
+          var sumX = 0;
+          var sumY = 0;
+          angular.forEach(species, function(s) {
+            sumX += s.x;
+            sumY += s.y;
+          });
 
-        this.x = sumX / species.length;
-        this.y = sumY / species.length;
+          this.x = sumX / species.length;
+          this.y = sumY / species.length;
+        }
       }
       return this;
     };

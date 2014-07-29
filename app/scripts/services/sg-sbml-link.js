@@ -56,16 +56,23 @@ angular.module('sg.graphene.sbml')
         this.y1 = targetToSource.y;
         this.x2 = newPoint.x;
         this.y2 = newPoint.y;
-        this.cp1 = sgGeo.extendPoint(sourceToTarget, targetToSource, -20);
-        this.cp2 = sgGeo.extendPoint(targetToSource, sourceToTarget, -20);
       } else {
         this.x1 = targetToSource.x;
         this.y1 = targetToSource.y;
         this.x2 = sourceToTarget.x;
         this.y2 = sourceToTarget.y;
+      }
+      if (!this.reaction.fixed) {
         this.cp1 = sgGeo.extendPoint(sourceToTarget, targetToSource, -20);
         this.cp2 = sgGeo.extendPoint(targetToSource, sourceToTarget, -20);
       }
+    };
+
+    SgSbmlLink.prototype.updateCp2 = function(newPos) {
+      this.cp2 = newPos;
+    };
+    SgSbmlLink.prototype.updateCp1 = function(newPos) {
+      this.cp1 = newPos;
     };
 
     return SgSbmlLink;
