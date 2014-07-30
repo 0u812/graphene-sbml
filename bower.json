@@ -9,7 +9,9 @@
     "graphene": "~1.1.0",
     "fontawesome": "~4.1.0",
     "angular-bootstrap": "~0.11.0",
-    "angular-strap": "~2.0.0"
+    "angular-strap": "~2.0.0",
+    "bootstrap-additions": "~0.2.3",
+    "angular-motion": "~0.3.3"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",
