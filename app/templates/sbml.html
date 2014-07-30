@@ -291,7 +291,7 @@
         <g 
           sg-drag
           sg-drag-begin="node"
-          sg-drag-move="node.updatePosition.bind(node)"
+          sg-drag-move="_.bind(node.updatePosition, node)"
           ng-repeat="node in model.nodes.species"
           ng-click="toggleProperty(node)"
           ng-attr-opacity="{{node.opacity}}"
@@ -315,7 +315,7 @@
         <g 
           sg-drag
           sg-drag-begin="node"
-          sg-drag-move="node.updatePosition.bind(node)"
+          sg-drag-move="_.bind(node.updatePosition, node)"
           ng-repeat="node in model.nodes.alias"
           ng-click="toggleProperty(node)"
           ng-attr-opacity="{{node.opacity}}"

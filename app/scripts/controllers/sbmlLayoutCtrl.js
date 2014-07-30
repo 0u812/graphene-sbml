@@ -5,6 +5,7 @@ angular.module('sg.graphene.sbml')
 
     $scope.AppState = AppState;
     $scope.sgGeo = sgGeo;
+    $scope._ = _;
 
     $scope.toggleProperty = function(obj) {
       var prop = AppState.clickMode;
