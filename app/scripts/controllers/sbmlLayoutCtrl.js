@@ -79,8 +79,8 @@ angular.module('sg.graphene.sbml')
         _.each($scope.model.getAllLinks(), function(l) {
           var watch = $scope.$watch(function() {
             return l.source.x + l.source.y + l.target.x + l.target.y;
-          }, function() {
-            if ($scope.started) {
+          }, function(val) {
+            if (val) {
               l.update();
               l.reaction.updatePosition();
             }
