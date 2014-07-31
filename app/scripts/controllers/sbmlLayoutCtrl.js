@@ -48,10 +48,7 @@ angular.module('sg.graphene.sbml')
             width: 0
           }
         });
-        $scope.layout = new SgLayout(
-          $scope.model.getAllNodes(),
-          $scope.model.getAllLinks()
-        );
+        $scope.layout = new SgLayout($scope.model);
         $scope.layout.addToTick(function() {
           $scope.$digest();
           $scope.started = true;

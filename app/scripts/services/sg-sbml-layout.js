@@ -10,14 +10,13 @@
 angular.module('sg.graphene.sbml')
   .factory('SgLayout', function () {
 
-    var SgLayout = function(nodes, links){
+    var SgLayout = function(model){
       this.charge = -700;
       this.linkDistance = 40;
       this.gravity = 0.1;
       this.height = 800;
       this.width = 800;
-      this.nodes = nodes || [];
-      this.links = links || [];
+      this.model = model;
 
       this.confine = false;
 
@@ -30,7 +29,7 @@ angular.module('sg.graphene.sbml')
       var self = this;
       this.force.on('tick', function() {
         if (self.confine) {
-          _.each(self.nodes, function(n) {
+          _.each(self.model.getAllNodes, function(n) {
             n.x = Math.max(n.width, Math.min(this.width -
                                              n.width, n.x));
             n.y = Math.max(n.height, Math.min(this.height -
@@ -44,7 +43,7 @@ angular.module('sg.graphene.sbml')
     SgLayout.prototype.start = function() {
 
       // Fix for making sure px/py are same as x and y for nodes
-      _.each(this.nodes, function(n) {
+      _.each(this.model.getAllNodes(), function(n) {
         n.px = n.x;
         n.py = n.y;
       });
@@ -54,8 +53,8 @@ angular.module('sg.graphene.sbml')
         .linkDistance(this.linkDistance)
         .gravity(this.gravity)
         .size([this.width, this.height])
-        .nodes(this.nodes)
-        .links(this.links)
+        .nodes(this.model.getAllNodes())
+        .links(this.model.getAllLinks())
         .start();
     };
 
