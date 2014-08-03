@@ -12,6 +12,36 @@
       <i class="fa fa-align-justify"></i>
     </button>
   </div>
+  <div ng-repeat="node in model.nodes.species" class="dropdown position-fixed" id="speciesMenu{{node.id}}">
+    <ul class="dropdown-menu" role="menu">
+      <li>
+        <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Node</a>
+      </li>
+      <li>
+        <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete node</a>
+      </li>
+    </ul>
+  </div>
+  <div ng-repeat="node in model.nodes.alias" class="dropdown position-fixed" id="aliasMenu{{node.id}}">
+    <ul class="dropdown-menu" role="menu">
+      <li>
+        <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Node</a>
+      </li>
+      <li>
+        <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete node</a>
+      </li>
+    </ul>
+  </div>
+  <div ng-repeat="node in model.nodes.reactions" class="dropdown position-fixed" id="reactionMenu{{node.id}}">
+    <ul class="dropdown-menu" role="menu">
+      <li>
+        <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Node</a>
+      </li>
+      <li>
+        <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete node</a>
+      </li>
+    </ul>
+  </div>
   <div class="col-sm-11 well">
     <svg
       zoomable="AppState.zoom"
@@ -123,7 +153,8 @@
         <g 
           class="link"
           ng-repeat="link in model.links.product"
-          ng-switch on="imports.showArcs"
+          context-menu
+          data-target="reactionMenu{{link.reaction.id}}"
           >
           <path
             ng-click="toggleProperty(link.reaction)"
@@ -177,7 +208,8 @@
         <g 
           class="link"
           ng-repeat="link in model.links.reactant" 
-          ng-switch on="imports.showArcs"
+          context-menu
+          data-target="reactionMenu{{link.reaction.id}}"
         >
           <path
             ng-click="toggleProperty(link.reaction)"
@@ -217,7 +249,6 @@
             />
           </g>
           <line 
-            ng-switch-default
             ng-if="false"
             ng-class="{selected: isSelected}"
             class="reaction reactant link"
@@ -228,16 +259,14 @@
             ng-attr-y2="{{link.y2}}">
           </line>
         </g>
-        <g ng-repeat="link in lines.modifier" ng-switch on="imports.showArcs">
+        <g ng-repeat="link in lines.modifier">
           <path 
-            ng-switch-when="true"
             class="modifier link" 
             ng-attr-opacity="{{link.opacity}}"
             ng-attr-d={{sgGeo.linkArc(link)}}
             fill="none"
             ></path>
           <line 
-            ng-switch-default
             ng-class="{selected: isSelected}" 
             class="modifier link" 
             ng-attr-opacity="{{link.opacity}}"
@@ -250,17 +279,14 @@
         </g>
         <g
           ng-repeat="link in lines.source" 
-          ng-switch on="imports.showArcs"
           >
           <path 
-            ng-switch-when="true"
             class="source link"
             ng-attr-opacity="{{link.opacity}}"
             ng-attr-d={{linkArc(link)}}
             fill="none"
             ></path>
           <line
-            ng-switch-default
             class="source link"
             ng-attr-x1="{{link.x1}}"
             ng-attr-y1="{{link.y1}}" 
@@ -269,17 +295,14 @@
         </g>
         <g
           ng-repeat="link in lines.sink"
-          ng-switch on="imports.showArcs"
           >
           <path 
-            ng-switch-when="true"
             class="sink link"
             ng-attr-opacity="{{link.opacity}}"
             ng-attr-d={{linkArc(link)}}
             fill="none"
             ></path>
           <line
-            ng-switch-default
             class="sink link"
             ng-attr-opacity="{{link.opacity}}"
             ng-attr-x1="{{link.x1}}"
@@ -293,6 +316,8 @@
           sg-drag-begin="node"
           sg-drag-move="_.bind(node.updatePosition, node)"
           ng-repeat="node in model.nodes.species"
+          context-menu
+          data-target="speciesMenu{{node.id}}"
           ng-click="toggleProperty(node)"
           ng-attr-opacity="{{node.opacity}}"
           ng-attr-transform="translate({{node.x}},{{node.y}})"
@@ -321,6 +346,8 @@
           sg-drag-begin="node"
           sg-drag-move="_.bind(node.updatePosition, node)"
           ng-repeat="node in model.nodes.alias"
+          context-menu
+          data-target="aliasMenu{{node.id}}"
           ng-click="toggleProperty(node)"
           ng-attr-opacity="{{node.opacity}}"
           ng-attr-transform="translate({{node.x}},{{node.y}})"
@@ -348,6 +375,8 @@
         <g 
           draggable 
           ng-repeat="node in model.nodes.reactions" 
+          context-menu
+          data-target="reactionMenu{{node.id}}"
         >
           <circle 
             ng-class="node.classes" 
