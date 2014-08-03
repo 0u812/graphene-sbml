@@ -20,5 +20,10 @@ angular.module('sg.graphene.sbml')
       this.y = pos.y;
     };
 
+    SgNodeSpecies.prototype.delete = function() {
+      // Remove all links and reactions associated with species node
+
+    };
+
     return SgNodeSpecies;
   });

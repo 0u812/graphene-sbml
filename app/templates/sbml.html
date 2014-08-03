@@ -22,8 +22,6 @@
       <style>
       svg .node.species {
         stroke: #FFB800;
-        stroke-width: 3px;
-        size: 300px;
       }
       svg .link {
         stroke: black;
@@ -303,6 +301,10 @@
           <rect 
             ng-class="{fixed: node.fixed, selected: node.selected}"
             class="species node"
+            style="
+              stroke-width: 3px;
+              size: 300px;
+            "
             ng-attr-x="{{-node.width/2}}"
             ng-attr-y="{{-node.height/2}}"
             ng-attr-width="{{node.width}}" 
@@ -325,8 +327,13 @@
           style="cursor: pointer;"
           >
           <rect 
-            ng-class="{fixed: node.fixed, selected: node.selected}"
             class="species node"
+            ng-class="{fixed: node.fixed, selected: node.selected}"
+            style="
+              stroke-width: 3px;
+              size: 300px;
+            "
+            stroke-dasharray="1, 1"
             ng-attr-x="{{-node.width/2}}"
             ng-attr-y="{{-node.height/2}}"
             ng-attr-width="{{node.width}}" 

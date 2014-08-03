@@ -115,6 +115,7 @@ angular.module('sg.graphene.sbml')
     SgSbmlModel.prototype.addSpeciesNode = function(data) {
       var newNode = new SgNodeSpecies(data._id);
       newNode.data = data;
+      newNode.model = this;
       try {
         newNode.width = this.size.species.width;
         newNode.height = this.size.species.height;
@@ -134,12 +135,14 @@ angular.module('sg.graphene.sbml')
       aliasNode.aliasOf = species;
       aliasNode.width = species.width;
       aliasNode.height = species.height;
+      aliasNode.model = this;
       return aliasNode;
     };
 
     SgSbmlModel.prototype.addReactionNode = function(data) {
       var newNode = new SgNodeReaction(data._id);
       newNode.data = data;
+      newNode.model = this;
       try {
         newNode.width = this.size.reactions.width;
         newNode.height = this.size.reactions.height;
@@ -194,6 +197,7 @@ angular.module('sg.graphene.sbml')
 
     SgSbmlModel.prototype.addLink = function(type, source, target) {
       var newLink = new SgSbmlLink(source, target);
+      newLink.model = this;
       this.links[type].push(newLink);
       return newLink;
     };

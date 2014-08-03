@@ -9,4 +9,4 @@
  * Main module of the application.
  */
 angular
-  .module('sg.graphene.sbml', ['sg.graphene', 'ui.bootstrap', 'mgcrea.ngStrap.aside', 'mgcrea.ngStrap.modal', 'ngAnimate']);
+  .module('sg.graphene.sbml', ['sg.graphene', 'ui.bootstrap', 'mgcrea.ngStrap.aside', 'mgcrea.ngStrap.modal', 'ngAnimate', 'ng-context-menu']);
