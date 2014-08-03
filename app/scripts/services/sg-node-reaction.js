@@ -20,6 +20,21 @@ angular.module('sg.graphene.sbml')
     };
     SgNodeReaction.prototype = new SgNode();
 
+    SgNodeReaction.prototype.delete = function() {
+      _.each(this.model.links, function(links, key) {
+        this.model.links[key] = _.filter(links, function(l) {
+          var keep = true;
+          if (l.source === this || l.target === this) {
+            keep = false;
+          }
+          return keep;
+        }, this);
+      }, this);
+
+      // Delete reaction node
+      delete this.model.nodes.reactions[this.id];
+    };
+
     SgNodeReaction.prototype.getCp = function(num) {
       if (num === 1) {
         return {
