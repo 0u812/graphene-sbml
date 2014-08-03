@@ -17,13 +17,27 @@ angular.module('sg.graphene.sbml')
 
     SgNodeAlias.prototype.delete = function() {
       // Replace all links to alias node to the parent node
-      _.each(this.model.links, function(links, key) {
-        this.model.links[key] = _.each(links, function(l) {
+      _.each(this.model.links, function(links) {
+        _.each(links, function(l) {
           if (l.source === this) {
             l.source = this.aliasOf;
           }
           if (l.target === this) {
             l.target = this.aliasOf;
+          }
+        }, this);
+      }, this);
+
+      // Replace all reactants and products in reaction nodes with parent
+      _.each(this.model.nodes.reactions, function(n) {
+        _.each(n.reactants, function(r, ind) {
+          if (r === this) {
+            n.reactants[ind] = this.aliasOf;
+          }
+        }, this);
+        _.each(n.products, function(p, ind) {
+          if (p === this) {
+            n.products[ind] = this.aliasOf;
           }
         }, this);
       }, this);

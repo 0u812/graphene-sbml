@@ -21,7 +21,35 @@ angular.module('sg.graphene.sbml')
     };
 
     SgNodeSpecies.prototype.delete = function() {
-      // Remove all links and reactions associated with species node
+      // Remove all alias nodes
+      _.each(this.model.nodes.alias, function(n) {
+        if (n.aliasOf === this) {
+          n.delete();
+        }
+      }, this);
+
+      // Find reactions associated with species node
+      var reactions  = _.filter(this.model.nodes.reactions, function(n) {
+        return _.contains(_.union(n.reactants, n.products), this);
+      }, this);
+      // Delete reactions
+      _.each(reactions, function(r) {
+        delete this.model.nodes.reactions[r.id];
+      }, this);
+
+      // Remove links from associated reactions
+      _.each(this.model.links, function(links, key) {
+        this.model.links[key] = _.filter(links, function(l) {
+          var keep = true;
+          if (_.contains(reactions, l.source) || _.contains(reactions, l.target)) {
+            keep = false;
+          }
+          return keep;
+        }, this);
+      }, this);
+
+      // Delete species node
+      delete this.model.nodes.species[this.id];
 
     };
 
