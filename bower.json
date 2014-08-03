@@ -6,7 +6,7 @@
     "json3": "~3.3.1",
     "es5-shim": "~3.1.0",
     "bootstrap-sass-official": "~3.2.0",
-    "graphene": "~1.1.0",
+    "graphene": "~1.2.0",
     "fontawesome": "~4.1.0",
     "angular-bootstrap": "~0.11.0",
     "angular-strap": "~2.0.0",
