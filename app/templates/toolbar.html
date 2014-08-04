@@ -7,11 +7,24 @@
     <i class="fa fa-lock"></i>
   </button>
 </span>
-<div class="btn-group">
-  <button class="btn btn-default btn-sm" ng-model="AppState.clickMode" btn-radio="'addSpecies'" tooltip="Add Species Node" tooltip-popup-delay="1000" tooltip-placement="right">
-    Add Species
+<button class="btn btn-default btn-sm" ng-model="AppState.clickMode" btn-radio="'addSpecies'" tooltip="Add Species Node" tooltip-popup-delay="1000" tooltip-placement="right">
+  Add Species
+</button>
+<span class="btn-group" dropdown>
+  <button class="btn btn-default btn-sm" ng-model="AppState.clickMode" btn-radio="'addUniUniReaction'" tooltip="Add Reaction" tooltip-popup-delay="1000" tooltip-placement="right">
+    Add Reaction
   </button>
-</div>
+  <button class="btn btn-default btn-sm dropdown-toggle" tooltip="Additional Reaction" tooltip-popup-delay="1000" tooltip-placement="right">
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a class="btn btn-default btn-sm" ng-model="AppState.clickMode" btn-radio="'addUniBiReaction'" tooltip="Add Reaction" tooltip-popup-delay="1000" tooltip-placement="right">
+        Uni-Bi Reaction
+      </a>
+    </li>
+  </ul>
+</span>
 <span>Auto Layout:</span>
 <span class="btn-group">
   <button class="btn btn-default btn-sm" ng-click="layout.force.stop()" tooltip="Stop Auto-Layout" tooltip-placement="right" tooltip-append-to-body="true" tooltip-popup-delay="1000">
