@@ -354,13 +354,12 @@
                 stroke-width: 3px;
                 size: 300px;
               "
-              stroke-dasharray="1, 1"
               ng-attr-x="{{-node.width/2}}"
               ng-attr-y="{{-node.height/2}}"
               ng-attr-width="{{node.width}}" 
               ng-attr-height="{{node.height}}"
               ng-attr-ry="{{node.height/2}}"
-              fill="url(#gradient)"
+              fill="white"
               >
             </rect>
             <text class="node-label">{{node.aliasOf.id | truncateTo:8}}</text>
