@@ -1,478 +1,469 @@
-<div class="row" ng-controller="SbmlLayoutCtrl">
-  <div class="col-sm-1">
-    <button
-      type="button"
-      class="btn btn-default"
-      data-template="templates/aside.html"
-      data-placement="left"
-      data-animation="am-slide-left"
-      bs-aside="aside"
-      data-container="body"
-      >
-      <i class="fa fa-align-justify"></i>
-    </button>
+<div ng-controller="SbmlLayoutCtrl">
+  <div class="row" ng-include="'templates/toolbar.html'">
   </div>
-  <div ng-repeat="node in model.nodes.species" class="dropdown position-fixed" id="speciesMenu{{node.id}}">
-    <ul class="dropdown-menu" role="menu">
-      <li>
-        <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Species</a>
-      </li>
-      <li>
-        <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete Species</a>
-      </li>
-    </ul>
-  </div>
-  <div ng-repeat="node in model.nodes.alias" class="dropdown position-fixed" id="aliasMenu{{node.id}}">
-    <ul class="dropdown-menu" role="menu">
-      <li>
-        <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Alias</a>
-      </li>
-      <li>
-        <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete Alias</a>
-      </li>
-    </ul>
-  </div>
-  <div ng-repeat="node in model.nodes.reactions" class="dropdown position-fixed" id="reactionMenu{{node.id}}">
-    <ul class="dropdown-menu" role="menu">
-      <li>
-        <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Reaction</a>
-      </li>
-      <li>
-        <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete Reaction</a>
-      </li>
-    </ul>
-  </div>
-  <div class="col-sm-11 well">
-    <svg
-      zoomable="AppState.zoom"
-      xmlns="http://www.w3.org/2000/svg"
-      ng-attr-height="{{imports.height || '800px'}}"
-      ng-attr-width="{{imports.width || '100%'}}"
-      >
-      <style>
-      svg .node.species {
-        stroke: #FFB800;
-      }
-      svg .link {
-        stroke: black;
-        stroke-width: 3px;
-      }
-      svg .link.modifier {
-        stroke-dasharray: 5, 5;
-      }
-      svg .node-label {
-        font-size: 14px;
-        font-family: Georgia;
-        font-weight: bolder;
-        text-anchor: middle;
-        dominant-baseline: middle;
-      }
-      svg .node.selected {
-        stroke: #FF0000;
-      }
-    
-      svg .node.fixed{
-        stroke: black;
-        stroke-width: 5px;
-      }
-      /*
-      svg .link.selected {
-        stroke: #FF0000;
-      }*/
-      svg marker {
-        overflow: visible;
-      }
-      svg .null-symbol {
-        fill: none;
-        stroke: black;
-        stroke-width: 3px;
-      }
-      </style>
-      <defs>
-        <marker 
-          case-sensitive="refX,refY" 
-          id="production" 
-          viewBox="0 0 10 10" 
-          ng-attr-refX="{{-2}}"
-          ng-attr-refY="{{0}}" 
-          markerWidth="10" 
-          markerHeight="10" 
-          orient="auto">
-          <path 
-            fill="url(#markerGradient)" 
-            stroke="#0013FF" 
-            transform="rotate(-90)" 
-            ng-attr-d="{{sgGeo.arrow({size: 10, type: 'triangle-down'})}}">
-          </path>
-        </marker>
-        <marker 
-          case-sensitive="refX,refY" 
-          id="degradation" 
-          viewBox="0 0 10 10" 
-          ng-attr-refX="{{-2}}"
-          ng-attr-refY="{{0}}" 
-          markerWidth="10" 
-          markerHeight="10" 
-          orient="auto">
-          <path 
-            fill="url(#markerGradient)" 
-            stroke="#0013FF" 
-            transform="rotate(-90)" 
-            ng-attr-d="{{sgGeo.arrow({size: 10, type: 'triangle-down'})}}"></path>
-        </marker>
-        <marker 
-          case-sensitive="refX,refY" 
-          id="modifier" 
-          viewBox="0 0 10 10" 
-          markerWidth="30"
-          markerHeight="30" 
-          ng-attr-refX="{{-0.4}}" 
-          ng-attr-refY="{{0}}" 
-          orient="auto">
-          <path 
-            stroke="black" 
-            stroke-width="0.3" 
-            fill="none" 
-            ng-attr-d="{{sgGeo.arrow({size: 1, type: 'circle'})}}">
-          </path>
-        </marker>
-        <linearGradient id="gradient">
-          <stop offset="5%" stop-color="#FFDC9E"></stop>
-          <stop offset="95%" stop-color="#FFF"></stop>
-        </linearGradient>
-        <linearGradient id="markerGradient">
-          <stop offset="5%" stop-color="rgb(97, 116, 255)"></stop>
-          <stop offset="95%" stop-color="#FFF"></stop>
-        </linearGradient>
-        <linearGradient id="reactionGradient">
-          <stop offset="5%" stop-color="#B0C0FF"></stop>
-          <stop offset="95%" stop-color="#FFF"></stop>
-        </linearGradient>
-      </defs>
-      <g ng-attr-transform="translate({{translate.x || 0}}, {{translate.y || 0}})scale({{scale || 1}})">
-        <g 
-          class="link"
-          ng-repeat="link in model.links.product"
-          context-menu
-          data-target="reactionMenu{{link.reaction.id}}"
-          >
-          <path
-            ng-click="toggleProperty(link.reaction)"
-            ng-attr-d="
-              M {{link.x1}} {{link.y1}}
-              C
-              {{link.reaction.getCp(2).x}} {{link.reaction.getCp(2).y}}
-              {{link.cp2.x}} {{link.cp2.y}}
-              {{link.x2}} {{link.y2}}
-            "
-            marker-end="url(#production)"
-            ng-attr-opacity="{{link.opacity}}"
-            ng-attr-stroke="{{link.reaction.selected ? 'red' : 'black'}}"
-            ng-attr-stroke-width="{{'3px'}}"
-            fill="none"
-          />
-          <g
-            ng-if="link.reaction.selected"
-          >
-            <line
-              stroke="red"
-              stroke-dasharray="1, 1"
-              ng-attr-x1="{{link.x2}}"
-              ng-attr-y1="{{link.y2}}"
-              ng-attr-x2="{{link.cp2.x}}"
-              ng-attr-y2="{{link.cp2.y}}"
-            />
-            <circle
-              stroke="red"
-              ng-attr-cx="{{link.cp2.x}}"
-              ng-attr-cy="{{link.cp2.y}}"
-              ng-attr-r="{{7}}"
-              fill="white"
-              sg-drag
-              sg-drag-begin="link.cp2"
-              sg-drag-move="_.bind(link.updateCp2, link)"
-              style="cursor: pointer;"
-            />
-          </g>
-          <line
-            ng-if="false"
-            class="reaction production link"
-            ng-attr-opacity="{{link.opacity}}"
-            marker-end="url(#production)"
-            ng-attr-x1="{{link.x1}}"
-            ng-attr-y1="{{link.y1}}"
-            ng-attr-x2="{{link.x2}}"
-            ng-attr-y2="{{link.y2}}">
-          </line>
-        </g>
-        <g 
-          class="link"
-          ng-repeat="link in model.links.reactant" 
-          context-menu
-          data-target="reactionMenu{{link.reaction.id}}"
+  <div class="row">
+    <div ng-repeat="node in model.nodes.species" class="dropdown position-fixed" id="speciesMenu{{node.id}}">
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Species</a>
+        </li>
+        <li>
+          <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete Species</a>
+        </li>
+      </ul>
+    </div>
+    <div ng-repeat="node in model.nodes.alias" class="dropdown position-fixed" id="aliasMenu{{node.id}}">
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Alias</a>
+        </li>
+        <li>
+          <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete Alias</a>
+        </li>
+      </ul>
+    </div>
+    <div ng-repeat="node in model.nodes.reactions" class="dropdown position-fixed" id="reactionMenu{{node.id}}">
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Reaction</a>
+        </li>
+        <li>
+          <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete Reaction</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-11 well">
+      <svg
+        zoomable="AppState.zoom"
+        xmlns="http://www.w3.org/2000/svg"
+        ng-attr-height="{{imports.height || '800px'}}"
+        ng-attr-width="{{imports.width || '100%'}}"
         >
-          <path
-            ng-click="toggleProperty(link.reaction)"
-            ng-attr-d="
-              M {{link.x1}} {{link.y1}}
-              C 
-              {{link.cp1.x}} {{link.cp1.y}}
-              {{link.reaction.getCp(1).x}} {{link.reaction.getCp(1).y}}
-              {{link.x2}} {{link.y2}}
-            "
-            fill="none"
-            ng-attr-stroke="{{link.reaction.selected ? 'red' : 'black'}}"
-            ng-attr-stroke-width="{{'3px'}}"
-            ng-attr-opacity="{{link.opacity}}"
-          />
-          <g
-            ng-if="link.reaction.selected"
-          >
-            <line
-              stroke="red"
-              stroke-dasharray="1, 1"
-              ng-attr-x1="{{link.x1}}"
-              ng-attr-y1="{{link.y1}}"
-              ng-attr-x2="{{link.cp1.x}}"
-              ng-attr-y2="{{link.cp1.y}}"
+        <style>
+        svg .node.species {
+          stroke: #FFB800;
+        }
+        svg .link {
+          stroke: black;
+          stroke-width: 3px;
+        }
+        svg .link.modifier {
+          stroke-dasharray: 5, 5;
+        }
+        svg .node-label {
+          font-size: 14px;
+          font-family: Georgia;
+          font-weight: bolder;
+          text-anchor: middle;
+          dominant-baseline: middle;
+        }
+        svg .node.selected {
+          stroke: #FF0000;
+        }
+      
+        svg .node.fixed{
+          stroke: black;
+          stroke-width: 5px;
+        }
+        /*
+        svg .link.selected {
+          stroke: #FF0000;
+        }*/
+        svg marker {
+          overflow: visible;
+        }
+        svg .null-symbol {
+          fill: none;
+          stroke: black;
+          stroke-width: 3px;
+        }
+        </style>
+        <defs>
+          <marker 
+            case-sensitive="refX,refY" 
+            id="production" 
+            viewBox="0 0 10 10" 
+            ng-attr-refX="{{-2}}"
+            ng-attr-refY="{{0}}" 
+            markerWidth="10" 
+            markerHeight="10" 
+            orient="auto">
+            <path 
+              fill="url(#markerGradient)" 
+              stroke="#0013FF" 
+              transform="rotate(-90)" 
+              ng-attr-d="{{sgGeo.arrow({size: 10, type: 'triangle-down'})}}">
+            </path>
+          </marker>
+          <marker 
+            case-sensitive="refX,refY" 
+            id="degradation" 
+            viewBox="0 0 10 10" 
+            ng-attr-refX="{{-2}}"
+            ng-attr-refY="{{0}}" 
+            markerWidth="10" 
+            markerHeight="10" 
+            orient="auto">
+            <path 
+              fill="url(#markerGradient)" 
+              stroke="#0013FF" 
+              transform="rotate(-90)" 
+              ng-attr-d="{{sgGeo.arrow({size: 10, type: 'triangle-down'})}}"></path>
+          </marker>
+          <marker 
+            case-sensitive="refX,refY" 
+            id="modifier" 
+            viewBox="0 0 10 10" 
+            markerWidth="30"
+            markerHeight="30" 
+            ng-attr-refX="{{-0.4}}" 
+            ng-attr-refY="{{0}}" 
+            orient="auto">
+            <path 
+              stroke="black" 
+              stroke-width="0.3" 
+              fill="none" 
+              ng-attr-d="{{sgGeo.arrow({size: 1, type: 'circle'})}}">
+            </path>
+          </marker>
+          <linearGradient id="gradient">
+            <stop offset="5%" stop-color="#FFDC9E"></stop>
+            <stop offset="95%" stop-color="#FFF"></stop>
+          </linearGradient>
+          <linearGradient id="markerGradient">
+            <stop offset="5%" stop-color="rgb(97, 116, 255)"></stop>
+            <stop offset="95%" stop-color="#FFF"></stop>
+          </linearGradient>
+          <linearGradient id="reactionGradient">
+            <stop offset="5%" stop-color="#B0C0FF"></stop>
+            <stop offset="95%" stop-color="#FFF"></stop>
+          </linearGradient>
+        </defs>
+        <g ng-attr-transform="translate({{translate.x || 0}}, {{translate.y || 0}})scale({{scale || 1}})">
+          <g 
+            class="link"
+            ng-repeat="link in model.links.product"
+            context-menu
+            data-target="reactionMenu{{link.reaction.id}}"
+            >
+            <path
+              ng-click="toggleProperty(link.reaction)"
+              ng-attr-d="
+                M {{link.x1}} {{link.y1}}
+                C
+                {{link.reaction.getCp(2).x}} {{link.reaction.getCp(2).y}}
+                {{link.cp2.x}} {{link.cp2.y}}
+                {{link.x2}} {{link.y2}}
+              "
+              marker-end="url(#production)"
+              ng-attr-opacity="{{link.opacity}}"
+              ng-attr-stroke="{{link.reaction.selected ? 'red' : 'black'}}"
+              ng-attr-stroke-width="{{'3px'}}"
+              fill="none"
             />
-            <circle
-              stroke="red"
-              ng-attr-cx="{{link.cp1.x}}"
-              ng-attr-cy="{{link.cp1.y}}"
-              ng-attr-r="{{7}}"
-              fill="white"
-              sg-drag
-              sg-drag-begin="link.cp1"
-              sg-drag-move="_.bind(link.updateCp1, link)"
-              style="cursor: pointer;"
-            />
-          </g>
-          <line 
-            ng-if="false"
-            ng-class="{selected: isSelected}"
-            class="reaction reactant link"
-            ng-attr-opacity="{{link.opacity}}"
-            ng-attr-x1="{{link.x1}}"
-            ng-attr-y1="{{link.y1}}"
-            ng-attr-x2="{{link.x2}}"
-            ng-attr-y2="{{link.y2}}">
-          </line>
-        </g>
-        <g ng-repeat="link in lines.modifier">
-          <path 
-            class="modifier link" 
-            ng-attr-opacity="{{link.opacity}}"
-            ng-attr-d={{sgGeo.linkArc(link)}}
-            fill="none"
-            ></path>
-          <line 
-            ng-class="{selected: isSelected}" 
-            class="modifier link" 
-            ng-attr-opacity="{{link.opacity}}"
-            ng-attr-x1="{{link.x1}}"
-            ng-attr-y1="{{link.y1}}" 
-            ng-attr-x2="{{link.x2}}" 
-            ng-attr-y2="{{link.y2}}"
-            marker-end="url(#modifier)">
-          </line>
-        </g>
-        <g
-          ng-repeat="link in lines.source" 
-          >
-          <path 
-            class="source link"
-            ng-attr-opacity="{{link.opacity}}"
-            ng-attr-d={{linkArc(link)}}
-            fill="none"
-            ></path>
-          <line
-            class="source link"
-            ng-attr-x1="{{link.x1}}"
-            ng-attr-y1="{{link.y1}}" 
-            ng-attr-x2="{{link.x2}}" 
-            ng-attr-y2="{{link.y2}}"></line>
-        </g>
-        <g
-          ng-repeat="link in lines.sink"
-          >
-          <path 
-            class="sink link"
-            ng-attr-opacity="{{link.opacity}}"
-            ng-attr-d={{linkArc(link)}}
-            fill="none"
-            ></path>
-          <line
-            class="sink link"
-            ng-attr-opacity="{{link.opacity}}"
-            ng-attr-x1="{{link.x1}}"
-            ng-attr-y1="{{link.y1}}" 
-            ng-attr-x2="{{link.x2}}" 
-            ng-attr-y2="{{link.y2}}"
-            marker-end="url(#production)"></line>
-        </g>
-        <g 
-          sg-drag
-          sg-drag-begin="node"
-          sg-drag-move="_.bind(node.updatePosition, node)"
-          ng-repeat="node in model.nodes.species"
-          context-menu
-          data-target="speciesMenu{{node.id}}"
-          ng-click="toggleProperty(node)"
-          ng-attr-opacity="{{node.opacity}}"
-          ng-attr-transform="translate({{node.x}},{{node.y}})"
-          style="cursor: pointer;"
-          >
-          <rect 
-            ng-class="{fixed: node.fixed, selected: node.selected}"
-            class="species node"
-            style="
-              stroke-width: 3px;
-              size: 300px;
-            "
-            ng-attr-x="{{-node.width/2}}"
-            ng-attr-y="{{-node.height/2}}"
-            ng-attr-width="{{node.width}}" 
-            ng-attr-height="{{node.height}}"
-            ng-attr-ry="{{node.height/2}}"
-            fill="url(#gradient)"
-            >
-          </rect>
-          <text class="node-label">{{node.id | truncateTo:8}}</text>
-          <title>ID: {{node.id}}, Name: {{node.name}}</title>
-        </g>
-        <g 
-          sg-drag
-          sg-drag-begin="node"
-          sg-drag-move="_.bind(node.updatePosition, node)"
-          ng-repeat="node in model.nodes.alias"
-          context-menu
-          data-target="aliasMenu{{node.id}}"
-          ng-click="toggleProperty(node)"
-          ng-attr-opacity="{{node.opacity}}"
-          ng-attr-transform="translate({{node.x}},{{node.y}})"
-          style="cursor: pointer;"
-          >
-          <rect 
-            class="species node"
-            ng-class="{fixed: node.fixed, selected: node.selected}"
-            style="
-              stroke-width: 3px;
-              size: 300px;
-            "
-            stroke-dasharray="1, 1"
-            ng-attr-x="{{-node.width/2}}"
-            ng-attr-y="{{-node.height/2}}"
-            ng-attr-width="{{node.width}}" 
-            ng-attr-height="{{node.height}}"
-            ng-attr-ry="{{node.height/2}}"
-            fill="url(#gradient)"
-            >
-          </rect>
-          <text class="node-label">{{node.aliasOf.id | truncateTo:8}}</text>
-          <title>ID: {{node.id}}, Name: {{node.name}}</title>
-        </g>
-        <g 
-          draggable 
-          ng-repeat="node in model.nodes.reactions" 
-          context-menu
-          data-target="reactionMenu{{node.id}}"
-        >
-          <circle 
-            ng-class="node.classes" 
-            class="node" 
-            ng-attr-r="{{4}}"
-            fill="black" 
-            stroke="black"
-            ng-attr-opacity="{{imports.showReactionNodes ? 1 : 0}}"
-            ng-attr-transform="translate({{node.x}},{{node.y}})"
-            >
-            <title>ID: {{node.id}}, Name: {{node.name}}</title>
-          </circle>
-          <g
-            ng-if="node.selected"
-          >
             <g
-              ng-if="node.fixed"
-              ng-attr-transform="translate({{node.x}},{{node.y}}) scale(0.005)"
-              >
-              <path d="M448 1568v-576q0-40 28-68t68-28h32v-192q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68v576q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68zm320-672h512v-192q0-106-75-181t-181-75-181 75-75 181v192z"/>
+              ng-if="link.reaction.selected"
+            >
+              <line
+                stroke="red"
+                stroke-dasharray="1, 1"
+                ng-attr-x1="{{link.x2}}"
+                ng-attr-y1="{{link.y2}}"
+                ng-attr-x2="{{link.cp2.x}}"
+                ng-attr-y2="{{link.cp2.y}}"
+              />
+              <circle
+                stroke="red"
+                ng-attr-cx="{{link.cp2.x}}"
+                ng-attr-cy="{{link.cp2.y}}"
+                ng-attr-r="{{7}}"
+                fill="white"
+                sg-drag
+                sg-drag-begin="link.cp2"
+                sg-drag-move="_.bind(link.updateCp2, link)"
+                style="cursor: pointer;"
+              />
             </g>
             <line
-              stroke="red"
-              stroke-dasharray="1, 1"
-              ng-attr-x1="{{node.getCp(1).x}}"
-              ng-attr-y1="{{node.getCp(1).y}}"
-              ng-attr-x2="{{node.getCp(2).x}}"
-              ng-attr-y2="{{node.getCp(2).y}}"
-            />
-            <circle
-              sg-drag
-              sg-drag-begin="node.getCp(1)"
-              sg-drag-move="_.bind(node.updateCp1, node)"
-              stroke="red"
-              ng-attr-cx="{{node.getCp(1).x}}"
-              ng-attr-cy="{{node.getCp(1).y}}"
-              ng-attr-r="{{7}}"
-              fill="white"
-            />
-            <circle
-              sg-drag
-              sg-drag-begin="node.getCp(2)"
-              sg-drag-move="_.bind(node.updateCp2, node)"
-              stroke="red"
-              ng-attr-cx="{{node.getCp(2).x}}"
-              ng-attr-cy="{{node.getCp(2).y}}"
-              ng-attr-r="{{7}}"
-              fill="white"
-            />
-          </g>
-          <text class="node-label">{{}}</text>
-        </g>
-        <g 
-          draggable 
-          ng-repeat="node in sourceNodes" 
-          ng-attr-transform="translate({{node.x}},{{node.y}})">
-          <g class="null-symbol">
-            <circle 
-              class = "node"
-              ng-class="{fixed: node.fixed, selected: node.selected}" 
-              ng-attr-r="{{node.height / 2}}"
-              fill="white">
-            </circle>
-            <line 
-              class = "node"
-              ng-class="{fixed: node.fixed, selected: node.selected}" 
-              ng-attr-x1="{{-10}}" 
-              ng-attr-y1="{{10}}"
-              ng-attr-x2="{{10}}" 
-              ng-attr-y2="{{-10}}">
+              ng-if="false"
+              class="reaction production link"
+              ng-attr-opacity="{{link.opacity}}"
+              marker-end="url(#production)"
+              ng-attr-x1="{{link.x1}}"
+              ng-attr-y1="{{link.y1}}"
+              ng-attr-x2="{{link.x2}}"
+              ng-attr-y2="{{link.y2}}">
             </line>
           </g>
-        </g>
-        <g 
-          draggable 
-          ng-repeat="node in sinkNodes" 
-          ng-attr-transform="translate({{node.x}},{{node.y}})">
-          <g class="null-symbol">
-            <circle 
-              ng-attr-r="{{node.height / 2}}"
-              class = "node"
-              ng-class="{fixed: node.fixed, selected: node.selected}" 
-              fill="white"
+          <g 
+            class="link"
+            ng-repeat="link in model.links.reactant" 
+            context-menu
+            data-target="reactionMenu{{link.reaction.id}}"
+          >
+            <path
+              ng-click="toggleProperty(link.reaction)"
+              ng-attr-d="
+                M {{link.x1}} {{link.y1}}
+                C 
+                {{link.cp1.x}} {{link.cp1.y}}
+                {{link.reaction.getCp(1).x}} {{link.reaction.getCp(1).y}}
+                {{link.x2}} {{link.y2}}
+              "
+              fill="none"
+              ng-attr-stroke="{{link.reaction.selected ? 'red' : 'black'}}"
+              ng-attr-stroke-width="{{'3px'}}"
+              ng-attr-opacity="{{link.opacity}}"
+            />
+            <g
+              ng-if="link.reaction.selected"
+            >
+              <line
+                stroke="red"
+                stroke-dasharray="1, 1"
+                ng-attr-x1="{{link.x1}}"
+                ng-attr-y1="{{link.y1}}"
+                ng-attr-x2="{{link.cp1.x}}"
+                ng-attr-y2="{{link.cp1.y}}"
+              />
+              <circle
+                stroke="red"
+                ng-attr-cx="{{link.cp1.x}}"
+                ng-attr-cy="{{link.cp1.y}}"
+                ng-attr-r="{{7}}"
+                fill="white"
+                sg-drag
+                sg-drag-begin="link.cp1"
+                sg-drag-move="_.bind(link.updateCp1, link)"
+                style="cursor: pointer;"
+              />
+            </g>
+            <line 
+              ng-if="false"
+              ng-class="{selected: isSelected}"
+              class="reaction reactant link"
+              ng-attr-opacity="{{link.opacity}}"
+              ng-attr-x1="{{link.x1}}"
+              ng-attr-y1="{{link.y1}}"
+              ng-attr-x2="{{link.x2}}"
+              ng-attr-y2="{{link.y2}}">
+            </line>
+          </g>
+          <g ng-repeat="link in lines.modifier">
+            <path 
+              class="modifier link" 
+              ng-attr-opacity="{{link.opacity}}"
+              ng-attr-d={{sgGeo.linkArc(link)}}
+              fill="none"
+              ></path>
+            <line 
+              ng-class="{selected: isSelected}" 
+              class="modifier link" 
+              ng-attr-opacity="{{link.opacity}}"
+              ng-attr-x1="{{link.x1}}"
+              ng-attr-y1="{{link.y1}}" 
+              ng-attr-x2="{{link.x2}}" 
+              ng-attr-y2="{{link.y2}}"
+              marker-end="url(#modifier)">
+            </line>
+          </g>
+          <g
+            ng-repeat="link in lines.source" 
+            >
+            <path 
+              class="source link"
+              ng-attr-opacity="{{link.opacity}}"
+              ng-attr-d={{linkArc(link)}}
+              fill="none"
+              ></path>
+            <line
+              class="source link"
+              ng-attr-x1="{{link.x1}}"
+              ng-attr-y1="{{link.y1}}" 
+              ng-attr-x2="{{link.x2}}" 
+              ng-attr-y2="{{link.y2}}"></line>
+          </g>
+          <g
+            ng-repeat="link in lines.sink"
+            >
+            <path 
+              class="sink link"
+              ng-attr-opacity="{{link.opacity}}"
+              ng-attr-d={{linkArc(link)}}
+              fill="none"
+              ></path>
+            <line
+              class="sink link"
+              ng-attr-opacity="{{link.opacity}}"
+              ng-attr-x1="{{link.x1}}"
+              ng-attr-y1="{{link.y1}}" 
+              ng-attr-x2="{{link.x2}}" 
+              ng-attr-y2="{{link.y2}}"
+              marker-end="url(#production)"></line>
+          </g>
+          <g 
+            sg-drag
+            sg-drag-begin="node"
+            sg-drag-move="_.bind(node.updatePosition, node)"
+            ng-repeat="node in model.nodes.species"
+            context-menu
+            data-target="speciesMenu{{node.id}}"
+            ng-click="toggleProperty(node)"
+            ng-attr-opacity="{{node.opacity}}"
+            ng-attr-transform="translate({{node.x}},{{node.y}})"
+            style="cursor: pointer;"
+            >
+            <rect 
+              ng-class="{fixed: node.fixed, selected: node.selected}"
+              class="species node"
+              style="
+                stroke-width: 3px;
+                size: 300px;
+              "
+              ng-attr-x="{{-node.width/2}}"
+              ng-attr-y="{{-node.height/2}}"
+              ng-attr-width="{{node.width}}" 
+              ng-attr-height="{{node.height}}"
+              ng-attr-ry="{{node.height/2}}"
+              fill="url(#gradient)"
               >
+            </rect>
+            <text class="node-label">{{node.id | truncateTo:8}}</text>
+            <title>ID: {{node.id}}, Name: {{node.name}}</title>
+          </g>
+          <g 
+            sg-drag
+            sg-drag-begin="node"
+            sg-drag-move="_.bind(node.updatePosition, node)"
+            ng-repeat="node in model.nodes.alias"
+            context-menu
+            data-target="aliasMenu{{node.id}}"
+            ng-click="toggleProperty(node)"
+            ng-attr-opacity="{{node.opacity}}"
+            ng-attr-transform="translate({{node.x}},{{node.y}})"
+            style="cursor: pointer;"
+            >
+            <rect 
+              class="species node"
+              ng-class="{fixed: node.fixed, selected: node.selected}"
+              style="
+                stroke-width: 3px;
+                size: 300px;
+              "
+              stroke-dasharray="1, 1"
+              ng-attr-x="{{-node.width/2}}"
+              ng-attr-y="{{-node.height/2}}"
+              ng-attr-width="{{node.width}}" 
+              ng-attr-height="{{node.height}}"
+              ng-attr-ry="{{node.height/2}}"
+              fill="url(#gradient)"
+              >
+            </rect>
+            <text class="node-label">{{node.aliasOf.id | truncateTo:8}}</text>
+            <title>ID: {{node.id}}, Name: {{node.name}}</title>
+          </g>
+          <g 
+            draggable 
+            ng-repeat="node in model.nodes.reactions" 
+            context-menu
+            data-target="reactionMenu{{node.id}}"
+          >
+            <circle 
+              ng-class="node.classes" 
+              class="node" 
+              ng-attr-r="{{4}}"
+              fill="black" 
+              stroke="black"
+              ng-attr-opacity="{{imports.showReactionNodes ? 1 : 0}}"
+              ng-attr-transform="translate({{node.x}},{{node.y}})"
+              >
+              <title>ID: {{node.id}}, Name: {{node.name}}</title>
             </circle>
-            <line 
-              class = "node"
-              ng-class="{fixed: node.fixed, selected: node.selected}" 
-              ng-attr-x1="{{-10}}" 
-              ng-attr-y1="{{10}}"
-              ng-attr-x2="{{10}}" 
-              ng-attr-y2="{{-10}}">
-            </line>
+            <g
+              ng-if="node.selected"
+            >
+              <g
+                ng-if="node.fixed"
+                ng-attr-transform="translate({{node.x}},{{node.y}}) scale(0.005)"
+                >
+                <path d="M448 1568v-576q0-40 28-68t68-28h32v-192q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68v576q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68zm320-672h512v-192q0-106-75-181t-181-75-181 75-75 181v192z"/>
+              </g>
+              <line
+                stroke="red"
+                stroke-dasharray="1, 1"
+                ng-attr-x1="{{node.getCp(1).x}}"
+                ng-attr-y1="{{node.getCp(1).y}}"
+                ng-attr-x2="{{node.getCp(2).x}}"
+                ng-attr-y2="{{node.getCp(2).y}}"
+              />
+              <circle
+                sg-drag
+                sg-drag-begin="node.getCp(1)"
+                sg-drag-move="_.bind(node.updateCp1, node)"
+                stroke="red"
+                ng-attr-cx="{{node.getCp(1).x}}"
+                ng-attr-cy="{{node.getCp(1).y}}"
+                ng-attr-r="{{7}}"
+                fill="white"
+              />
+              <circle
+                sg-drag
+                sg-drag-begin="node.getCp(2)"
+                sg-drag-move="_.bind(node.updateCp2, node)"
+                stroke="red"
+                ng-attr-cx="{{node.getCp(2).x}}"
+                ng-attr-cy="{{node.getCp(2).y}}"
+                ng-attr-r="{{7}}"
+                fill="white"
+              />
+            </g>
+            <text class="node-label">{{}}</text>
+          </g>
+          <g 
+            draggable 
+            ng-repeat="node in sourceNodes" 
+            ng-attr-transform="translate({{node.x}},{{node.y}})">
+            <g class="null-symbol">
+              <circle 
+                class = "node"
+                ng-class="{fixed: node.fixed, selected: node.selected}" 
+                ng-attr-r="{{node.height / 2}}"
+                fill="white">
+              </circle>
+              <line 
+                class = "node"
+                ng-class="{fixed: node.fixed, selected: node.selected}" 
+                ng-attr-x1="{{-10}}" 
+                ng-attr-y1="{{10}}"
+                ng-attr-x2="{{10}}" 
+                ng-attr-y2="{{-10}}">
+              </line>
+            </g>
+          </g>
+          <g 
+            draggable 
+            ng-repeat="node in sinkNodes" 
+            ng-attr-transform="translate({{node.x}},{{node.y}})">
+            <g class="null-symbol">
+              <circle 
+                ng-attr-r="{{node.height / 2}}"
+                class = "node"
+                ng-class="{fixed: node.fixed, selected: node.selected}" 
+                fill="white"
+                >
+              </circle>
+              <line 
+                class = "node"
+                ng-class="{fixed: node.fixed, selected: node.selected}" 
+                ng-attr-x1="{{-10}}" 
+                ng-attr-y1="{{10}}"
+                ng-attr-x2="{{10}}" 
+                ng-attr-y2="{{-10}}">
+              </line>
+            </g>
           </g>
         </g>
-      </g>
-    </svg>
+      </svg>
+    </div>
   </div>
 </div>

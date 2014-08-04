@@ -1,0 +1,44 @@
+<span>Click Mode:</span>
+<span class="btn-group">
+  <button class="btn btn-default btn-sm" ng-model="AppState.clickMode" btn-radio="'selected'" tooltip="Select Node" tooltip-popup-delay="1000" tooltip-placement="right">
+    <i class="fa fa-location-arrow fa-flip-horizontal"></i>
+  </button>
+  <button class="btn btn-default btn-sm" ng-model="AppState.clickMode" btn-radio="'fixed'" tooltip="Lock Node" tooltip-popup-delay="1000" tooltip-placement="right">
+    <i class="fa fa-lock"></i>
+  </button>
+</span>
+<div class="btn-group">
+  <button class="btn btn-default btn-sm" ng-model="AppState.clickMode" btn-radio="'addSpecies'" tooltip="Add Species Node" tooltip-popup-delay="1000" tooltip-placement="right">
+    Add Node
+  </button>
+</div>
+<span>Auto Layout:</span>
+<span class="btn-group">
+  <button class="btn btn-default btn-sm" ng-click="layout.force.stop()" tooltip="Stop Auto-Layout" tooltip-placement="right" tooltip-append-to-body="true" tooltip-popup-delay="1000">
+    <i class="fa fa-stop"></i>
+  </button>
+  <button class="btn btn-default btn-sm" ng-click="layout.start()" tooltip="Start Auto-Layout" tooltip-placement="right" tooltip-append-to-body="true" tooltip-popup-delay="1000">
+    <i class="fa fa-play"></i>
+  </button>
+  <button class="btn btn-default btn-sm" btn-checkbox ng-model="AppState.menu.layout" tooltip="Auto-Layout Settings" tooltip-placement="right" tooltip-append-to-body="true" tooltip-popup-delay="1000">
+    <i class="fa fa-wrench"></i>
+  </button>
+</span>
+<div class="col-sm-6 col-sm-offset-3" collapse="!AppState.menu.layout">
+  <form>
+  <label>Charge</label>
+  <input class="form-control" type="number" ng-model="layout.charge" step="10" min="-5000" max="0"></input>
+  <label>Gravity</label>
+  <input class="form-control" type="number" ng-model="layout.gravity" min="0" max="1" step="0.1"></input>
+  <label>Link Distance</label>
+  <input class="form-control" type="number" ng-model="layout.linkDistance" min="0" max="100" step="1"></input>
+  <label>Max Links In</label>
+  <input class="form-control" type="number" ng-model="max.links.in" min="1" max="100" step="1"></input>
+  <label>Max Links Out</label>
+  <input class="form-control" type="number" ng-model="max.links.out" min="1" max="100" step="1"></input>
+  <label>Zoom</label>
+  <input class="form-control" type="checkbox" ng-model="AppState.zoom"></input>
+  <label>Show Modifiers</label>
+  <input class="form-control" type="checkbox" ng-model="linkModifiers"></input>
+  </form>
+</div>
