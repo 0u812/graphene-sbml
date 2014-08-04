@@ -17,6 +17,7 @@ angular.module('sg.graphene.sbml')
         layout: false
       },
       clickMode: 'selected',
+      toggleModes: ['selected', 'lock'],
       clickModeToggleAll: {
         'selected': false,
       },

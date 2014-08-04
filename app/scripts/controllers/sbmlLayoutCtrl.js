@@ -9,25 +9,28 @@ angular.module('sg.graphene.sbml')
 
     $scope.toggleProperty = function(obj) {
       var prop = AppState.clickMode;
-      var setAllOthers = AppState.clickModeToggleAll[prop];
-      if (!_.isUndefined(setAllOthers)) {
-        var allObjs;
-        if (obj instanceof SgNode) {
-          allObjs = $scope.model.getAllNodes();
-        } else if (obj instanceof SgLink) {
-          allObjs = $scope.model.getAllLinks();
+      if (_.contains(AppState.toggleModes, AppState.clickMode)) {
+
+        var setAllOthers = AppState.clickModeToggleAll[prop];
+        if (!_.isUndefined(setAllOthers)) {
+          var allObjs;
+          if (obj instanceof SgNode) {
+            allObjs = $scope.model.getAllNodes();
+          } else if (obj instanceof SgLink) {
+            allObjs = $scope.model.getAllLinks();
+          }
+
+          if (allObjs) {
+            _.each(allObjs, function(n) {
+              if (n !== obj) {
+                n[prop] = setAllOthers;
+              }
+            });
+          }
         }
 
-        if (allObjs) {
-          _.each(allObjs, function(n) {
-            if (n !== obj) {
-              n[prop] = setAllOthers;
-            }
-          });
-        }
+        obj[prop] = !obj[prop];
       }
-
-      obj[prop] = !obj[prop];
     };
 
 
