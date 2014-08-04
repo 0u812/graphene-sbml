@@ -135,6 +135,9 @@ angular.module('sg.graphene.sbml')
       aliasNode.aliasOf = species;
       aliasNode.width = species.width;
       aliasNode.height = species.height;
+      aliasNode.x = species.x + 20;
+      aliasNode.y = species.y + 20;
+
       aliasNode.model = this;
       return aliasNode;
     };
