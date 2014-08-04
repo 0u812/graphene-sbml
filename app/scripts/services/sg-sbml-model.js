@@ -8,7 +8,7 @@
  * Service in the sg.graphene.sbml.
  */
 angular.module('sg.graphene.sbml')
-  .factory('SgSbmlModel', function(SgNodeReaction, SgNodeSpecies, SgSbmlLink, SgNodeAlias) {
+  .factory('SgSbmlModel', function(SgNodeReaction, SgNodeSpecies, SgSbmlLink, SgNodeAlias, idGenerator) {
 
     var x2js = new X2JS();
     var arrayify = function(s) {
@@ -29,23 +29,6 @@ angular.module('sg.graphene.sbml')
       node.y = parseInt(obj._y, 10);
     };
 
-    var generateAliasId = function(origId) {
-      var increment = 0;
-      var id;
-      function newId() {
-        id = origId + '_' + increment;
-        increment += 1;
-      }
-      newId();
-
-      var allIds = _.pluck(this.getAllNodes(), 'id');
-
-      while(_.contains(allIds, id)) {
-        newId();
-      }
-
-      return id;
-    };
 
     var SgSbmlModel = function(sbmlStr) {
       this.sbml = x2js.xml_str2json(sbmlStr);
@@ -113,6 +96,14 @@ angular.module('sg.graphene.sbml')
     };
 
     SgSbmlModel.prototype.addSpeciesNode = function(data) {
+      if (!data) {
+        data = {
+          _id: idGenerator.generateSpeciesId(this),
+          _boundaryCondition: false,
+          _initialConcentration: 0,
+          _compartment: 'compartment'
+        };
+      }
       var newNode = new SgNodeSpecies(data._id);
       newNode.data = data;
       newNode.model = this;
@@ -123,12 +114,13 @@ angular.module('sg.graphene.sbml')
         console.log('Node sizes not defined');
       }
       this.nodes.species[newNode.id] = newNode;
+      return newNode;
     };
 
     SgSbmlModel.prototype.makeAliasNode = function(species, aliasId) {
       var aliasNode;
       if (!aliasId) {
-        aliasId = _.bind(generateAliasId, this)(species.id);
+        aliasId = idGenerator.generateAliasId(species.id, this);
       }
       aliasNode = new SgNodeAlias(aliasId);
       this.nodes.alias[aliasId] = aliasNode;

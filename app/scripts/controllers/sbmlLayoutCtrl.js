@@ -7,18 +7,21 @@ angular.module('sg.graphene.sbml')
     $scope.sgGeo = sgGeo;
     $scope._ = _;
 
-    $scope.toggleProperty = function(obj) {
+    $scope.toggleProperty = function(obj, event) {
+
+      if (obj instanceof SgNode || obj instanceof SgLink) {
+        if (event) {
+          event.stopPropagation();
+        }
+      }
+
       var prop = AppState.clickMode;
       if (_.contains(AppState.toggleModes, AppState.clickMode)) {
 
         var setAllOthers = AppState.clickModeToggleAll[prop];
         if (!_.isUndefined(setAllOthers)) {
-          var allObjs;
-          if (obj instanceof SgNode) {
-            allObjs = $scope.model.getAllNodes();
-          } else if (obj instanceof SgLink) {
-            allObjs = $scope.model.getAllLinks();
-          }
+
+          var allObjs = _.union($scope.model.getAllNodes(), $scope.model.getAllLinks());
 
           if (allObjs) {
             _.each(allObjs, function(n) {
@@ -30,6 +33,15 @@ angular.module('sg.graphene.sbml')
         }
 
         obj[prop] = !obj[prop];
+      }
+    };
+
+    $scope.addSpecies = function($event) {
+      if (AppState.clickMode === 'addSpecies') {
+        var newNode = $scope.model.addSpeciesNode();
+        var clientRect = $event.currentTarget.getBoundingClientRect();
+        newNode.x = (($event.pageX - clientRect.left) - $scope.translate.x) / $scope.scale;
+        newNode.y = (($event.pageY - clientRect.top) - $scope.translate.y) / $scope.scale;
       }
     };
 
