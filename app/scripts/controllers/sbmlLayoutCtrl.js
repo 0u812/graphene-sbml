@@ -66,7 +66,6 @@ angular.module('sg.graphene.sbml')
         $scope.layout = new SgLayout($scope.model);
         $scope.layout.addToTick(function() {
           $scope.$digest();
-          $scope.started = true;
         });
         if ($scope.model.getJdesignerLayout()) {
 
@@ -122,9 +121,7 @@ angular.module('sg.graphene.sbml')
             });
             return total;
           }, function() {
-            if ($scope.started) {
-              n.updateCentroid();
-            }
+            n.updateCentroid();
           });
           nodeWatchers.push(watch);
         });
