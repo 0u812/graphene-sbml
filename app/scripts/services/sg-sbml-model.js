@@ -128,7 +128,7 @@ angular.module('sg.graphene.sbml')
     SgSbmlModel.prototype.makeAliasNode = function(species, aliasId) {
       var aliasNode;
       if (!aliasId) {
-        aliasId = generateAliasId(species.id);
+        aliasId = _.bind(generateAliasId, this)(species.id);
       }
       aliasNode = new SgNodeAlias(aliasId);
       this.nodes.alias[aliasId] = aliasNode;
