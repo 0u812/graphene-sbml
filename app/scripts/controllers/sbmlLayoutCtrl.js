@@ -1,11 +1,15 @@
 'use strict';
 
 angular.module('sg.graphene.sbml')
-  .controller('SbmlLayoutCtrl', function($scope, sgSbml, sgGeo, SgSbmlModel, SgLayout, SgLink, SgNode, AppState) {
+  .controller('SbmlLayoutCtrl', function($scope, sgSbml, sgGeo, SgSbmlModel, SgLayout, SgLink, SgNode, AppState, sgSbmlClickHandlers) {
 
     $scope.AppState = AppState;
     $scope.sgGeo = sgGeo;
     $scope._ = _;
+
+    $scope.clickHandler = function() {
+      sgSbmlClickHandlers[AppState.clickMode].apply($scope, arguments);
+    };
 
     $scope.toggleProperty = function(obj, event) {
 

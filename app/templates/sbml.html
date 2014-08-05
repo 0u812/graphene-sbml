@@ -41,7 +41,7 @@
         xmlns="http://www.w3.org/2000/svg"
         ng-attr-height="{{imports.height || '800px'}}"
         ng-attr-width="{{imports.width || '100%'}}"
-        ng-click="toggleProperty({}); addSpecies($event);"
+        ng-click="clickHandler({}); addSpecies($event);"
         >
         <style>
         svg .node.species {
@@ -151,7 +151,7 @@
             data-target="reactionMenu{{link.reaction.id}}"
             >
             <path
-              ng-click="toggleProperty(link.reaction, $event)"
+              ng-click="clickHandler(link.reaction, $event)"
               ng-attr-d="
                 M {{link.x1}} {{link.y1}}
                 C
@@ -206,7 +206,7 @@
             data-target="reactionMenu{{link.reaction.id}}"
           >
             <path
-              ng-click="toggleProperty(link.reaction, $event)"
+              ng-click="clickHandler(link.reaction, $event)"
               ng-attr-d="
                 M {{link.x1}} {{link.y1}}
                 C 
@@ -312,7 +312,7 @@
             ng-repeat="node in model.nodes.species"
             context-menu
             data-target="speciesMenu{{node.id}}"
-            ng-click="toggleProperty(node, $event)"
+            ng-click="clickHandler(node, $event)"
             ng-attr-opacity="{{node.opacity}}"
             ng-attr-transform="translate({{node.x}},{{node.y}})"
             style="cursor: pointer;"
@@ -342,7 +342,7 @@
             ng-repeat="node in model.nodes.alias"
             context-menu
             data-target="aliasMenu{{node.id}}"
-            ng-click="toggleProperty(node, $event)"
+            ng-click="clickHandler(node, $event)"
             ng-attr-opacity="{{node.opacity}}"
             ng-attr-transform="translate({{node.x}},{{node.y}})"
             style="cursor: pointer;"
