@@ -296,19 +296,7 @@ angular.module('sg.graphene.sbml')
         }, this);
 
         // Rewire all links to point to alias nodes
-        var links = this.getAllLinksForReaction(reactionNode);
-        var speciesWithAliases = _.pluck(aliasNodes, 'aliasOf');
-        _.each(links, function(l) {
-          var sInd = _.indexOf(speciesWithAliases, l.source);
-          if (sInd > -1) {
-            l.source = aliasNodes[sInd];
-          }
-          var tInd = _.indexOf(speciesWithAliases, l.target);
-          if (tInd > -1) {
-            l.target = aliasNodes[tInd];
-          }
-
-        });
+        this.replaceSpeciesWithAliasInReaction(reactionNode, aliasNodes);
 
       }, this);
 
@@ -323,9 +311,25 @@ angular.module('sg.graphene.sbml')
       });
 
 
-
-
       return layout;
+
+    };
+
+    SgSbmlModel.prototype.replaceSpeciesWithAliasInReaction = function (reactionNode, aliasNodes) {
+      var links = this.getAllLinksForReaction(reactionNode);
+
+      var speciesWithAliases = _.pluck(aliasNodes, 'aliasOf');
+      _.each(links, function(l) {
+        var sInd = _.indexOf(speciesWithAliases, l.source);
+        if (sInd > -1) {
+          l.source = aliasNodes[sInd];
+        }
+        var tInd = _.indexOf(speciesWithAliases, l.target);
+        if (tInd > -1) {
+          l.target = aliasNodes[tInd];
+        }
+
+      });
 
     };
 

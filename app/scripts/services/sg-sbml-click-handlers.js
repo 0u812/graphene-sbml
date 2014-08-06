@@ -8,7 +8,7 @@
  * Factory in the grapheneSbmlApp.
  */
 angular.module('sg.graphene.sbml')
-  .factory('sgSbmlClickHandlers', function(AppState, SgNode, SgLink) {
+  .factory('sgSbmlClickHandlers', function(AppState, SgNode, SgLink, SgNodeAlias) {
     // Service logic
     // ...
     var toggleProperty = function(obj, event) {
@@ -53,13 +53,30 @@ angular.module('sg.graphene.sbml')
           console.log(nodeStack);
           if (nodeStack.length > 1) {
             var newReaction = this.model.createReaction();
-            newReaction.addReactant(nodeStack[0].data, 1);
-            newReaction.addProduct(nodeStack[1].data, 1);
+            var speciesSbml = [];
+            var aliasNodes = [];
 
-            var newNode = this.model.addReactionNode(newReaction);
+            _.each(nodeStack, function(n) {
+              if (n instanceof SgNodeAlias) {
+                speciesSbml.push(n.aliasOf.data);
+                aliasNodes.push(n);
+              } else {
+                speciesSbml.push(n.data);
+              }
+            });
+            newReaction.addReactant(speciesSbml[0], 1);
+            newReaction.addProduct(speciesSbml[1], 1);
+
+            var reactionNode = this.model.addReactionNode(newReaction);
             var newLinks = this.model.addReactionLinks(newReaction.data);
-            newNode.updatePosition();
-            newNode.updateCentroid();
+
+            // Replace species nodes with alias nodes in reaction node
+            if (aliasNodes.length > 0) {
+              this.model.replaceSpeciesWithAliasInReaction(reactionNode, aliasNodes);
+            }
+
+            reactionNode.updatePosition();
+            reactionNode.updateCentroid();
             _.each(newLinks, function(l) {
               l.update();
             });
