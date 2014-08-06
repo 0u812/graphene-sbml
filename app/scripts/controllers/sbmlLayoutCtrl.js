@@ -11,45 +11,6 @@ angular.module('sg.graphene.sbml')
       sgSbmlClickHandlers[AppState.clickMode].apply($scope, arguments);
     };
 
-    $scope.toggleProperty = function(obj, event) {
-
-      if (obj instanceof SgNode || obj instanceof SgLink) {
-        if (event) {
-          event.stopPropagation();
-        }
-      }
-
-      var prop = AppState.clickMode;
-      if (_.contains(AppState.toggleModes, AppState.clickMode)) {
-
-        var setAllOthers = AppState.clickModeToggleAll[prop];
-        if (!_.isUndefined(setAllOthers)) {
-
-          var allObjs = _.union($scope.model.getAllNodes(), $scope.model.getAllLinks());
-
-          if (allObjs) {
-            _.each(allObjs, function(n) {
-              if (n !== obj) {
-                n[prop] = setAllOthers;
-              }
-            });
-          }
-        }
-
-        obj[prop] = !obj[prop];
-      }
-    };
-
-    $scope.addSpecies = function($event) {
-      if (AppState.clickMode === 'addSpecies') {
-        var newNode = $scope.model.addSpeciesNode();
-        var clientRect = $event.currentTarget.getBoundingClientRect();
-        newNode.x = (($event.pageX - clientRect.left) - $scope.translate.x) / $scope.scale;
-        newNode.y = (($event.pageY - clientRect.top) - $scope.translate.y) / $scope.scale;
-      }
-    };
-
-
     /*
      * Watchers
      */
@@ -84,50 +45,62 @@ angular.module('sg.graphene.sbml')
 
     $scope.$watchCollection('model.links', function(val) {
       if (val) {
-        /*
-         * unwatch all link watchers
-         */
-        _.each(linkWatchers, function(w) {
-          w();
-        });
-        linkWatchers = [];
-        _.each($scope.model.getAllLinks(), function(l) {
-          var watch = $scope.$watch(function() {
-            return l.source.x + l.source.y + l.target.x + l.target.y;
-          }, function(val) {
+        _.each($scope.model.links, function(links, key) {
+          $scope.$watchCollection('model.links.' + key, function(val) {
             if (val) {
-              l.update();
-              l.reaction.updatePosition();
+              /*
+               * unwatch all link watchers
+               */
+              _.each(linkWatchers, function(w) {
+                w();
+              });
+              linkWatchers = [];
+              _.each($scope.model.getAllLinks(), function(l) {
+                var watch = $scope.$watch(function() {
+                  return l.source.x + l.source.y + l.target.x + l.target.y;
+                }, function(val) {
+                  if (val) {
+                    l.update();
+                    l.reaction.updatePosition();
+                  }
+                });
+                l.update();
+                l.reaction.updatePosition();
+                linkWatchers.push(watch);
+              });
             }
           });
-          l.update();
-          l.reaction.updatePosition();
-          linkWatchers.push(watch);
         });
       }
     });
 
     $scope.$watchCollection('model.nodes', function(val) {
       if (val) {
-        _.each(nodeWatchers, function(w) {
-          w();
-        });
-        nodeWatchers = [];
+        _.each($scope.model.nodes, function(nodes, key) {
+          $scope.$watchCollection('model.nodes.' + key, function(val) {
+            if (val) {
+              _.each(nodeWatchers, function(w) {
+                w();
+              });
+              nodeWatchers = [];
 
-        _.each($scope.model.nodes.reactions, function(n) {
-          var watch = $scope.$watch(function() {
-            var total = 0;
-            _.each(n.reactants, function(r) {
-              total += r.x + r.y;
-            });
-            _.each(n.products, function(p) {
-              total += p.x + p.y;
-            });
-            return total;
-          }, function() {
-            n.updateCentroid();
+              _.each($scope.model.nodes.reactions, function(n) {
+                var watch = $scope.$watch(function() {
+                  var total = 0;
+                  _.each(n.reactants, function(r) {
+                    total += r.x + r.y;
+                  });
+                  _.each(n.products, function(p) {
+                    total += p.x + p.y;
+                  });
+                  return total;
+                }, function() {
+                  n.updateCentroid();
+                });
+                nodeWatchers.push(watch);
+              });
+            }
           });
-          nodeWatchers.push(watch);
         });
       }
     });
