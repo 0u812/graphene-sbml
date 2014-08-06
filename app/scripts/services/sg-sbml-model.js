@@ -278,9 +278,6 @@ angular.module('sg.graphene.sbml')
           if (p.aliasRef) {
             var aliasNode = this.nodes.alias[p.aliasRef._aliasRef];
             aliasNodes.push(aliasNode);
-            // Exchange alias node for product
-            var indOfSpecies = _.indexOf(_.pluck(reactionNode.products, 'id'), p._species);
-            reactionNode.products[indOfSpecies] = aliasNode;
           }
         }, this);
 
@@ -289,9 +286,6 @@ angular.module('sg.graphene.sbml')
           if (p.aliasRef) {
             var aliasNode = this.nodes.alias[p.aliasRef._aliasRef];
             aliasNodes.push(aliasNode);
-            // Exchange alias node for product
-            var indOfSpecies = _.indexOf(_.pluck(reactionNode.reactants, 'id'), p._species);
-            reactionNode.reactants[indOfSpecies] = aliasNode;
           }
         }, this);
 
@@ -328,7 +322,20 @@ angular.module('sg.graphene.sbml')
         if (tInd > -1) {
           l.target = aliasNodes[tInd];
         }
+      });
 
+      // Switch reactants and products array nodes with aliases as well
+      _.each(reactionNode.reactants, function(n, ind) {
+        var sInd = _.indexOf(speciesWithAliases, n);
+        if (sInd > -1) {
+          reactionNode.reactants[ind] = aliasNodes[sInd];
+        }
+      });
+      _.each(reactionNode.products, function(n, ind) {
+        var sInd = _.indexOf(speciesWithAliases, n);
+        if (sInd > -1) {
+          reactionNode.products[ind] = aliasNodes[sInd];
+        }
       });
 
     };
