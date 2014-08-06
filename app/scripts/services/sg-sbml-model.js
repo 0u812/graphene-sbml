@@ -8,7 +8,14 @@
  * Service in the sg.graphene.sbml.
  */
 angular.module('sg.graphene.sbml')
-  .factory('SgSbmlModel', function(SgNodeReaction, SgNodeSpecies, SgSbmlLink, SgNodeAlias, idGenerator) {
+  .factory('SgSbmlModel', function(
+    SgNodeReaction,
+    SgSbmlReaction,
+    SgNodeSpecies,
+    SgSbmlLink,
+    SgNodeAlias,
+    idGenerator
+  ) {
 
     var x2js = new X2JS();
     var arrayify = function(s) {
@@ -69,10 +76,15 @@ angular.module('sg.graphene.sbml')
       // Create reaction nodes and links
       var reactions = this.getReactions();
       _.each(reactions, function(r) {
-        this.addReactionNode(r);
-        this.addReactionLinks(r);
+        var newReaction = this.createReaction(r);
+        this.addReactionNode(newReaction);
+        this.addReactionLinks(newReaction.data);
       }, this);
 
+    };
+
+    SgSbmlModel.prototype.createReaction = function(r) {
+      return new SgSbmlReaction(this, r);
     };
 
     SgSbmlModel.prototype.getCompartments = function() {
@@ -134,9 +146,9 @@ angular.module('sg.graphene.sbml')
       return aliasNode;
     };
 
-    SgSbmlModel.prototype.addReactionNode = function(data) {
-      var newNode = new SgNodeReaction(data._id);
-      newNode.data = data;
+    SgSbmlModel.prototype.addReactionNode = function(reaction) {
+      var newNode = new SgNodeReaction(reaction.data._id);
+      newNode.data = reaction;
       newNode.model = this;
       try {
         newNode.width = this.size.reactions.width;
@@ -145,12 +157,15 @@ angular.module('sg.graphene.sbml')
         console.log('Node sizes not defined');
       }
       this.nodes.reactions[newNode.id] = newNode;
+      return newNode;
     };
 
     SgSbmlModel.prototype.addReactionLinks = function(reaction) {
       var species;
 
       var reactionNode  = this.nodes.reactions[reaction._id];
+
+      var newLinks = [];
 
       var reactant = reaction.listOfReactants;
       if (reactant) {
@@ -159,6 +174,7 @@ angular.module('sg.graphene.sbml')
           var source = this.nodes.species[r._species];
           var target = reactionNode;
           var link = this.addLink('reactant', source, target);
+          newLinks.push(link);
           link.reaction = reactionNode;
           reactionNode.reactants.push(source);
         }, this);
@@ -171,6 +187,7 @@ angular.module('sg.graphene.sbml')
           var source = reactionNode;
           var target = this.nodes.species[r._species];
           var link = this.addLink('product', source, target);
+          newLinks.push(link);
           link.reaction = reactionNode;
           reactionNode.products.push(target);
         }, this);
@@ -183,10 +200,13 @@ angular.module('sg.graphene.sbml')
           var source = this.nodes.species[r._species];
           var target = reactionNode;
           var link = this.addLink('modifier', source, target);
+          newLinks.push(link);
           link.reaction = reactionNode;
           reactionNode.modifiers.push(source);
         }, this);
       }
+
+      return newLinks;
 
     };
 

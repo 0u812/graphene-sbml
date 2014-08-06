@@ -29,7 +29,11 @@ angular.module('sg.graphene.sbml')
       generateSpeciesId: function(model) {
         var baseId = 'S';
         return newId(baseId, model);
-      }
+      },
+      generateReactionId: function(model) {
+        var baseId = 'R';
+        return newId(baseId, model);
+      },
     };
 
     // Public API here

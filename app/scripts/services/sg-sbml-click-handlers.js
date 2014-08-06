@@ -38,12 +38,35 @@ angular.module('sg.graphene.sbml')
         obj[prop] = !obj[prop];
       }
     };
+
+    var nodeStack = [];
     var api = {
       'addSpecies': function($event) {
         var newNode = this.model.addSpeciesNode();
         var clientRect = $event.currentTarget.getBoundingClientRect();
         newNode.x = (($event.pageX - clientRect.left) - this.translate.x) / this.scale;
         newNode.y = (($event.pageY - clientRect.top) - this.translate.y) / this.scale;
+      },
+      'addUniUniReaction': function(node) {
+        if (node instanceof SgNode) {
+          nodeStack.push(node);
+          console.log(nodeStack);
+          if (nodeStack.length > 1) {
+            var newReaction = this.model.createReaction();
+            newReaction.addReactant(nodeStack[0].data, 1);
+            newReaction.addProduct(nodeStack[1].data, 1);
+
+            var newNode = this.model.addReactionNode(newReaction);
+            var newLinks = this.model.addReactionLinks(newReaction.data);
+            newNode.updatePosition();
+            newNode.updateCentroid();
+            _.each(newLinks, function(l) {
+              l.update();
+            });
+
+            nodeStack = [];
+          }
+        }
       },
       'selected': function() {
         toggleProperty.apply(this, arguments);
