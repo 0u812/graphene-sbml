@@ -48,43 +48,16 @@ angular.module('sg.graphene.sbml')
         newNode.y = (($event.pageY - clientRect.top) - this.translate.y) / this.scale;
       },
       'addUniUniReaction': function(node) {
-        if (node instanceof SgNode) {
-          nodeStack.push(node);
-          console.log(nodeStack);
-          if (nodeStack.length > 1) {
-            var newReaction = this.model.createReaction();
-            var speciesSbml = [];
-            var aliasNodes = [];
-
-            _.each(nodeStack, function(n) {
-              if (n instanceof SgNodeAlias) {
-                speciesSbml.push(n.aliasOf.data);
-                aliasNodes.push(n);
-              } else {
-                speciesSbml.push(n.data);
-              }
-            });
-            newReaction.addReactant(speciesSbml[0], 1);
-            newReaction.addProduct(speciesSbml[1], 1);
-
-            var reactionNode = this.model.addReactionNode(newReaction);
-            var newLinks = this.model.addReactionLinks(newReaction.data);
-
-            // Replace species nodes with alias nodes in reaction node
-            if (aliasNodes.length > 0) {
-              this.model.replaceSpeciesWithAliasInReaction(reactionNode, aliasNodes);
-            }
-
-            reactionNode.updatePosition();
-            reactionNode.updateCentroid();
-            _.each(newLinks, function(l) {
-              l.update();
-            });
-
-            nodeStack = [];
-            AppState.clickMode = 'selected';
-          }
-        }
+        addReaction(node, 1, 1);
+      },
+      'addUniBiReaction': function(node) {
+        addReaction(node, 1, 2);
+      },
+      'addBiUniReaction': function(node) {
+        addReaction(node, 2, 1);
+      },
+      'addBiBiReaction': function(node) {
+        addReaction(node, 2, 2);
       },
       'selected': function() {
         toggleProperty.apply(this, arguments);
@@ -93,6 +66,50 @@ angular.module('sg.graphene.sbml')
         toggleProperty.apply(this, arguments);
       },
     };
+
+    function addReaction(node, numReactants, numProducts) {
+      if (node instanceof SgNode) {
+        nodeStack.push(node);
+        if (nodeStack.length > (numReactants + numProducts - 1)) {
+          var newReaction = node.model.createReaction();
+          var speciesSbml = [];
+          var aliasNodes = [];
+
+          _.each(nodeStack, function(n) {
+            if (n instanceof SgNodeAlias) {
+              speciesSbml.push(n.aliasOf.data);
+              aliasNodes.push(n);
+            } else {
+              speciesSbml.push(n.data);
+            }
+          });
+          _.each(_.range(numReactants + numProducts), function(i) {
+            if (i < numReactants) {
+              newReaction.addReactant(speciesSbml[i], 1);
+            } else {
+              newReaction.addProduct(speciesSbml[i], 1);
+            }
+          });
+
+          var reactionNode = node.model.addReactionNode(newReaction);
+          var newLinks = node.model.addReactionLinks(newReaction.data);
+
+          // Replace species nodes with alias nodes in reaction node
+          if (aliasNodes.length > 0) {
+            node.model.replaceSpeciesWithAliasInReaction(reactionNode, aliasNodes);
+          }
+
+          reactionNode.updatePosition();
+          reactionNode.updateCentroid();
+          _.each(newLinks, function(l) {
+            l.update();
+          });
+
+          nodeStack = [];
+          AppState.clickMode = 'selected';
+        }
+      }
+    }
 
 
     // Public API here

@@ -151,6 +151,7 @@
             data-target="reactionMenu{{link.reaction.id}}"
             >
             <path
+              class="pointer"
               ng-click="clickHandler(link.reaction, $event)"
               ng-attr-d="
                 M {{link.x1}} {{link.y1}}
@@ -200,12 +201,13 @@
             </line>
           </g>
           <g 
-            class="link"
+            class="link pointer"
             ng-repeat="link in model.links.reactant" 
             context-menu
             data-target="reactionMenu{{link.reaction.id}}"
           >
             <path
+              class="pointer"
               ng-click="clickHandler(link.reaction, $event)"
               ng-attr-d="
                 M {{link.x1}} {{link.y1}}

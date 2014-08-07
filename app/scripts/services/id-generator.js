@@ -14,10 +14,10 @@ angular.module('sg.graphene.sbml')
     function newId(baseId, model) {
       var increment = 0;
       var allIds = _.pluck(model.getAllNodes(), 'id');
-      var id = baseId + '_' + increment;
+      var id = baseId + increment;
       while (_.contains(allIds, id)) {
         increment += 1;
-        id = baseId + '_' + increment;
+        id = baseId + increment;
       }
       return id;
     }
