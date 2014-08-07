@@ -33,6 +33,10 @@ module.exports = function (grunt) {
         files: ['bower.json'],
         tasks: ['wiredep']
       },
+      templates: {
+        files: ['<%= yeoman.app %>/templates{,*/}*.html'],
+        tasks: ['html2js']
+      },
       js: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
@@ -371,12 +375,15 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
+        'html2js',
         'compass:server'
       ],
       test: [
+        'html2js',
         'compass'
       ],
       dist: [
+        'html2js',
         'compass:dist',
         'imagemin',
         'svgmin'
@@ -389,6 +396,20 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    html2js: {
+      options: {
+        // custom options, see below
+        base: '<%= yeoman.app %>',
+        quoteChar: '\'',
+        useStrict: true,
+        module: 'sg.graphene.sbml.templates'
+      },
+      main: {
+        src: ['<%= yeoman.app %>/templates/**/*.html'],
+        dest: '<%= yeoman.app %>/scripts/templates.js'
+      },
     }
   });
 
