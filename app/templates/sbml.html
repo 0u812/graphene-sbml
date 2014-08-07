@@ -2,39 +2,7 @@
   <div class="row" ng-include="'templates/toolbar.html'">
   </div>
   <div class="row">
-    <div ng-repeat="node in model.nodes.species" class="dropdown position-fixed" id="speciesMenu{{node.id}}">
-      <ul class="dropdown-menu" role="menu">
-        <li>
-          <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Species</a>
-        </li>
-        <li>
-          <a class="pointer" role="menuitem" tabindex="1" ng-click="node.model.makeAliasNode(node)">Create Alias Node</a>
-        </li>
-        <li>
-          <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete Species</a>
-        </li>
-      </ul>
-    </div>
-    <div ng-repeat="node in model.nodes.alias" class="dropdown position-fixed" id="aliasMenu{{node.id}}">
-      <ul class="dropdown-menu" role="menu">
-        <li>
-          <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Alias</a>
-        </li>
-        <li>
-          <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete Alias</a>
-        </li>
-      </ul>
-    </div>
-    <div ng-repeat="node in model.nodes.reactions" class="dropdown position-fixed" id="reactionMenu{{node.id}}">
-      <ul class="dropdown-menu" role="menu">
-        <li>
-          <a class="pointer" role="menuitem" tabindex="1" ng-click="node.fixed = !node.fixed">Lock/Unlock Reaction</a>
-        </li>
-        <li>
-          <a class="pointer" role="menuitem" tabindex="2" ng-click="node.delete()">Delete Reaction</a>
-        </li>
-      </ul>
-    </div>
+    <ng-include src="'templates/context-menus.html'"></ng-include>
     <div class="col-sm-11 well">
       <svg
         zoomable="AppState.zoom"
