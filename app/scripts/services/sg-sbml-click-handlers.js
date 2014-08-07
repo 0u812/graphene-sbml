@@ -82,6 +82,7 @@ angular.module('sg.graphene.sbml')
             });
 
             nodeStack = [];
+            AppState.clickMode = 'selected';
           }
         }
       },
