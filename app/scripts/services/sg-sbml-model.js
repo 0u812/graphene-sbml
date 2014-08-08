@@ -253,6 +253,10 @@ angular.module('sg.graphene.sbml')
     SgSbmlModel.prototype.getJdesignerLayout = function() {
       var layout = this.sbml.sbml.model.annotation.JDesignerLayout;
 
+      if (!layout) {
+        return false;
+      }
+
       _.each(layout.listOfSpecies.species, function(s) {
         var bb = s.boundingBox;
         var id = s._id;
