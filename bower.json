@@ -2,7 +2,21 @@
   "name": "graphene-sbml",
   "version": "0.0.0",
   "main": [
-    "app/scripts/**/*.js"
+    "app/scripts/app.js",
+    "app/scripts/templates.js",
+    "app/scripts/controllers/sbmlDataCtrl.js",
+    "app/scripts/controllers/sbmlLayoutCtrl.js",
+    "app/scripts/services/appstate.js",
+    "app/scripts/services/id-generator.js",
+    "app/scripts/services/sbml.js",
+    "app/scripts/services/sg-node-alias.js",
+    "app/scripts/services/sg-node-reaction.js",
+    "app/scripts/services/sg-node-species.js",
+    "app/scripts/services/sg-sbml-click-handlers.js",
+    "app/scripts/services/sg-sbml-layout.js",
+    "app/scripts/services/sg-sbml-link.js",
+    "app/scripts/services/sg-sbml-model.js",
+    "app/scripts/services/sg-sbml-reaction.js"
   ],
   "dependencies": {
     "angular": "1.2.16",
