@@ -3,7 +3,7 @@
   </div>
   <div class="row">
     <ng-include src="'templates/context-menus.html'"></ng-include>
-    <div class="col-sm-11 well">
+    <div class="col-sm-12 well">
       <svg
         zoomable="AppState.zoom"
         xmlns="http://www.w3.org/2000/svg"
@@ -21,14 +21,6 @@
         }
         svg .link.modifier {
           stroke-dasharray: 5, 5;
-        }
-        svg .node.selected {
-          stroke: #FF0000;
-        }
-      
-        svg .node.fixed{
-          stroke: black;
-          stroke-width: 5px;
         }
         /*
         svg .link.selected {
@@ -281,7 +273,6 @@
             style="cursor: pointer;"
             >
             <rect 
-              ng-class="{fixed: node.fixed, selected: node.selected}"
               ng-attr-stroke="{{node.display.stroke}}"
               ng-attr-stroke-width="{{node.display.strokeWidth}}"
               ng-attr-x="{{-node.width/2}}"
@@ -292,6 +283,23 @@
               ng-attr-fill="url(#speciesGradient-{{node.id}})"
               >
             </rect>
+            <rect
+              ng-if="node.selected"
+              ng-attr-x="{{-node.width/2}}"
+              ng-attr-y="{{-node.height/2}}"
+              ng-attr-width="{{node.width}}"
+              ng-attr-height="{{node.height}}"
+              stroke="red"
+              stroke-width="5px"
+              fill="none"
+              >
+            </rect>
+            <g
+              ng-if="node.fixed"
+              transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"
+            >
+              <path d="M448 1568v-576q0-40 28-68t68-28h32v-192q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68v576q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68zm320-672h512v-192q0-106-75-181t-181-75-181 75-75 181v192z"/>
+            </g>
             <text
               style="
                 font-size: 14px;
@@ -316,7 +324,6 @@
             style="cursor: pointer;"
             >
             <rect 
-              ng-class="{fixed: node.fixed, selected: node.selected}"
               style="
                 stroke-width: 3px;
                 size: 300px;
@@ -330,6 +337,23 @@
               ng-attr-fill="url(#aliasGradient-{{node.id}})"
               >
             </rect>
+            <rect
+              ng-if="node.selected"
+              ng-attr-x="{{-node.width/2}}"
+              ng-attr-y="{{-node.height/2}}"
+              ng-attr-width="{{node.width}}"
+              ng-attr-height="{{node.height}}"
+              stroke="red"
+              stroke-width="5px"
+              fill="none"
+              >
+            </rect>
+            <g
+              ng-if="node.fixed"
+              transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"
+            >
+              <path d="M448 1568v-576q0-40 28-68t68-28h32v-192q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68v576q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68zm320-672h512v-192q0-106-75-181t-181-75-181 75-75 181v192z"/>
+            </g>
             <text
               style="
                 font-size: 14px;

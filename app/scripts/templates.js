@@ -47,7 +47,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '  </div>\n' +
     '  <div class="row">\n' +
     '    <ng-include src="\'templates/context-menus.html\'"></ng-include>\n' +
-    '    <div class="col-sm-11 well">\n' +
+    '    <div class="col-sm-12 well">\n' +
     '      <svg\n' +
     '        zoomable="AppState.zoom"\n' +
     '        xmlns="http://www.w3.org/2000/svg"\n' +
@@ -65,14 +65,6 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '        }\n' +
     '        svg .link.modifier {\n' +
     '          stroke-dasharray: 5, 5;\n' +
-    '        }\n' +
-    '        svg .node.selected {\n' +
-    '          stroke: #FF0000;\n' +
-    '        }\n' +
-    '      \n' +
-    '        svg .node.fixed{\n' +
-    '          stroke: black;\n' +
-    '          stroke-width: 5px;\n' +
     '        }\n' +
     '        /*\n' +
     '        svg .link.selected {\n' +
@@ -325,7 +317,6 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            style="cursor: pointer;"\n' +
     '            >\n' +
     '            <rect \n' +
-    '              ng-class="{fixed: node.fixed, selected: node.selected}"\n' +
     '              ng-attr-stroke="{{node.display.stroke}}"\n' +
     '              ng-attr-stroke-width="{{node.display.strokeWidth}}"\n' +
     '              ng-attr-x="{{-node.width/2}}"\n' +
@@ -336,6 +327,23 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-attr-fill="url(#speciesGradient-{{node.id}})"\n' +
     '              >\n' +
     '            </rect>\n' +
+    '            <rect\n' +
+    '              ng-if="node.selected"\n' +
+    '              ng-attr-x="{{-node.width/2}}"\n' +
+    '              ng-attr-y="{{-node.height/2}}"\n' +
+    '              ng-attr-width="{{node.width}}"\n' +
+    '              ng-attr-height="{{node.height}}"\n' +
+    '              stroke="red"\n' +
+    '              stroke-width="5px"\n' +
+    '              fill="none"\n' +
+    '              >\n' +
+    '            </rect>\n' +
+    '            <g\n' +
+    '              ng-if="node.fixed"\n' +
+    '              transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"\n' +
+    '            >\n' +
+    '              <path d="M448 1568v-576q0-40 28-68t68-28h32v-192q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68v576q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68zm320-672h512v-192q0-106-75-181t-181-75-181 75-75 181v192z"/>\n' +
+    '            </g>\n' +
     '            <text\n' +
     '              style="\n' +
     '                font-size: 14px;\n' +
@@ -360,7 +368,6 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            style="cursor: pointer;"\n' +
     '            >\n' +
     '            <rect \n' +
-    '              ng-class="{fixed: node.fixed, selected: node.selected}"\n' +
     '              style="\n' +
     '                stroke-width: 3px;\n' +
     '                size: 300px;\n' +
@@ -374,6 +381,23 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-attr-fill="url(#aliasGradient-{{node.id}})"\n' +
     '              >\n' +
     '            </rect>\n' +
+    '            <rect\n' +
+    '              ng-if="node.selected"\n' +
+    '              ng-attr-x="{{-node.width/2}}"\n' +
+    '              ng-attr-y="{{-node.height/2}}"\n' +
+    '              ng-attr-width="{{node.width}}"\n' +
+    '              ng-attr-height="{{node.height}}"\n' +
+    '              stroke="red"\n' +
+    '              stroke-width="5px"\n' +
+    '              fill="none"\n' +
+    '              >\n' +
+    '            </rect>\n' +
+    '            <g\n' +
+    '              ng-if="node.fixed"\n' +
+    '              transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"\n' +
+    '            >\n' +
+    '              <path d="M448 1568v-576q0-40 28-68t68-28h32v-192q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68v576q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68zm320-672h512v-192q0-106-75-181t-181-75-181 75-75 181v192z"/>\n' +
+    '            </g>\n' +
     '            <text\n' +
     '              style="\n' +
     '                font-size: 14px;\n' +
@@ -487,6 +511,9 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '          </g>\n' +
     '        </g>\n' +
     '      </svg>\n' +
+    '    </div>\n' +
+    '    <div class="col-sm-3 pull-right">\n' +
+    '      MEOW!\n' +
     '    </div>\n' +
     '  </div>\n' +
     '</div>\n' +
