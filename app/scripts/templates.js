@@ -143,7 +143,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            <stop offset="5%" stop-color="rgb(97, 116, 255)"></stop>\n' +
     '            <stop offset="95%" stop-color="#FFF"></stop>\n' +
     '          </linearGradient>\n' +
-    '          <linearGradient id="reactionGradient">\n' +
+    '          <linearGradient id="aliasGradient">\n' +
     '            <stop offset="5%" stop-color="#B0C0FF"></stop>\n' +
     '            <stop offset="95%" stop-color="#FFF"></stop>\n' +
     '          </linearGradient>\n' +
@@ -363,18 +363,18 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            style="cursor: pointer;"\n' +
     '            >\n' +
     '            <rect \n' +
-    '              class="species node"\n' +
     '              ng-class="{fixed: node.fixed, selected: node.selected}"\n' +
     '              style="\n' +
     '                stroke-width: 3px;\n' +
     '                size: 300px;\n' +
     '              "\n' +
+    '              stroke="#0013FF";\n' +
     '              ng-attr-x="{{-node.width/2}}"\n' +
     '              ng-attr-y="{{-node.height/2}}"\n' +
     '              ng-attr-width="{{node.width}}" \n' +
     '              ng-attr-height="{{node.height}}"\n' +
     '              ng-attr-ry="{{node.height/2}}"\n' +
-    '              fill="white"\n' +
+    '              fill="url(#aliasGradient)"\n' +
     '              >\n' +
     '            </rect>\n' +
     '            <text\n' +

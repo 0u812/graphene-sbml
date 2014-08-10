@@ -99,7 +99,7 @@
             <stop offset="5%" stop-color="rgb(97, 116, 255)"></stop>
             <stop offset="95%" stop-color="#FFF"></stop>
           </linearGradient>
-          <linearGradient id="reactionGradient">
+          <linearGradient id="aliasGradient">
             <stop offset="5%" stop-color="#B0C0FF"></stop>
             <stop offset="95%" stop-color="#FFF"></stop>
           </linearGradient>
@@ -319,18 +319,18 @@
             style="cursor: pointer;"
             >
             <rect 
-              class="species node"
               ng-class="{fixed: node.fixed, selected: node.selected}"
               style="
                 stroke-width: 3px;
                 size: 300px;
               "
+              stroke="#0013FF";
               ng-attr-x="{{-node.width/2}}"
               ng-attr-y="{{-node.height/2}}"
               ng-attr-width="{{node.width}}" 
               ng-attr-height="{{node.height}}"
               ng-attr-ry="{{node.height/2}}"
-              fill="white"
+              fill="url(#aliasGradient)"
               >
             </rect>
             <text
