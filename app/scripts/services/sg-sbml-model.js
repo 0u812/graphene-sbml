@@ -14,6 +14,8 @@ angular.module('sg.graphene.sbml')
     SgNodeSpecies,
     SgSbmlLink,
     SgNodeAlias,
+    SgSbmlTemplate,
+    SgSbmlTranslator,
     idGenerator
   ) {
 
@@ -38,7 +40,11 @@ angular.module('sg.graphene.sbml')
 
 
     var SgSbmlModel = function(sbmlStr) {
-      this.sbml = x2js.xml_str2json(sbmlStr);
+      if (!sbmlStr) {
+        this.sbml = SgSbmlTemplate.newTemplate();
+      } else {
+        this.sbml = x2js.xml_str2json(sbmlStr);
+      }
 
       if (!this.sbml.sbml || !this.sbml.sbml.model) {
         // Super basic validation of valid sbml model
@@ -51,6 +57,9 @@ angular.module('sg.graphene.sbml')
 
 
     SgSbmlModel.prototype.initialize = function() {
+      // Create a translator object
+      this.translator = new SgSbmlTranslator(this);
+
       this.nodes = {
         species: {},
         alias: {},
