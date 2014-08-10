@@ -12,6 +12,15 @@ angular.module('sg.graphene.sbml')
 
     var SgNodeSpecies = function() {
       SgNode.apply(this, arguments);
+      this.display = {
+        stroke: '#FFB800',
+        strokeWidth: '3px',
+        gradient: {
+          start: '#FFDC9E',
+          stop: '#FFF'
+        }
+      };
+
     };
     SgNodeSpecies.prototype = new SgNode();
 

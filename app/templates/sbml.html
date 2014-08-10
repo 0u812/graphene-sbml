@@ -44,7 +44,7 @@
         }
         </style>
         <defs>
-          <marker 
+          <marker
             case-sensitive="refX,refY" 
             id="production" 
             viewBox="0 0 10 10" 
@@ -91,16 +91,16 @@
               ng-attr-d="{{sgGeo.arrow({size: 1, type: 'circle'})}}">
             </path>
           </marker>
-          <linearGradient id="gradient">
+          <linearGradient ng-repeat="node in model.nodes.species" id="speciesGradient-{{node.id}}">
             <stop offset="5%" stop-color="#FFDC9E"></stop>
+            <stop offset="95%" stop-color="#FFF"></stop>
+          </linearGradient>
+          <linearGradient ng-repeat="node in model.nodes.alias" id="aliasGradient-{{node.id}}">
+            <stop offset="5%" stop-color="#B0C0FF"></stop>
             <stop offset="95%" stop-color="#FFF"></stop>
           </linearGradient>
           <linearGradient id="markerGradient">
             <stop offset="5%" stop-color="rgb(97, 116, 255)"></stop>
-            <stop offset="95%" stop-color="#FFF"></stop>
-          </linearGradient>
-          <linearGradient id="aliasGradient">
-            <stop offset="5%" stop-color="#B0C0FF"></stop>
             <stop offset="95%" stop-color="#FFF"></stop>
           </linearGradient>
         </defs>
@@ -282,17 +282,14 @@
             >
             <rect 
               ng-class="{fixed: node.fixed, selected: node.selected}"
-              class="species node"
-              style="
-                stroke-width: 3px;
-                size: 300px;
-              "
+              ng-attr-stroke="{{node.display.stroke}}"
+              ng-attr-stroke-width="{{node.display.strokeWidth}}"
               ng-attr-x="{{-node.width/2}}"
               ng-attr-y="{{-node.height/2}}"
               ng-attr-width="{{node.width}}" 
               ng-attr-height="{{node.height}}"
               ng-attr-ry="{{node.height/2}}"
-              fill="url(#gradient)"
+              ng-attr-fill="url(#speciesGradient-{{node.id}})"
               >
             </rect>
             <text
@@ -324,13 +321,13 @@
                 stroke-width: 3px;
                 size: 300px;
               "
-              stroke="#0013FF";
+              ng-attr-stroke="{{node.display.stroke}}";
               ng-attr-x="{{-node.width/2}}"
               ng-attr-y="{{-node.height/2}}"
               ng-attr-width="{{node.width}}" 
               ng-attr-height="{{node.height}}"
               ng-attr-ry="{{node.height/2}}"
-              fill="url(#aliasGradient)"
+              ng-attr-fill="url(#aliasGradient-{{node.id}})"
               >
             </rect>
             <text

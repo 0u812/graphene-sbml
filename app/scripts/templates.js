@@ -88,7 +88,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '        }\n' +
     '        </style>\n' +
     '        <defs>\n' +
-    '          <marker \n' +
+    '          <marker\n' +
     '            case-sensitive="refX,refY" \n' +
     '            id="production" \n' +
     '            viewBox="0 0 10 10" \n' +
@@ -135,16 +135,16 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-attr-d="{{sgGeo.arrow({size: 1, type: \'circle\'})}}">\n' +
     '            </path>\n' +
     '          </marker>\n' +
-    '          <linearGradient id="gradient">\n' +
+    '          <linearGradient ng-repeat="node in model.nodes.species" id="speciesGradient-{{node.id}}">\n' +
     '            <stop offset="5%" stop-color="#FFDC9E"></stop>\n' +
+    '            <stop offset="95%" stop-color="#FFF"></stop>\n' +
+    '          </linearGradient>\n' +
+    '          <linearGradient ng-repeat="node in model.nodes.alias" id="aliasGradient-{{node.id}}">\n' +
+    '            <stop offset="5%" stop-color="#B0C0FF"></stop>\n' +
     '            <stop offset="95%" stop-color="#FFF"></stop>\n' +
     '          </linearGradient>\n' +
     '          <linearGradient id="markerGradient">\n' +
     '            <stop offset="5%" stop-color="rgb(97, 116, 255)"></stop>\n' +
-    '            <stop offset="95%" stop-color="#FFF"></stop>\n' +
-    '          </linearGradient>\n' +
-    '          <linearGradient id="aliasGradient">\n' +
-    '            <stop offset="5%" stop-color="#B0C0FF"></stop>\n' +
     '            <stop offset="95%" stop-color="#FFF"></stop>\n' +
     '          </linearGradient>\n' +
     '        </defs>\n' +
@@ -326,17 +326,14 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            >\n' +
     '            <rect \n' +
     '              ng-class="{fixed: node.fixed, selected: node.selected}"\n' +
-    '              class="species node"\n' +
-    '              style="\n' +
-    '                stroke-width: 3px;\n' +
-    '                size: 300px;\n' +
-    '              "\n' +
+    '              ng-attr-stroke="{{node.display.stroke}}"\n' +
+    '              ng-attr-stroke-width="{{node.display.strokeWidth}}"\n' +
     '              ng-attr-x="{{-node.width/2}}"\n' +
     '              ng-attr-y="{{-node.height/2}}"\n' +
     '              ng-attr-width="{{node.width}}" \n' +
     '              ng-attr-height="{{node.height}}"\n' +
     '              ng-attr-ry="{{node.height/2}}"\n' +
-    '              fill="url(#gradient)"\n' +
+    '              ng-attr-fill="url(#speciesGradient-{{node.id}})"\n' +
     '              >\n' +
     '            </rect>\n' +
     '            <text\n' +
@@ -368,13 +365,13 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '                stroke-width: 3px;\n' +
     '                size: 300px;\n' +
     '              "\n' +
-    '              stroke="#0013FF";\n' +
+    '              ng-attr-stroke="{{node.display.stroke}}";\n' +
     '              ng-attr-x="{{-node.width/2}}"\n' +
     '              ng-attr-y="{{-node.height/2}}"\n' +
     '              ng-attr-width="{{node.width}}" \n' +
     '              ng-attr-height="{{node.height}}"\n' +
     '              ng-attr-ry="{{node.height/2}}"\n' +
-    '              fill="url(#aliasGradient)"\n' +
+    '              ng-attr-fill="url(#aliasGradient-{{node.id}})"\n' +
     '              >\n' +
     '            </rect>\n' +
     '            <text\n' +

@@ -12,6 +12,14 @@ angular.module('sg.graphene.sbml')
 
     var SgSbmlLink = function(){
       SgLink.apply(this, arguments);
+
+      this.display = {
+        stroke: 'black',
+        gradient: {
+          start: 'rgb(97, 116, 255)',
+          stop: '#FFF'
+        }
+      };
     };
     SgSbmlLink.prototype = new SgLink();
 
