@@ -22,13 +22,6 @@
         svg .link.modifier {
           stroke-dasharray: 5, 5;
         }
-        svg .node-label {
-          font-size: 14px;
-          font-family: Georgia;
-          font-weight: bolder;
-          text-anchor: middle;
-          dominant-baseline: middle;
-        }
         svg .node.selected {
           stroke: #FF0000;
         }
@@ -302,7 +295,15 @@
               fill="url(#gradient)"
               >
             </rect>
-            <text class="node-label">{{node.id | truncateTo:8}}</text>
+            <text
+              style="
+                font-size: 14px;
+                font-family: Georgia;
+                font-weight: bolder;
+                text-anchor: middle;
+                dominant-baseline: middle;
+              "
+            >{{node.id | truncateTo:8}}</text>
             <title>ID: {{node.id}}, Name: {{node.name}}</title>
           </g>
           <g 
@@ -332,7 +333,15 @@
               fill="white"
               >
             </rect>
-            <text class="node-label">{{node.aliasOf.id | truncateTo:8}}</text>
+            <text
+              style="
+                font-size: 14px;
+                font-family: Georgia;
+                font-weight: bolder;
+                text-anchor: middle;
+                dominant-baseline: middle;
+              "
+            >{{node.aliasOf.id | truncateTo:8}}</text>
             <title>ID: {{node.id}}, Name: {{node.name}}</title>
           </g>
           <g 
