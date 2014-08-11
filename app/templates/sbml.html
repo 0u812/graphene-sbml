@@ -3,7 +3,7 @@
   </div>
   <div class="row">
     <ng-include src="'templates/context-menus.html'"></ng-include>
-    <div class="col-sm-12 well">
+    <div ng-class="{'col-sm-9': AppState.selected.id, 'col-sm-12': !AppState.selected.id}" class="well">
       <svg
         zoomable="AppState.zoom"
         xmlns="http://www.w3.org/2000/svg"
@@ -84,8 +84,8 @@
             </path>
           </marker>
           <linearGradient ng-repeat="node in model.nodes.species" id="speciesGradient-{{node.id}}">
-            <stop offset="5%" stop-color="#FFDC9E"></stop>
-            <stop offset="95%" stop-color="#FFF"></stop>
+            <stop offset="5%" ng-attr-stop-color="{{node.display.gradient.start}}"></stop>
+            <stop offset="95%" ng-attr-stop-color="{{node.display.gradient.stop}}"></stop>
           </linearGradient>
           <linearGradient ng-repeat="node in model.nodes.alias" id="aliasGradient-{{node.id}}">
             <stop offset="5%" stop-color="#B0C0FF"></stop>
@@ -296,7 +296,7 @@
             </rect>
             <g
               ng-if="node.fixed"
-              transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"
+              ng-attr-transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"
             >
               <path d="M448 1568v-576q0-40 28-68t68-28h32v-192q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68v576q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68zm320-672h512v-192q0-106-75-181t-181-75-181 75-75 181v192z"/>
             </g>
@@ -350,7 +350,7 @@
             </rect>
             <g
               ng-if="node.fixed"
-              transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"
+              ng-attr-transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"
             >
               <path d="M448 1568v-576q0-40 28-68t68-28h32v-192q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68v576q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68zm320-672h512v-192q0-106-75-181t-181-75-181 75-75 181v192z"/>
             </g>
@@ -467,6 +467,9 @@
           </g>
         </g>
       </svg>
+    </div>
+    <div ng-if="AppState.selected.id" class="col-sm-3">
+      <ng-include src="'templates/details.html'">
     </div>
   </div>
 </div>

@@ -1,0 +1,43 @@
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <div class="row">
+      <label class="col-sm-2 control-label">ID:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="AppState.selected.id"></input>
+      </div>
+    </div>
+    <div class="row">
+      <label class="col-sm-2 control-label">Name:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="AppState.selected.name"></input>
+      </div>
+    </div>
+  </div>
+  <h4>Display</h4>
+  <div class="form-group">
+    <div class="row">
+      <label class="col-sm-2 control-label">Stroke:</label>
+      <div class="col-sm-10">
+        <spectrum-colorpicker ng-model="AppState.selected.display.stroke"></spectrum-colorpicker>
+      </div>
+    </div>
+    <div class="row">
+      <label class="col-sm-2 control-label">Stroke-Width:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ng-model="AppState.selected.display.strokeWidth"></input>
+      </div>
+    </div>
+    <div class="row">
+      <label class="col-sm-2 control-label">Gradient Start:</label>
+      <div class="col-sm-10">
+        <spectrum-colorpicker ng-model="AppState.selected.display.gradient.start"></spectrum-colorpicker>
+      </div>
+    </div>
+    <div class="row">
+      <label class="col-sm-2 control-label">Gradient Stop:</label>
+      <div class="col-sm-10">
+        <spectrum-colorpicker ng-model="AppState.selected.display.gradient.stop"></spectrum-colorpicker>
+      </div>
+    </div>
+  </div>
+</form>

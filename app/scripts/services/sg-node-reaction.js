@@ -17,6 +17,8 @@ angular.module('sg.graphene.sbml')
       this.reactants = [];
       this.products = [];
       this.modifiers = [];
+      this.width = 0;
+      this.height = 0;
     };
     SgNodeReaction.prototype = new SgNode();
 

@@ -20,6 +20,8 @@ angular.module('sg.graphene.sbml')
           stop: '#FFF'
         }
       };
+      this.height = 30;
+      this.width = 80;
 
     };
     SgNodeSpecies.prototype = new SgNode();

@@ -59,8 +59,15 @@ angular.module('sg.graphene.sbml')
       'addBiBiReaction': function(node) {
         addReaction(node, 2, 2);
       },
-      'selected': function() {
+      'selected': function(obj) {
         toggleProperty.apply(this, arguments);
+        if (obj.selected) {
+          if (obj instanceof SgNode) {
+            AppState.selected = obj;
+          } else {
+            AppState.selected = null;
+          }
+        }
       },
       'fixed': function() {
         toggleProperty.apply(this, arguments);

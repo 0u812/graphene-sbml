@@ -132,7 +132,6 @@ angular.module('sg.graphene.sbml')
         newNode.width = this.size.species.width;
         newNode.height = this.size.species.height;
       } catch(e) {
-        console.log('Node sizes not defined');
       }
       this.nodes.species[newNode.id] = newNode;
       return newNode;
@@ -163,7 +162,6 @@ angular.module('sg.graphene.sbml')
         newNode.width = this.size.reactions.width;
         newNode.height = this.size.reactions.height;
       } catch(e) {
-        console.log('Node sizes not defined');
       }
       this.nodes.reactions[newNode.id] = newNode;
       return newNode;
