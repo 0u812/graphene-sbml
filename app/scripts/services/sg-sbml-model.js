@@ -156,7 +156,8 @@ angular.module('sg.graphene.sbml')
 
     SgSbmlModel.prototype.addReactionNode = function(reaction) {
       var newNode = new SgNodeReaction(reaction.data._id);
-      newNode.data = reaction;
+      newNode.sbmlReaction = reaction;
+      newNode.data = reaction.data;
       newNode.model = this;
       try {
         newNode.width = this.size.reactions.width;

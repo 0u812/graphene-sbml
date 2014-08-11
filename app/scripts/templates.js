@@ -1294,13 +1294,13 @@ angular.module('templates/details.html', []).run(['$templateCache', function($te
     '    <div class="row">\n' +
     '      <label class="col-sm-4 control-label">ID:</label>\n' +
     '      <div class="col-sm-8">\n' +
-    '        <input type="text" class="form-control" ng-model="AppState.selected.id"></input>\n' +
+    '        <input type="text" class="form-control" ng-model="AppState.selected.data._id"></input>\n' +
     '      </div>\n' +
     '    </div>\n' +
     '    <div class="row">\n' +
     '      <label class="col-sm-4 control-label">Name:</label>\n' +
     '      <div class="col-sm-8">\n' +
-    '        <input type="text" class="form-control" ng-model="AppState.selected.name"></input>\n' +
+    '        <input type="text" class="form-control" ng-model="AppState.selected.data._name"></input>\n' +
     '      </div>\n' +
     '    </div>\n' +
     '  </div>\n' +
@@ -1316,16 +1316,16 @@ angular.module('templates/details.html', []).run(['$templateCache', function($te
     '      <label class="col-sm-4 control-label">Stroke-Width:</label>\n' +
     '      <div class="col-sm-8">\n' +
     '        <input type="text" class="form-control" ng-model="AppState.selected.display.strokeWidth"></input>\n' +
-    '        <input type="range" class="form-control" min="0" max="10" ng-model="AppState.selected.display.strokeWidth"></input>\n' +
+    '        <input type="range" min="0" max="10" ng-model="AppState.selected.display.strokeWidth"></input>\n' +
     '      </div>\n' +
     '    </div>\n' +
-    '    <div class="row">\n' +
+    '    <div class="row" ng-if="!AppState.selected.centroid">\n' +
     '      <label class="col-sm-4 control-label">Gradient Start:</label>\n' +
     '      <div class="col-sm-8">\n' +
     '        <spectrum-colorpicker format="hex" ng-model="AppState.selected.display.gradient.start"></spectrum-colorpicker>\n' +
     '      </div>\n' +
     '    </div>\n' +
-    '    <div class="row">\n' +
+    '    <div class="row" ng-if="!AppState.selected.centroid">\n' +
     '      <label class="col-sm-4 control-label">Gradient Stop:</label>\n' +
     '      <div class="col-sm-8">\n' +
     '        <spectrum-colorpicker format="hex" ng-model="AppState.selected.display.gradient.stop"></spectrum-colorpicker>\n' +

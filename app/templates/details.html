@@ -3,13 +3,13 @@
     <div class="row">
       <label class="col-sm-4 control-label">ID:</label>
       <div class="col-sm-8">
-        <input type="text" class="form-control" ng-model="AppState.selected.id"></input>
+        <input type="text" class="form-control" ng-model="AppState.selected.data._id"></input>
       </div>
     </div>
     <div class="row">
       <label class="col-sm-4 control-label">Name:</label>
       <div class="col-sm-8">
-        <input type="text" class="form-control" ng-model="AppState.selected.name"></input>
+        <input type="text" class="form-control" ng-model="AppState.selected.data._name"></input>
       </div>
     </div>
   </div>
@@ -25,16 +25,16 @@
       <label class="col-sm-4 control-label">Stroke-Width:</label>
       <div class="col-sm-8">
         <input type="text" class="form-control" ng-model="AppState.selected.display.strokeWidth"></input>
-        <input type="range" class="form-control" min="0" max="10" ng-model="AppState.selected.display.strokeWidth"></input>
+        <input type="range" min="0" max="10" ng-model="AppState.selected.display.strokeWidth"></input>
       </div>
     </div>
-    <div class="row">
+    <div class="row" ng-if="!AppState.selected.centroid">
       <label class="col-sm-4 control-label">Gradient Start:</label>
       <div class="col-sm-8">
         <spectrum-colorpicker format="hex" ng-model="AppState.selected.display.gradient.start"></spectrum-colorpicker>
       </div>
     </div>
-    <div class="row">
+    <div class="row" ng-if="!AppState.selected.centroid">
       <label class="col-sm-4 control-label">Gradient Stop:</label>
       <div class="col-sm-8">
         <spectrum-colorpicker format="hex" ng-model="AppState.selected.display.gradient.stop"></spectrum-colorpicker>
