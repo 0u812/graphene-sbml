@@ -1292,14 +1292,14 @@ angular.module('templates/details.html', []).run(['$templateCache', function($te
     '<form class="form-horizontal" role="form">\n' +
     '  <div class="form-group">\n' +
     '    <div class="row">\n' +
-    '      <label class="col-sm-2 control-label">ID:</label>\n' +
-    '      <div class="col-sm-10">\n' +
+    '      <label class="col-sm-4 control-label">ID:</label>\n' +
+    '      <div class="col-sm-8">\n' +
     '        <input type="text" class="form-control" ng-model="AppState.selected.id"></input>\n' +
     '      </div>\n' +
     '    </div>\n' +
     '    <div class="row">\n' +
-    '      <label class="col-sm-2 control-label">Name:</label>\n' +
-    '      <div class="col-sm-10">\n' +
+    '      <label class="col-sm-4 control-label">Name:</label>\n' +
+    '      <div class="col-sm-8">\n' +
     '        <input type="text" class="form-control" ng-model="AppState.selected.name"></input>\n' +
     '      </div>\n' +
     '    </div>\n' +
@@ -1307,27 +1307,28 @@ angular.module('templates/details.html', []).run(['$templateCache', function($te
     '  <h4>Display</h4>\n' +
     '  <div class="form-group">\n' +
     '    <div class="row">\n' +
-    '      <label class="col-sm-2 control-label">Stroke:</label>\n' +
-    '      <div class="col-sm-10">\n' +
-    '        <spectrum-colorpicker ng-model="AppState.selected.display.stroke"></spectrum-colorpicker>\n' +
+    '      <label class="col-sm-4 control-label">Stroke:</label>\n' +
+    '      <div class="col-sm-8">\n' +
+    '        <spectrum-colorpicker format="hex" ng-model="AppState.selected.display.stroke"></spectrum-colorpicker>\n' +
     '      </div>\n' +
     '    </div>\n' +
     '    <div class="row">\n' +
-    '      <label class="col-sm-2 control-label">Stroke-Width:</label>\n' +
-    '      <div class="col-sm-10">\n' +
+    '      <label class="col-sm-4 control-label">Stroke-Width:</label>\n' +
+    '      <div class="col-sm-8">\n' +
     '        <input type="text" class="form-control" ng-model="AppState.selected.display.strokeWidth"></input>\n' +
+    '        <input type="range" class="form-control" min="0" max="10" ng-model="AppState.selected.display.strokeWidth"></input>\n' +
     '      </div>\n' +
     '    </div>\n' +
     '    <div class="row">\n' +
-    '      <label class="col-sm-2 control-label">Gradient Start:</label>\n' +
-    '      <div class="col-sm-10">\n' +
-    '        <spectrum-colorpicker ng-model="AppState.selected.display.gradient.start"></spectrum-colorpicker>\n' +
+    '      <label class="col-sm-4 control-label">Gradient Start:</label>\n' +
+    '      <div class="col-sm-8">\n' +
+    '        <spectrum-colorpicker format="hex" ng-model="AppState.selected.display.gradient.start"></spectrum-colorpicker>\n' +
     '      </div>\n' +
     '    </div>\n' +
     '    <div class="row">\n' +
-    '      <label class="col-sm-2 control-label">Gradient Stop:</label>\n' +
-    '      <div class="col-sm-10">\n' +
-    '        <spectrum-colorpicker ng-model="AppState.selected.display.gradient.stop"></spectrum-colorpicker>\n' +
+    '      <label class="col-sm-4 control-label">Gradient Stop:</label>\n' +
+    '      <div class="col-sm-8">\n' +
+    '        <spectrum-colorpicker format="hex" ng-model="AppState.selected.display.gradient.stop"></spectrum-colorpicker>\n' +
     '      </div>\n' +
     '    </div>\n' +
     '  </div>\n' +
@@ -1455,8 +1456,8 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              "\n' +
     '              marker-end="url(#production)"\n' +
     '              ng-attr-opacity="{{link.opacity}}"\n' +
-    '              ng-attr-stroke="{{link.reaction.selected ? \'red\' : \'black\'}}"\n' +
-    '              ng-attr-stroke-width="{{\'3px\'}}"\n' +
+    '              ng-attr-stroke="{{link.reaction.display.stroke}}"\n' +
+    '              ng-attr-stroke-width="{{link.reaction.display.strokeWidth}}"\n' +
     '              fill="none"\n' +
     '            />\n' +
     '            <g\n' +
@@ -1510,8 +1511,8 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '                {{link.x2}} {{link.y2}}\n' +
     '              "\n' +
     '              fill="none"\n' +
-    '              ng-attr-stroke="{{link.reaction.selected ? \'red\' : \'black\'}}"\n' +
-    '              ng-attr-stroke-width="{{\'3px\'}}"\n' +
+    '              ng-attr-stroke="{{link.reaction.display.stroke}}"\n' +
+    '              ng-attr-stroke-width="{{link.reaction.display.strokeWidth}}"\n' +
     '              ng-attr-opacity="{{link.opacity}}"\n' +
     '            />\n' +
     '            <g\n' +

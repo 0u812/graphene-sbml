@@ -19,6 +19,10 @@ angular.module('sg.graphene.sbml')
       this.modifiers = [];
       this.width = 0;
       this.height = 0;
+      this.display = {
+        stroke: 'black',
+        strokeWidth: 3
+      };
     };
     SgNodeReaction.prototype = new SgNode();
 

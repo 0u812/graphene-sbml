@@ -14,7 +14,7 @@ angular.module('sg.graphene.sbml')
       SgNode.apply(this, arguments);
       this.display = {
         stroke: '#FFB800',
-        strokeWidth: '3px',
+        strokeWidth: 3,
         gradient: {
           start: '#FFDC9E',
           stop: '#FFF'
