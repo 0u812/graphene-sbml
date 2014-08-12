@@ -1430,8 +1430,8 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            <stop offset="95%" ng-attr-stop-color="{{node.display.gradient.stop}}"></stop>\n' +
     '          </linearGradient>\n' +
     '          <linearGradient ng-repeat="node in model.nodes.alias" id="aliasGradient-{{node.id}}">\n' +
-    '            <stop offset="5%" stop-color="#B0C0FF"></stop>\n' +
-    '            <stop offset="95%" stop-color="#FFF"></stop>\n' +
+    '            <stop offset="5%" ng-attr-stop-color="{{node.display.gradient.start}}"></stop>\n' +
+    '            <stop offset="95%" ng-attr-stop-color="{{node.display.gradient.stop}}"></stop>\n' +
     '          </linearGradient>\n' +
     '          <linearGradient id="markerGradient">\n' +
     '            <stop offset="5%" stop-color="rgb(97, 116, 255)"></stop>\n' +
