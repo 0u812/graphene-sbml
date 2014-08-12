@@ -131,8 +131,7 @@ angular.module('sg.graphene.sbml')
       try {
         newNode.width = this.size.species.width;
         newNode.height = this.size.species.height;
-      } catch(e) {
-      }
+      } catch (e) {}
       this.nodes.species[newNode.id] = newNode;
       return newNode;
     };
@@ -162,8 +161,7 @@ angular.module('sg.graphene.sbml')
       try {
         newNode.width = this.size.reactions.width;
         newNode.height = this.size.reactions.height;
-      } catch(e) {
-      }
+      } catch (e) {}
       this.nodes.reactions[newNode.id] = newNode;
       return newNode;
     };
@@ -171,7 +169,7 @@ angular.module('sg.graphene.sbml')
     SgSbmlModel.prototype.addReactionLinks = function(reaction) {
       var species;
 
-      var reactionNode  = this.nodes.reactions[reaction._id];
+      var reactionNode = this.nodes.reactions[reaction._id];
 
       var newLinks = [];
 
@@ -321,7 +319,88 @@ angular.module('sg.graphene.sbml')
 
     };
 
-    SgSbmlModel.prototype.replaceSpeciesWithAliasInReaction = function (reactionNode, aliasNodes) {
+    SgSbmlModel.prototype.getSbmlLayout = function() {
+      var layout = arrayify(this.sbml.sbml.model.annotation.listOfLayouts.layout)[0];
+
+      if (!layout) {
+        return false;
+      }
+
+      _.each(arrayify(layout.listOfSpeciesGlyphs.speciesGlyph), function(s) {
+        var bb = s.boundingBox;
+        var glyphId = s._id;
+        var speciesId = s._species;
+        var node = this.nodes.species[speciesId]; // Parent node
+        if (node.glyphId) {
+          // Create alias because already assigned glyph to parent
+          node = this.makeAliasNode(node, glyphId);
+        }
+        node.glyphId = glyphId;
+
+        setPositionFromAttributes(node, bb.position);
+      }, this);
+
+      _.each(arrayify(layout.listOfReactionGlyphs.reactionGlyph), function(r) {
+        var aliasNodes = [];
+        var reactionNode = this.nodes.reactions[r._reaction];
+        reactionNode.glyphId = r._id;
+
+        // Check for alias nodes to re-wire
+        _.each(arrayify(r.listOfSpeciesReferenceGlyphs.speciesReferenceGlyph), function(s) {
+          var alias = _.find(this.nodes.alias, {
+            glyphId: s._speciesGlyph
+          });
+          if (alias) {
+            aliasNodes.push(alias);
+          }
+        }, this);
+
+        // Rewire all links to point to alias nodes
+        this.replaceSpeciesWithAliasInReaction(reactionNode, aliasNodes);
+
+      }, this);
+
+      // Update species node styles
+      var renderInformation = arrayify(layout.annotation.listOfRenderInformation.renderInformation)[0];
+      var lookup = {
+        gradient: _.indexBy(arrayify(renderInformation.listOfGradientDefinitions.linearGradient), '_id'),
+        color: _.indexBy(arrayify(renderInformation.listOfColorDefinitions.colorDefinition), '_id'),
+        glyph: _.indexBy(_.union(_.toArray(this.nodes.species), _.toArray(this.nodes.alias)), 'glyphId')
+      };
+      _.each(renderInformation.listOfStyles.style, function(style) {
+        if (style._idList) {
+          var r = style.g.rectangle;
+          var nodes = _.map(style._idList.split(' '), function(id) {
+            return lookup.glyph[id];
+          });
+          _.each(nodes, function(node) {
+            node.display.stroke = lookup.color[r._stroke]._value;
+            node.display.strokeWidth = parseInt(r['_stroke-width'], 10);
+            if (lookup.gradient[r._fill]) {
+              node.display.gradient.start = lookup.gradient[r._fill].stop[0]['_stop-color'];
+              node.display.gradient.stop = lookup.gradient[r._fill].stop[1]['_stop-color'];
+            } else if (lookup.color[r._fill]) {
+              node.display.gradient.start = lookup.color[r._fill]._value;
+              node.display.gradient.stop = lookup.color[r._fill]._value;
+            }
+          });
+        }
+      });
+
+      _.each(this.nodes.reactions, function(n) {
+        n.updatePosition();
+        n.updateCentroid();
+      });
+
+      _.each(this.getAllLinks(), function(l) {
+        l.update();
+      });
+
+      return layout;
+
+    };
+
+    SgSbmlModel.prototype.replaceSpeciesWithAliasInReaction = function(reactionNode, aliasNodes) {
       var links = this.getAllLinksForReaction(reactionNode);
 
       var speciesWithAliases = _.pluck(aliasNodes, 'aliasOf');

@@ -1290,6 +1290,7 @@ angular.module('templates/details.html', []).run(['$templateCache', function($te
   'use strict';
   $templateCache.put('templates/details.html',
     '<form class="form-horizontal" role="form">\n' +
+    '  <h4>Details</h4>\n' +
     '  <div class="form-group">\n' +
     '    <div class="row">\n' +
     '      <label class="col-sm-4 control-label">ID:</label>\n' +

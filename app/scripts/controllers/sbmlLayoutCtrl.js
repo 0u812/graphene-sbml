@@ -32,7 +32,8 @@ angular.module('sg.graphene.sbml')
         $scope.layout.addToTick(function() {
           $scope.$digest();
         });
-        if ($scope.model.getJdesignerLayout()) {
+        if ($scope.model.getSbmlLayout()) {
+        //if ($scope.model.getJdesignerLayout()) {
 
         } else {
           $scope.layout.start();
