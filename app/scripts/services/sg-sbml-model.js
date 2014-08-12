@@ -374,14 +374,16 @@ angular.module('sg.graphene.sbml')
             return lookup.glyph[id];
           });
           _.each(nodes, function(node) {
-            node.display.stroke = lookup.color[r._stroke]._value;
-            node.display.strokeWidth = parseInt(r['_stroke-width'], 10);
-            if (lookup.gradient[r._fill]) {
-              node.display.gradient.start = lookup.gradient[r._fill].stop[0]['_stop-color'];
-              node.display.gradient.stop = lookup.gradient[r._fill].stop[1]['_stop-color'];
-            } else if (lookup.color[r._fill]) {
-              node.display.gradient.start = lookup.color[r._fill]._value;
-              node.display.gradient.stop = lookup.color[r._fill]._value;
+            if (node) {
+              node.display.stroke = lookup.color[r._stroke]._value;
+              node.display.strokeWidth = parseInt(r['_stroke-width'], 10);
+              if (lookup.gradient[r._fill]) {
+                node.display.gradient.start = lookup.gradient[r._fill].stop[0]['_stop-color'];
+                node.display.gradient.stop = lookup.gradient[r._fill].stop[1]['_stop-color'];
+              } else if (lookup.color[r._fill]) {
+                node.display.gradient.start = lookup.color[r._fill]._value;
+                node.display.gradient.stop = lookup.color[r._fill]._value;
+              }
             }
           });
         }
