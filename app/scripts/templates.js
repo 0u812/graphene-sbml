@@ -1644,13 +1644,13 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            </g>\n' +
     '            <text\n' +
     '              style="\n' +
-    '                font-size: 14px;\n' +
+    '                font-size: 8px;\n' +
     '                font-family: Georgia;\n' +
     '                font-weight: bolder;\n' +
     '                text-anchor: middle;\n' +
     '                dominant-baseline: middle;\n' +
     '              "\n' +
-    '            >{{node.id | truncateTo:8}}</text>\n' +
+    '            >{{node.data._name || node.data._id | truncateTo:100}}</text>\n' +
     '            <title>ID: {{node.id}}, Name: {{node.name}}</title>\n' +
     '          </g>\n' +
     '          <g \n' +
@@ -1698,13 +1698,13 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            </g>\n' +
     '            <text\n' +
     '              style="\n' +
-    '                font-size: 14px;\n' +
+    '                font-size: 8px;\n' +
     '                font-family: Georgia;\n' +
     '                font-weight: bolder;\n' +
     '                text-anchor: middle;\n' +
     '                dominant-baseline: middle;\n' +
     '              "\n' +
-    '            >{{node.aliasOf.id | truncateTo:8}}</text>\n' +
+    '            >{{node.aliasOf.data._name || node.aliasOf.data._id}}</text>\n' +
     '            <title>ID: {{node.id}}, Name: {{node.name}}</title>\n' +
     '          </g>\n' +
     '          <g \n' +

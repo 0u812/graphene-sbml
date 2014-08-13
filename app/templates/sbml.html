@@ -302,13 +302,13 @@
             </g>
             <text
               style="
-                font-size: 14px;
+                font-size: 8px;
                 font-family: Georgia;
                 font-weight: bolder;
                 text-anchor: middle;
                 dominant-baseline: middle;
               "
-            >{{node.id | truncateTo:8}}</text>
+            >{{node.data._name || node.data._id | truncateTo:100}}</text>
             <title>ID: {{node.id}}, Name: {{node.name}}</title>
           </g>
           <g 
@@ -356,13 +356,13 @@
             </g>
             <text
               style="
-                font-size: 14px;
+                font-size: 8px;
                 font-family: Georgia;
                 font-weight: bolder;
                 text-anchor: middle;
                 dominant-baseline: middle;
               "
-            >{{node.aliasOf.id | truncateTo:8}}</text>
+            >{{node.aliasOf.data._name || node.aliasOf.data._id}}</text>
             <title>ID: {{node.id}}, Name: {{node.name}}</title>
           </g>
           <g 

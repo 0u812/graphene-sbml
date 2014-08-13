@@ -37,6 +37,10 @@ angular.module('sg.graphene.sbml')
       node.x = parseInt(obj._x, 10);
       node.y = parseInt(obj._y, 10);
     };
+    var setDimensionsFromAttributes = function(node, obj) {
+      node.width = parseInt(obj._width, 10);
+      node.height = parseInt(obj._height, 10);
+    };
 
 
     var SgSbmlModel = function(sbmlStr) {
@@ -338,6 +342,7 @@ angular.module('sg.graphene.sbml')
         node.glyphId = glyphId;
 
         setPositionFromAttributes(node, bb.position);
+        setDimensionsFromAttributes(node, bb.dimensions);
       }, this);
 
       _.each(arrayify(layout.listOfReactionGlyphs.reactionGlyph), function(r) {
