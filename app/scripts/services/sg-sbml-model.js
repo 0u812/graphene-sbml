@@ -20,7 +20,7 @@ angular.module('sg.graphene.sbml')
     idGenerator
   ) {
 
-    var x2js = new X2JS();
+    var x2js = SgSbmlUtils.x2js;
     var arrayify = SgSbmlUtils.arrayify;
     var setPositionFromAttributes = SgSbmlUtils.setPositionFromAttributes;
     var setDimensionsFromAttributes = SgSbmlUtils.setDimensionsFromAttributes;

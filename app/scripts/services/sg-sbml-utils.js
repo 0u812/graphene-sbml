@@ -17,7 +17,8 @@ angular.module('sg.graphene.sbml')
       arrayify: arrayify,
       ensureExists: ensureExists,
       setPositionFromAttributes: setPositionFromAttributes,
-      setDimensionsFromAttributes: setDimensionsFromAttributes
+      setDimensionsFromAttributes: setDimensionsFromAttributes,
+      x2js: new X2JS()
     };
 
     function arrayify(s) {

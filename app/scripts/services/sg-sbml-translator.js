@@ -8,7 +8,7 @@
  * Factory in the grapheneSbmlApp.
  */
 angular.module('sg.graphene.sbml')
-  .factory('SgSbmlTranslator', function () {
+  .factory('SgSbmlTranslator', function (SgSbmlUtils) {
     // Service logic
     // ...
 
@@ -33,19 +33,10 @@ angular.module('sg.graphene.sbml')
       });
 
       // update layout/render annotation
-      var layout = this.model.sbml.sbml.model.annotation
+      var layout = SgSbmlUtils.ensureExists(this.model, ['sbml', 'sbml', 'model', 'annotation', 'listOfLayouts', 'layout']);
+      layout = SgSbmlUtils.arrayify(layout)[0];
 
       return this.model.sbml;
-    };
-
-    function ensureExists(obj, propertyArray) {
-      _.each(propertyArray, function(prop) {
-        if (!obj[prop]) {
-          obj[prop] = {};
-        }
-        obj = obj[prop];
-      });
-      return obj;
     };
 
     // Public API here
