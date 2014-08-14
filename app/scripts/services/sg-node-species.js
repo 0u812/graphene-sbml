@@ -31,6 +31,19 @@ angular.module('sg.graphene.sbml')
       this.y = pos.y;
     };
 
+    SgNodeSpecies.prototype.resizeHeightBottom = function(pos) {
+      this.height = 2 * (this.y - pos.y);
+    };
+    SgNodeSpecies.prototype.resizeHeightTop = function(pos) {
+      this.height = 2 * (pos.y - this.y);
+    };
+    SgNodeSpecies.prototype.resizeWidthLeft = function(pos) {
+      this.width = 2 * (this.x - pos.x);
+    };
+    SgNodeSpecies.prototype.resizeWidthRight = function(pos) {
+      this.width = 2 * (pos.x - this.x);
+    };
+
     SgNodeSpecies.prototype.delete = function() {
       // Remove all alias nodes
       _.each(this.model.nodes.alias, function(n) {

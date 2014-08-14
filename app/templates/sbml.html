@@ -270,7 +270,7 @@
             ng-click="clickHandler(node, $event)"
             ng-attr-opacity="{{node.opacity}}"
             ng-attr-transform="translate({{node.x}},{{node.y}})"
-            style="cursor: pointer;"
+            style="cursor: move;"
             >
             <rect 
               ng-attr-stroke="{{node.display.stroke}}"
@@ -283,17 +283,10 @@
               ng-attr-fill="url(#speciesGradient-{{node.id}})"
               >
             </rect>
-            <rect
-              ng-if="node.selected"
-              ng-attr-x="{{-node.width/2}}"
-              ng-attr-y="{{-node.height/2}}"
-              ng-attr-width="{{node.width}}"
-              ng-attr-height="{{node.height}}"
-              stroke="red"
-              stroke-width="5px"
-              fill="none"
-              >
-            </rect>
+            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x - node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthLeft, node)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{-node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>
+            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x + node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthRight, node)" ng-attr-x1="{{node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>
+            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x, y: node.y - node.height/2}" sg-drag-move="_.bind(node.resizeHeightBottom, node)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{-node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ns-resize;"></line>
+            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x, y: node.y + node.height/2}" sg-drag-move="_.bind(node.resizeHeightTop, node)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ns-resize;"></line>
             <g
               ng-if="node.fixed"
               ng-attr-transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"
@@ -321,7 +314,7 @@
             ng-click="clickHandler(node, $event)"
             ng-attr-opacity="{{node.opacity}}"
             ng-attr-transform="translate({{node.x}},{{node.y}})"
-            style="cursor: pointer;"
+            style="cursor: move;"
             >
             <rect 
               style="

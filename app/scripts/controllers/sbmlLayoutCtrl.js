@@ -58,7 +58,7 @@ angular.module('sg.graphene.sbml')
               linkWatchers = [];
               _.each($scope.model.getAllLinks(), function(l) {
                 var watch = $scope.$watch(function() {
-                  return l.source.x + l.source.y + l.target.x + l.target.y;
+                  return l.source.x + l.source.y + l.source.width + l.source.height + l.target.x + l.target.y + l.target.width + l.target.height;
                 }, function(val) {
                   if (val) {
                     l.update();
