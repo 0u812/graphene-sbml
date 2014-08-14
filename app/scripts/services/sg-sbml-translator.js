@@ -32,7 +32,20 @@ angular.module('sg.graphene.sbml')
         listOfReactions.reactions.push(r.data);
       });
 
+      // update layout/render annotation
+      var layout = this.model.sbml.sbml.model.annotation
+
       return this.model.sbml;
+    };
+
+    function ensureExists(obj, propertyArray) {
+      _.each(propertyArray, function(prop) {
+        if (!obj[prop]) {
+          obj[prop] = {};
+        }
+        obj = obj[prop];
+      });
+      return obj;
     };
 
     // Public API here

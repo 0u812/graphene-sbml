@@ -16,32 +16,14 @@ angular.module('sg.graphene.sbml')
     SgNodeAlias,
     SgSbmlTemplate,
     SgSbmlTranslator,
+    SgSbmlUtils,
     idGenerator
   ) {
 
     var x2js = new X2JS();
-    var arrayify = function(s) {
-      if (typeof s === 'object') {
-        if (s.length) {
-          // already an array-like object
-          return s;
-        } else {
-          return [s];
-        }
-      } else if (typeof s === 'string') {
-        return s.split();
-      }
-    };
-
-    var setPositionFromAttributes = function(node, obj) {
-      node.x = parseInt(obj._x, 10);
-      node.y = parseInt(obj._y, 10);
-    };
-    var setDimensionsFromAttributes = function(node, obj) {
-      node.width = parseInt(obj._width, 10);
-      node.height = parseInt(obj._height, 10);
-    };
-
+    var arrayify = SgSbmlUtils.arrayify;
+    var setPositionFromAttributes = SgSbmlUtils.setPositionFromAttributes;
+    var setDimensionsFromAttributes = SgSbmlUtils.setDimensionsFromAttributes;
 
     var SgSbmlModel = function(sbmlStr) {
       if (!sbmlStr) {
