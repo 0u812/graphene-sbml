@@ -23,7 +23,10 @@ angular.module('sg.graphene.sbml')
           _name: 'untitled',
           annotation: {},
           listOfCompartments: {
-            compartment: []
+            compartment: [{
+              _id: 'compartment',
+              _size: 1
+            }]
           },
           listOfParameters: {
             parameter: []
