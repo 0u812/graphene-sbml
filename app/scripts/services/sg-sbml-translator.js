@@ -19,22 +19,25 @@ angular.module('sg.graphene.sbml')
     };
 
     SgSbmlTranslator.prototype.getSbml = function() {
+      var copiedSbml = angular.copy(this.model.sbml);
+      var model = copiedSbml.sbml.model;
       // update species
-      var listOfSpecies = this.model.sbml.sbml.model.listOfSpecies;
+      var listOfSpecies = model.listOfSpecies;
       listOfSpecies.species = [];
       _.each(this.model.nodes.species, function(s) {
         listOfSpecies.species.push(s.data);
       });
       // update reactions
-      var listOfReactions = this.model.sbml.sbml.model.listOfReactions;
+      var listOfReactions = model.listOfReactions;
       listOfReactions.reaction = [];
       _.each(this.model.nodes.reactions, function(r) {
         listOfReactions.reaction.push(r.data);
       });
 
       // update layout/render annotation
-      var layout = SgSbmlUtils.ensureExists(this.model, ['sbml', 'sbml', 'model', 'annotation', 'listOfLayouts', 'layout']);
+      var layout = SgSbmlUtils.ensureExists(model, ['annotation', 'listOfLayouts', 'layout']);
       layout = SgSbmlUtils.arrayify(layout)[0]; // assign to first layout
+      layout._id = layout._id || 'GrapheneLayout';
 
       // Get a handle to the species glyphs
       var listOfSpeciesGlyphs = SgSbmlUtils.ensureExists(layout, ['listOfSpeciesGlyphs']);
@@ -125,7 +128,20 @@ angular.module('sg.graphene.sbml')
         });
       });
 
-      return this.model.sbml;
+      // Validate that empty elements are removed
+      if (!model.listOfParameters.parameter.length) {
+        delete model.listOfParameters;
+      }
+      if (!model.listOfCompartments.compartment.length) {
+        delete model.listOfCompartments;
+      }
+
+
+      return copiedSbml;
+    };
+
+    SgSbmlTranslator.prototype.getSbmlString = function() {
+      return SgSbmlUtils.x2js.json2xml_str(this.getSbml());
     };
 
     // Public API here
