@@ -23,7 +23,7 @@
     "json3": "~3.3.1",
     "es5-shim": "~3.1.0",
     "bootstrap-sass-official": "~3.2.0",
-    "graphene": "~1.2.0",
+    "graphene": "~1.2.1",
     "fontawesome": "~4.1.0",
     "angular-bootstrap": "~0.11.0",
     "ng-context-menu": "~0.1.6",
