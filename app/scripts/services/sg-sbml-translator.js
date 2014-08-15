@@ -27,9 +27,9 @@ angular.module('sg.graphene.sbml')
       });
       // update reactions
       var listOfReactions = this.model.sbml.sbml.model.listOfReactions;
-      listOfReactions.reactions = [];
+      listOfReactions.reaction = [];
       _.each(this.model.nodes.reactions, function(r) {
-        listOfReactions.reactions.push(r.data);
+        listOfReactions.reaction.push(r.data);
       });
 
       // update layout/render annotation

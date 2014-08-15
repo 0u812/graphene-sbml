@@ -8,20 +8,7 @@
  * Factory in the grapheneSbmlApp.
  */
 angular.module('sg.graphene.sbml')
-  .factory('SgSbmlReaction', function(idGenerator) {
-    var arrayify = function(s) {
-      if (typeof s === 'object') {
-        if (!_.isUndefined(s.length)) {
-          // already an array-like object
-          return s;
-        } else {
-          return [s];
-        }
-      } else if (typeof s === 'string') {
-        return s.split();
-      }
-    };
-
+  .factory('SgSbmlReaction', function(idGenerator, SgSbmlUtils) {
     var SgSbmlReaction = function(model, data) {
       this.model = model;
       if (!data) {
@@ -42,13 +29,13 @@ angular.module('sg.graphene.sbml')
           speciesReference: []
         };
       }
-      data.listOfReactants.speciesReference = arrayify(data.listOfReactants.speciesReference);
+      data.listOfReactants.speciesReference = SgSbmlUtils.arrayify(data.listOfReactants.speciesReference);
       if (!data.listOfProducts || !data.listOfProducts.speciesReference) {
         data.listOfProducts = {
           speciesReference: []
         };
       }
-      data.listOfProducts.speciesReference = arrayify(data.listOfProducts.speciesReference);
+      data.listOfProducts.speciesReference = SgSbmlUtils.arrayify(data.listOfProducts.speciesReference);
 
       this.data = data;
     };

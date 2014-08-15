@@ -23,7 +23,7 @@ angular.module('sg.graphene.sbml')
 
     function arrayify(s) {
       if (typeof s === 'object') {
-        if (s.length) {
+        if (!_.isUndefined(s.length)) {
           // already an array-like object
           return s;
         } else {

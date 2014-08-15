@@ -306,10 +306,12 @@ angular.module('sg.graphene.sbml')
     };
 
     SgSbmlModel.prototype.getSbmlLayout = function() {
-      var layout = arrayify(this.sbml.sbml.model.annotation.listOfLayouts.layout)[0];
+      var layout = SgSbmlUtils.ensureExists(this.sbml.sbml.model, ['annotation', 'listOfLayouts']).layout;
 
       if (!layout) {
         return false;
+      } else {
+        layout = layout[0];
       }
 
       _.each(arrayify(layout.listOfSpeciesGlyphs.speciesGlyph), function(s) {
