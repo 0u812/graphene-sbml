@@ -108,7 +108,7 @@ angular.module('sg.graphene.sbml')
           _id: idGenerator.generateSpeciesId(this),
           _boundaryCondition: false,
           _initialConcentration: 0,
-          _compartment: 'compartment'
+          _compartment: this.sbml.sbml.model.listOfCompartments.compartment[0]._id
         };
       }
       var newNode = new SgNodeSpecies(data._id);
