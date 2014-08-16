@@ -141,7 +141,39 @@ angular.module('sg.graphene.sbml')
     };
 
     SgSbmlTranslator.prototype.getSbmlString = function() {
-      return SgSbmlUtils.x2js.json2xml_str(this.getSbml());
+
+      // Reorder XML nodes to be valid SBML
+      var doc = SgSbmlUtils.x2js.json2xml(this.getSbml());
+      var model = angular.element(doc).find('model')[0];
+      var children = [];
+      while (model.firstChild) {
+        children.push(model.removeChild(model.firstChild));
+      }
+      console.log(children);
+      var order = [
+        'annotation',
+        'listOfFunctionDefinitions',
+        'listOfCompartmentTypes',
+        'listOfSpeciesTypes',
+        'listOfCompartments',
+        'listOfSpecies',
+        'listOfParameters',
+        'listOfInitialAssignments',
+        'listOfRules',
+        'listOfConstraints',
+        'listOfReactions',
+        'listOfEvents'
+      ];
+      _.each(order, function(tagname) {
+        var ind = _.findIndex(children, function(child) {
+          return tagname.toLowerCase().match(child.tagName.toLowerCase());
+        });
+        if (ind > -1) {
+          model.appendChild(children[ind]);
+        }
+      });
+
+      return new XMLSerializer().serializeToString(doc);
     };
 
     // Public API here
