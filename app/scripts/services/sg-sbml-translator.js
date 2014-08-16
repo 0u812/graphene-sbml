@@ -38,6 +38,10 @@ angular.module('sg.graphene.sbml')
       var layout = SgSbmlUtils.ensureExists(model, ['annotation', 'listOfLayouts', 'layout']);
       layout = SgSbmlUtils.arrayify(layout)[0]; // assign to first layout
       layout._id = layout._id || 'GrapheneLayout';
+      layout.dimensions = {
+        _width: _.max(_.pluck(this.model.nodes.species, 'x')),
+        _height: _.max(_.pluck(this.model.nodes.species, 'y'))
+      };
 
       // Get a handle to the species glyphs
       var listOfSpeciesGlyphs = SgSbmlUtils.ensureExists(layout, ['listOfSpeciesGlyphs']);
