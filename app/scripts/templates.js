@@ -1320,14 +1320,14 @@ angular.module('templates/details.html', []).run(['$templateCache', function($te
     '        <input type="range" min="0" max="10" ng-model="AppState.selected.display.strokeWidth"></input>\n' +
     '      </div>\n' +
     '    </div>\n' +
-    '    <div class="row">\n' +
+    '    <div class="row" ng-if="!AppState.selected.data._id">\n' +
     '      <label class="col-sm-4 control-label">Font-Size:</label>\n' +
     '      <div class="col-sm-8">\n' +
     '        <input type="text" class="form-control" ng-model="AppState.selected.display.text.size"></input>\n' +
     '        <input type="range" min="5" max="30" ng-model="AppState.selected.display.text.size"></input>\n' +
     '      </div>\n' +
     '    </div>\n' +
-    '    <div class="row">\n' +
+    '    <div class="row" ng-if="!AppState.selected.data._id">\n' +
     '      <label class="col-sm-4 control-label">Font:</label>\n' +
     '      <div class="col-sm-8">\n' +
     '        <input type="text" class="form-control" ng-model="AppState.selected.display.text.font"></input>\n' +
