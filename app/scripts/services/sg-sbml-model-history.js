@@ -16,6 +16,28 @@ angular.module('sg.graphene.sbml')
       this.history = [];
     };
 
+    SgSbmlModelHistory.prototype.addHistory = function(model) {
+      var self = this;
+      if (self.limit && (self.history.length >= self.limit)) {
+        self.history.shift();
+      }
+      self.history.push(model.translator.getSbmlString());
+    };
+
+    SgSbmlModelHistory.prototype.getHistory = function(ind) {
+      var self = this;
+      if (!_.isNumber(ind)) {
+        ind = self.history.length - 1;
+      }
+      if (ind > -1 && ind < self.history.length) {
+        var item = self.history.splice(ind, 1)[0];
+        return item;
+      } else {
+        return false;
+      }
+    };
+
+
     // Public API here
     return SgSbmlModelHistory;
   });
