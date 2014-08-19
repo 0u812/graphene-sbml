@@ -16,7 +16,10 @@
     "app/scripts/services/sg-sbml-layout.js",
     "app/scripts/services/sg-sbml-link.js",
     "app/scripts/services/sg-sbml-model.js",
-    "app/scripts/services/sg-sbml-reaction.js"
+    "app/scripts/services/sg-sbml-reaction.js",
+    "app/scripts/services/sg-sbml-template.js",
+    "app/scripts/services/sg-sbml-translator.js",
+    "app/scripts/services/sg-sbml-utils.js"
   ],
   "dependencies": {
     "angular": "1.2.16",
