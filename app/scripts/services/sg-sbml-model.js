@@ -307,12 +307,8 @@ angular.module('sg.graphene.sbml')
 
     SgSbmlModel.prototype.getSbmlLayout = function() {
       var layout = SgSbmlUtils.ensureExists(this.sbml.sbml.model, ['annotation', 'listOfLayouts']).layout;
-
-      if (!layout) {
-        return false;
-      } else {
-        layout = layout[0];
-      }
+      layout = SgSbmlUtils.arrayify(layout);
+      layout = layout[0];
 
       _.each(arrayify(layout.listOfSpeciesGlyphs.speciesGlyph), function(s) {
         var bb = s.boundingBox;
