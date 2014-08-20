@@ -18,6 +18,10 @@ angular.module('sg.graphene.sbml')
         gradient: {
           start: '#B0C0FF',
           stop: '#FFF'
+        },
+        text: {
+          font: 'Georgia',
+          size: 10
         }
       };
 

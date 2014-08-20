@@ -1650,7 +1650,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            </g>\n' +
     '            <text\n' +
     '              ng-attr-style="\n' +
-    '              font-size: {{node.display.text.size}}px;\n' +
+    '                font-size: {{node.display.text.size}}px;\n' +
     '                font-family: {{node.display.text.font}};\n' +
     '                font-weight: bolder;\n' +
     '                text-anchor: middle;\n' +
@@ -1703,9 +1703,9 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              <path d="M448 1568v-576q0-40 28-68t68-28h32v-192q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68v576q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68zm320-672h512v-192q0-106-75-181t-181-75-181 75-75 181v192z"/>\n' +
     '            </g>\n' +
     '            <text\n' +
-    '              style="\n' +
-    '                font-size: 8px;\n' +
-    '                font-family: Georgia;\n' +
+    '              ng-attr-style="\n' +
+    '                font-size: {{node.display.text.size}}px;\n' +
+    '                font-family: {{node.display.text.font}};\n' +
     '                font-weight: bolder;\n' +
     '                text-anchor: middle;\n' +
     '                dominant-baseline: middle;\n' +

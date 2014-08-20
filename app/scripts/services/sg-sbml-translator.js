@@ -51,6 +51,10 @@ angular.module('sg.graphene.sbml')
       var listOfTextGlyphs = SgSbmlUtils.ensureExists(layout, ['listOfTextGlyphs']);
       listOfTextGlyphs.textGlyph = [];
 
+      // Get a handle to the reaction glyphs
+      var listOfReactionGlyphs = SgSbmlUtils.ensureExists(layout, ['listOfReactionGlyphs']);
+      listOfReactionGlyphs.reactionGlyph = [];
+
       /*
       // Get a handle to species rendering style
       var listOfRenderStyles = SgSbmlUtils.ensureExists(layout, ['annotation', 'listOfRenderStyles']);
@@ -87,7 +91,7 @@ angular.module('sg.graphene.sbml')
       var styles = listOfRenderInformation.renderInformation.listOfStyles.style;
       var gradients = listOfRenderInformation.renderInformation.listOfGradientDefinitions.linearGradient;
 
-      _.each(this.model.nodes.species, function(s) {
+      _.each(_.union(_.values(this.model.nodes.species), _.values(this.model.nodes.alias)), function(s) {
         var bb = {
           dimensions: {
             _height: s.height,
@@ -99,22 +103,35 @@ angular.module('sg.graphene.sbml')
           }
         };
 
-        var speciesGlyphId = 'sGlyph-' + s.data._id;
-        var textGlyphId = 'tGlyph-' + s.data._id;
-        var gradientId = 'gradient-' + s.data._id;
+        var speciesGlyphId = 'sGlyph-' + s.id;
+        var textGlyphId = 'tGlyph-' + s.id;
+        var gradientId = 'gradient-' + s.id;
 
-        listOfSpeciesGlyphs.speciesGlyph.push({
-          _id: speciesGlyphId,
-          _species: s.data._id,
-          boundingBox: bb
-        });
-
-        listOfTextGlyphs.textGlyph.push({
-          _id: textGlyphId,
-          _graphicalObject: speciesGlyphId,
-          _text: s.data._name || s.data._id,
-          boundingBox: bb
-        });
+        if (s.aliasOf) {
+          listOfSpeciesGlyphs.speciesGlyph.push({
+            _id: speciesGlyphId,
+            _species: s.aliasOf.data._id,
+            boundingBox: bb
+          });
+          listOfTextGlyphs.textGlyph.push({
+            _id: textGlyphId,
+            _graphicalObject: speciesGlyphId,
+            _text: s.aliasOf.data._name || s.aliasOf.data._id,
+            boundingBox: bb
+          });
+        } else {
+          listOfSpeciesGlyphs.speciesGlyph.push({
+            _id: speciesGlyphId,
+            _species: s.data._id,
+            boundingBox: bb
+          });
+          listOfTextGlyphs.textGlyph.push({
+            _id: textGlyphId,
+            _graphicalObject: speciesGlyphId,
+            _text: s.data._name || s.data._id,
+            boundingBox: bb
+          });
+        }
 
 
         styles.push({
@@ -196,6 +213,15 @@ angular.module('sg.graphene.sbml')
       }
       if (!SgSbmlUtils.arrayify(model.listOfCompartments.compartment).length) {
         delete model.listOfCompartments;
+      }
+      if (!SgSbmlUtils.arrayify(listOfReactionGlyphs.reactionGlyph).length) {
+        delete layout.listOfReactionGlyphs;
+      }
+      if (!SgSbmlUtils.arrayify(listOfSpeciesGlyphs.speciesGlyph).length) {
+        delete layout.listOfSpeciesGlyphs;
+      }
+      if (!SgSbmlUtils.arrayify(listOfTextGlyphs.textGlyph).length) {
+        delete layout.listOfTextGlyphs;
       }
 
 

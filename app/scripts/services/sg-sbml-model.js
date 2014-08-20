@@ -22,6 +22,7 @@ angular.module('sg.graphene.sbml')
 
     var x2js = SgSbmlUtils.x2js;
     var arrayify = SgSbmlUtils.arrayify;
+    var ensureExists = SgSbmlUtils.ensureExists;
     var setPositionFromAttributes = SgSbmlUtils.setPositionFromAttributes;
     var setDimensionsFromAttributes = SgSbmlUtils.setDimensionsFromAttributes;
 
@@ -314,11 +315,11 @@ angular.module('sg.graphene.sbml')
     };
 
     SgSbmlModel.prototype.getSbmlLayout = function() {
-      var layout = SgSbmlUtils.ensureExists(this.sbml.sbml.model, ['annotation', 'listOfLayouts']).layout;
-      layout = SgSbmlUtils.arrayify(layout);
+      var layout = ensureExists(this.sbml.sbml.model, ['annotation', 'listOfLayouts']).layout;
+      layout = arrayify(layout);
       layout = layout[0];
 
-      _.each(arrayify(layout.listOfSpeciesGlyphs.speciesGlyph), function(s) {
+      _.each(arrayify(ensureExists(layout, ['listOfSpeciesGlyphs', 'speciesGlyph'])), function(s) {
         var bb = s.boundingBox;
         var glyphId = s._id;
         var speciesId = s._species;
@@ -333,7 +334,7 @@ angular.module('sg.graphene.sbml')
         setDimensionsFromAttributes(node, bb.dimensions);
       }, this);
 
-      _.each(arrayify(layout.listOfReactionGlyphs.reactionGlyph), function(r) {
+      _.each(arrayify(ensureExists(layout, ['listOfReactionGlyphs', 'reactionGlyph'])), function(r) {
         var aliasNodes = [];
         var reactionNode = this.nodes.reactions[r._reaction];
         reactionNode.glyphId = r._id;
