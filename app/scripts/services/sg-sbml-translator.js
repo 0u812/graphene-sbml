@@ -88,8 +88,21 @@ angular.module('sg.graphene.sbml')
           linearGradient: []
         }
       };
-      var styles = listOfRenderInformation.renderInformation.listOfStyles.style;
-      var gradients = listOfRenderInformation.renderInformation.listOfGradientDefinitions.linearGradient;
+      var listOfStyles = SgSbmlUtils.ensureExists(listOfRenderInformation, [
+        'renderInformation',
+        'listOfStyles'
+      ]);
+      listOfStyles.style = [];
+      var styles = listOfStyles.style;
+      var listOfGradients = SgSbmlUtils.ensureExists(
+        listOfRenderInformation,
+        [
+          'renderInformation',
+          'listOfGradientDefinitions'
+        ]
+      );
+      listOfGradients.linearGradient= [];
+      var gradients = listOfGradients.linearGradient;
 
       _.each(_.union(_.values(this.model.nodes.species), _.values(this.model.nodes.alias)), function(s) {
         var bb = {
@@ -207,6 +220,82 @@ angular.module('sg.graphene.sbml')
         */
       });
 
+      _.each(this.model.nodes.reactions, function(r) {
+        var reactionGlyphId = 'rGlyph-' + r.id;
+        var bb = {
+          dimensions: {
+            _height: r.height,
+            _width: r.width
+          },
+          position: {
+            _x: r.x,
+            _y: r.y
+          }
+        };
+
+        var reactionGlyph = {
+          _id: reactionGlyphId,
+          _reaction: r.data._id,
+          boundingBox: bb,
+          listOfSpeciesReferenceGlyphs: {
+            speciesReferenceGlyph: []
+          }
+        };
+        listOfReactionGlyphs.reactionGlyph.push(reactionGlyph);
+
+        _.each(r.reactants, function(reactant, i) {
+          var speciesReference;
+          if (reactant.aliasOf) {
+            speciesReference = reactant.aliasOf.data._id;
+          } else {
+            speciesReference = reactant.data._id;
+          }
+          reactionGlyph.listOfSpeciesReferenceGlyphs.speciesReferenceGlyph.push({
+            _id: 'sReference-' + r.id + '-' + reactant.id + '-' + i,
+            _role: 'substrate',
+            _speciesGlyph: 'sGlyph-' + reactant.id,
+            _speciesReference: speciesReference,
+            '_xmlns:render': 'http://projects.eml.org/bcb/sbml/render/level2',
+            boundingBox: {
+              position: {
+                _x: 0,
+                _y: 0
+              },
+              dimensions: {
+                _width: 0,
+                _height: 0
+              }
+            }
+          });
+        });
+        _.each(r.products, function(product, i) {
+          var speciesReference;
+          if (product.aliasOf) {
+            speciesReference = product.aliasOf.data._id;
+          } else {
+            speciesReference = product.data._id;
+          }
+          reactionGlyph.listOfSpeciesReferenceGlyphs.speciesReferenceGlyph.push({
+            _id: 'sReference-' + r.id + '-' + product.id + '-' + i,
+            _role: 'product',
+            _speciesGlyph: 'sGlyph-' + product.id,
+            _speciesReference: speciesReference,
+            '_xmlns:render': 'http://projects.eml.org/bcb/sbml/render/level2',
+            boundingBox: {
+              position: {
+                _x: 0,
+                _y: 0
+              },
+              dimensions: {
+                _width: 0,
+                _height: 0
+              }
+            }
+          });
+        });
+      });
+
+
       // Validate that empty elements are removed
       if (!SgSbmlUtils.arrayify(model.listOfParameters.parameter).length) {
         delete model.listOfParameters;
@@ -223,7 +312,6 @@ angular.module('sg.graphene.sbml')
       if (!SgSbmlUtils.arrayify(listOfTextGlyphs.textGlyph).length) {
         delete layout.listOfTextGlyphs;
       }
-
 
       return copiedSbml;
     };
