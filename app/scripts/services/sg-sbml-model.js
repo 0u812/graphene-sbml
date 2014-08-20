@@ -360,6 +360,26 @@ angular.module('sg.graphene.sbml')
         color: _.indexBy(arrayify(renderInformation.listOfColorDefinitions.colorDefinition), '_id'),
         glyph: _.indexBy(_.union(_.toArray(this.nodes.species), _.toArray(this.nodes.alias)), 'glyphId')
       };
+
+      /*
+      // **Deprecated**
+      // Using listOfRenderStyles for render information
+      var renderStyle = arrayify(SgSbmlUtils.ensureExists(layout, ['annotation', 'listOfRenderStyles', 'renderStyle']))[0];
+      var speciesStyle = arrayify(SgSbmlUtils.ensureExists(renderStyle, ['listOfSpeciesStyles', 'speciesStyle']));
+      _.each(speciesStyle, function(style) {
+        var node = lookup.glyph[style._reference];
+        var shape = style.listOfShapes.shape;
+        node.display.stroke = SgSbmlUtils.colorConvert(shape.edgeStyle._color);
+        node.display.strokeWidth = parseInt(shape.edgeStyle._thickness, 10);
+        node.display.gradient.start = SgSbmlUtils.colorConvert(shape.fillStyle._startColor);
+        if (shape.fillStyle._fillType === 'Solid') {
+          node.display.gradient.stop = SgSbmlUtils.colorConvert(shape.fillStyle._startColor);
+        } else {
+          node.display.gradient.stop = SgSbmlUtils.colorConvert(shape.fillStyle._endColor);
+        }
+      });
+      */
+
       _.each(renderInformation.listOfStyles.style, function(style) {
         if (style._idList) {
           var r = style.g.rectangle;

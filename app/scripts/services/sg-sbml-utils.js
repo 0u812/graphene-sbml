@@ -15,6 +15,7 @@ angular.module('sg.graphene.sbml')
 
     var api = {
       arrayify: arrayify,
+      colorConvert: colorConvert,
       ensureExists: ensureExists,
       setPositionFromAttributes: setPositionFromAttributes,
       setDimensionsFromAttributes: setDimensionsFromAttributes,
@@ -31,6 +32,15 @@ angular.module('sg.graphene.sbml')
         }
       } else if (typeof s === 'string') {
         return s.split();
+      }
+    }
+
+    function colorConvert(s) {
+      // Just does basic checking to convert 8 digit hex string to 6
+      if (_.isString(s) && _.isEqual(s.length, 8)) {
+        return '#' + s.substr(0, 6);
+      } else {
+        return s;
       }
     }
 

@@ -1,7 +1,19 @@
 'use strict';
 
 angular.module('sg.graphene.sbml')
-  .controller('SbmlLayoutCtrl', function($scope, $window, sgSbml, sgGeo, SgSbmlModel, SgLayout, SgLink, SgNode, AppState, sgSbmlClickHandlers) {
+  .controller('SbmlLayoutCtrl', function(
+    $scope,
+    $window,
+    sgSbml,
+    sgGeo,
+    SgSbmlModel,
+    SgSbmlModelHistory,
+    SgLayout,
+    SgLink,
+    SgNode,
+    AppState,
+    sgSbmlClickHandlers
+  ) {
 
     $scope.AppState = AppState;
     $scope.sgGeo = sgGeo;
@@ -20,6 +32,7 @@ angular.module('sg.graphene.sbml')
     /*
      * Watchers
      */
+    $scope.history = new SgSbmlModelHistory();
 
     $scope.$watch('imports.sbml', function(newVal) {
       if (newVal) {
