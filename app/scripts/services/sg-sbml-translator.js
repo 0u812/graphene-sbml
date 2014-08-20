@@ -36,7 +36,14 @@ angular.module('sg.graphene.sbml')
 
       // update layout/render annotation
       var layout = SgSbmlUtils.ensureExists(model, ['annotation', 'listOfLayouts', 'layout']);
-      layout = SgSbmlUtils.arrayify(layout)[0]; // assign to first layout
+      layout = SgSbmlUtils.arrayify(layout); // assign to first layout
+      if (_.isArray(layout) && layout.length) {
+        // get first layout
+        layout = layout[0];
+      } else {
+        model.annotation.listOfLayouts.layout = {};
+        layout = model.annotation.listOfLayouts.layout;
+      }
       layout._id = layout._id || 'GrapheneLayout';
       layout.dimensions = {
         _width: _.max(_.pluck(this.model.nodes.species, 'x')),

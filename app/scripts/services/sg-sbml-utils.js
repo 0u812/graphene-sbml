@@ -27,8 +27,6 @@ angular.module('sg.graphene.sbml')
         if (!_.isUndefined(s.length)) {
           // already an array-like object
           return s;
-        } else if (!_.values(s).length) {
-          return [];
         } else {
           return [s];
         }

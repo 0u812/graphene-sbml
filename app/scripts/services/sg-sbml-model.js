@@ -33,15 +33,23 @@ angular.module('sg.graphene.sbml')
         this.sbml = x2js.xml_str2json(sbmlStr);
       }
 
-      if (!this.sbml.sbml || !this.sbml.sbml.model) {
+      if (!this.sbml || !this.sbml.sbml || !this.sbml.sbml.model) {
         // Super basic validation of valid sbml model
-        throw new Error('Invalid SBML!');
+        this.sbml = SgSbmlTemplate.newTemplate();
+        console.log('Could not process SBML, using an empty model instead.');
       }
+
+      this.ensureComponentsExist();
 
       this.initialize();
 
     };
 
+    SgSbmlModel.prototype.ensureComponentsExist = function() {
+      var model = this.sbml.sbml.model;
+      ensureExists(model, ['listOfParameters', 'parameter']);
+      ensureExists(model, ['listOfCompartments', 'compartment']);
+    };
 
     SgSbmlModel.prototype.initialize = function() {
       // Create a translator object
@@ -315,11 +323,19 @@ angular.module('sg.graphene.sbml')
     };
 
     SgSbmlModel.prototype.getSbmlLayout = function() {
-      var layout = ensureExists(this.sbml.sbml.model, ['annotation', 'listOfLayouts']).layout;
-      layout = arrayify(layout);
-      layout = layout[0];
+      var listOfLayouts = ensureExists(this.sbml.sbml.model, ['annotation', 'listOfLayouts']);
+      var layout = arrayify(listOfLayouts.layout);
+      if (layout && layout.length) {
+        layout = layout[0];
+      } else {
+        listOfLayouts.layout = [];
+        layout = listOfLayouts.layout;
+      }
 
       _.each(arrayify(ensureExists(layout, ['listOfSpeciesGlyphs', 'speciesGlyph'])), function(s) {
+        if (!_.values(s).length) {
+          return;
+        }
         var bb = s.boundingBox;
         var glyphId = s._id;
         var speciesId = s._species;
@@ -335,6 +351,9 @@ angular.module('sg.graphene.sbml')
       }, this);
 
       _.each(arrayify(ensureExists(layout, ['listOfReactionGlyphs', 'reactionGlyph'])), function(r) {
+        if (!_.values(r).length) {
+          return;
+        }
         var aliasNodes = [];
         var reactionNode = this.nodes.reactions[r._reaction];
         reactionNode.glyphId = r._id;
@@ -355,10 +374,17 @@ angular.module('sg.graphene.sbml')
       }, this);
 
       // Update species node styles
-      var renderInformation = arrayify(layout.annotation.listOfRenderInformation.renderInformation)[0];
+      var renderInformation = arrayify(ensureExists(
+        layout,
+        [
+          'annotation',
+          'listOfRenderInformation',
+          'renderInformation'
+        ]
+      ))[0];
 
       var lookup = {
-        gradient: _.indexBy(arrayify(renderInformation.listOfGradientDefinitions.linearGradient), '_id'),
+        gradient: _.indexBy(arrayify(SgSbmlUtils.ensureExists(renderInformation, ['listOfGradientDefinitions', 'linearGradient'])), '_id'),
         color: _.indexBy(arrayify(SgSbmlUtils.ensureExists(renderInformation, ['listOfColorDefinitions', 'colorDefinition'])), '_id'),
         glyph: _.indexBy(_.union(_.toArray(this.nodes.species), _.toArray(this.nodes.alias)), 'glyphId')
       };
@@ -382,7 +408,7 @@ angular.module('sg.graphene.sbml')
       });
       */
 
-      _.each(renderInformation.listOfStyles.style, function(style) {
+      _.each(arrayify(ensureExists(renderInformation, ['listOfStyles', 'style'])), function(style) {
         if (style._idList) {
           var r = style.g.rectangle;
           var nodes = _.map(style._idList.split(' '), function(id) {
