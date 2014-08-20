@@ -166,6 +166,8 @@ angular.module('sg.graphene.sbml')
           var source = this.nodes.species[r._species];
           var target = reactionNode;
           var link = this.addLink('reactant', source, target);
+          source.reactions.push(reactionNode);
+          source.links.push(link);
           newLinks.push(link);
           link.reaction = reactionNode;
           reactionNode.reactants.push(source);
@@ -179,6 +181,8 @@ angular.module('sg.graphene.sbml')
           var source = reactionNode;
           var target = this.nodes.species[r._species];
           var link = this.addLink('product', source, target);
+          target.reactions.push(reactionNode);
+          target.links.push(link);
           newLinks.push(link);
           link.reaction = reactionNode;
           reactionNode.products.push(target);
@@ -192,6 +196,10 @@ angular.module('sg.graphene.sbml')
           var source = this.nodes.species[r._species];
           var target = reactionNode;
           var link = this.addLink('modifier', source, target);
+          source.reactions.push(reactionNode);
+          target.reactions.push(reactionNode);
+          source.links.push(link);
+          target.links.push(link);
           newLinks.push(link);
           link.reaction = reactionNode;
           reactionNode.modifiers.push(source);
@@ -395,10 +403,12 @@ angular.module('sg.graphene.sbml')
         var sInd = _.indexOf(speciesWithAliases, l.source);
         if (sInd > -1) {
           l.source = aliasNodes[sInd];
+          aliasNodes[sInd].links.push(l);
         }
         var tInd = _.indexOf(speciesWithAliases, l.target);
         if (tInd > -1) {
           l.target = aliasNodes[tInd];
+          aliasNodes[tInd].links.push(l);
         }
       });
 
@@ -407,13 +417,27 @@ angular.module('sg.graphene.sbml')
         var sInd = _.indexOf(speciesWithAliases, n);
         if (sInd > -1) {
           reactionNode.reactants[ind] = aliasNodes[sInd];
+          aliasNodes[sInd].reactions.push(reactionNode);
         }
       });
       _.each(reactionNode.products, function(n, ind) {
         var sInd = _.indexOf(speciesWithAliases, n);
         if (sInd > -1) {
           reactionNode.products[ind] = aliasNodes[sInd];
+          aliasNodes[sInd].reactions.push(reactionNode);
         }
+      });
+
+      // Clean up old connections with species
+      _.each(speciesWithAliases, function(s) {
+        // remove links that don't contain it
+        s.links = _.filter(s.links, function(l) {
+          return (l.source === s || l.target === s);
+        });
+        // remove reactions that don't point to it
+        s.reactions = _.filter(s.reactions, function(r) {
+          return (_.contains(r.reactants, s) || _.contains(r.products, s));
+        });
       });
 
     };

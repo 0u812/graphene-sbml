@@ -37,6 +37,14 @@ angular.module('sg.graphene.sbml')
         }, this);
       }, this);
 
+      // Remove links from species nodes
+      _.each(this.reactants, function(r) {
+        r.reactions = _.without(r.reactions, this);
+      }, this);
+      _.each(this.products , function(p) {
+        p.reactions = _.without(p.reactions, this);
+      }, this);
+
       // Delete reaction node
       delete this.model.nodes.reactions[this.id];
     };
@@ -101,8 +109,13 @@ angular.module('sg.graphene.sbml')
     };
 
     SgNodeReaction.prototype.updatePosition = function() {
+      var species = _.union(this.products, this.reactants);
+      _.each(species, function(s) {
+        _.each(s.links, function(l) {
+          l.update();
+        });
+      });
       if (!this.fixed) {
-        var species = _.union(this.products, this.reactants);
         if (species.length > 1) {
           var sumX = 0;
           var sumY = 0;

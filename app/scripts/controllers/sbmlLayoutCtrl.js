@@ -24,16 +24,6 @@ angular.module('sg.graphene.sbml')
     $scope.$watch('imports.sbml', function(newVal) {
       if (newVal) {
         $scope.model = new SgSbmlModel(newVal);
-        $scope.model.setNodeSize({
-          species: {
-            height: 30,
-            width: 80
-          },
-          reactions: {
-            height: 0,
-            width: 0
-          }
-        });
         $scope.layout = new SgLayout($scope.model);
         $scope.layout.addToTick(function() {
           $scope.$digest();
@@ -47,6 +37,7 @@ angular.module('sg.graphene.sbml')
       }
     });
 
+    /*
     var linkWatchers = []; // storing node watchers to be removed if unnecessary
     var nodeWatchers = []; // storing node watchers to be removed if unnecessary
 
@@ -55,9 +46,7 @@ angular.module('sg.graphene.sbml')
         _.each($scope.model.links, function(links, key) {
           $scope.$watchCollection('model.links.' + key, function(val) {
             if (val) {
-              /*
-               * unwatch all link watchers
-               */
+               // unwatch all link watchers
               _.each(linkWatchers, function(w) {
                 w();
               });
@@ -111,6 +100,7 @@ angular.module('sg.graphene.sbml')
         });
       }
     });
+    */
 
     // var watchList = ['charge', 'linkDistance', 'gravity'];
     // _.each(watchList, function(w) {

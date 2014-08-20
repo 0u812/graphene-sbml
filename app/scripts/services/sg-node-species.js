@@ -27,12 +27,19 @@ angular.module('sg.graphene.sbml')
       this.height = 30;
       this.width = 80;
 
+      this.links = [];
+      this.reactions = [];
+
     };
     SgNodeSpecies.prototype = new SgNode();
 
     SgNodeSpecies.prototype.updatePosition = function(pos) {
       this.x = pos.x;
       this.y = pos.y;
+      _.each(this.reactions, function(r) {
+        r.updatePosition();
+        r.updateCentroid();
+      });
     };
 
     SgNodeSpecies.prototype.resizeHeightBottom = function(pos) {

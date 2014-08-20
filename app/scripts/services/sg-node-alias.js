@@ -20,6 +20,9 @@ angular.module('sg.graphene.sbml')
           stop: '#FFF'
         }
       };
+
+      this.links = [];
+      this.reactions = [];
     };
     SgNodeAlias.prototype = new SgNodeSpecies();
 
@@ -29,11 +32,18 @@ angular.module('sg.graphene.sbml')
         _.each(links, function(l) {
           if (l.source === this) {
             l.source = this.aliasOf;
+            this.aliasOf.links.push(l);
           }
           if (l.target === this) {
             l.target = this.aliasOf;
+            this.aliasOf.links.push(l);
           }
         }, this);
+      }, this);
+
+      // Replace species with reactions
+      _.each(this.reactions, function(r) {
+        this.aliasOf.reactions.push(r);
       }, this);
 
       // Replace all reactants and products in reaction nodes with parent
@@ -49,6 +59,9 @@ angular.module('sg.graphene.sbml')
           }
         }, this);
       }, this);
+
+      // Update position of parent node
+      this.aliasOf.updatePosition(this.aliasOf);
 
       // Delete node
       delete this.model.nodes.alias[this.id];
