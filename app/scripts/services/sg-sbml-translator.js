@@ -8,7 +8,7 @@
  * Factory in the grapheneSbmlApp.
  */
 angular.module('sg.graphene.sbml')
-  .factory('SgSbmlTranslator', function (SgSbmlUtils) {
+  .factory('SgSbmlTranslator', function(SgSbmlUtils) {
     // Service logic
     // ...
 
@@ -51,6 +51,7 @@ angular.module('sg.graphene.sbml')
       var listOfTextGlyphs = SgSbmlUtils.ensureExists(layout, ['listOfTextGlyphs']);
       listOfTextGlyphs.textGlyph = [];
 
+      /*
       // Get a handle to species rendering style
       var listOfRenderStyles = SgSbmlUtils.ensureExists(layout, ['annotation', 'listOfRenderStyles']);
       listOfRenderStyles = {
@@ -69,32 +70,88 @@ angular.module('sg.graphene.sbml')
           }
         }
       };
+      */
+
+      // Get a handle to rendering information
+      var listOfRenderInformation = SgSbmlUtils.ensureExists(layout, ['annotation', 'listOfRenderInformation']);
+      listOfRenderInformation._xmlns = 'http://projects.eml.org/bcb/sbml/render/level2';
+      listOfRenderInformation.renderInformation = {
+        _id: 'Graphene-SBML',
+        listOfStyles: {
+          style: []
+        },
+        listOfGradientDefinitions: {
+          linearGradient: []
+        }
+      };
+      var styles = listOfRenderInformation.renderInformation.listOfStyles.style;
+      var gradients = listOfRenderInformation.renderInformation.listOfGradientDefinitions.linearGradient;
 
       _.each(this.model.nodes.species, function(s) {
         var bb = {
-            dimensions: {
-              _height: s.height,
-              _width: s.width
-            },
-            position: {
-              _x: s.x,
-              _y: s.y
-            }
-          };
+          dimensions: {
+            _height: s.height,
+            _width: s.width
+          },
+          position: {
+            _x: s.x,
+            _y: s.y
+          }
+        };
+
+        var speciesGlyphId = 'sGlyph-' + s.data._id;
+        var textGlyphId = 'tGlyph-' + s.data._id;
+        var gradientId = 'gradient-' + s.data._id;
 
         listOfSpeciesGlyphs.speciesGlyph.push({
-          _id: 'sGlyph-' + s.data._id,
+          _id: speciesGlyphId,
           _species: s.data._id,
           boundingBox: bb
         });
 
         listOfTextGlyphs.textGlyph.push({
-          _id: 'tGlyph-' + s.data._id,
-          _graphicalObject: 'sGlyph-' + s.data._id,
+          _id: textGlyphId,
+          _graphicalObject: speciesGlyphId,
           _text: s.data._name || s.data._id,
           boundingBox: bb
         });
 
+
+        styles.push({
+          _idList: speciesGlyphId,
+          g: {
+            rectangle: {
+              _fill: gradientId,
+              _height: s.height,
+              _width: s.width,
+              _stroke: s.display.stroke,
+              '_stroke-width': s.display.strokeWidth
+            }
+          }
+        });
+        gradients.push({
+          _id: gradientId,
+          stop: [{
+            _offset: '0%',
+            '_stop-color': s.display.gradient.start
+          }, {
+            _offset: '100%',
+            '_stop-color': s.display.gradient.stop
+          }]
+        });
+        // text glyph style
+        styles.push({
+          _idList: textGlyphId,
+          g: {
+            '_font-family': s.display.text.font,
+            '_font-size': s.display.text.size,
+            '_stroke': s.display.text.color || 'black',
+            '_text-anchor': 'middle',
+            '_vtext-anchor': 'top'
+          }
+        });
+
+        /*
         listOfRenderStyles.renderStyle.listOfSpeciesStyles.speciesStyle.push({
           _id: 'sStyle-' + s.data._id,
           _reference: 'sGlyph-' + s.data._id,
@@ -130,13 +187,14 @@ angular.module('sg.graphene.sbml')
             }
           }
         });
+        */
       });
 
       // Validate that empty elements are removed
-      if (!model.listOfParameters.parameter.length) {
+      if (!SgSbmlUtils.arrayify(model.listOfParameters.parameter).length) {
         delete model.listOfParameters;
       }
-      if (!model.listOfCompartments.compartment.length) {
+      if (!SgSbmlUtils.arrayify(model.listOfCompartments.compartment).length) {
         delete model.listOfCompartments;
       }
 
@@ -153,7 +211,6 @@ angular.module('sg.graphene.sbml')
       while (model.firstChild) {
         children.push(model.removeChild(model.firstChild));
       }
-      console.log(children);
       var order = [
         'annotation',
         'listOfFunctionDefinitions',

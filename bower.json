@@ -31,7 +31,8 @@
     "angular-bootstrap": "~0.11.0",
     "ng-context-menu": "~0.1.6",
     "angular-ui-utils": "bower-jq",
-    "angular-spectrum-colorpicker": "~1.0.16"
+    "angular-spectrum-colorpicker": "~1.0.16",
+    "color": "harthur/color#185f806cf1"
   },
   "devDependencies": {
     "angular-mocks": "1.2.16",

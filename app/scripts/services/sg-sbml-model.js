@@ -355,9 +355,10 @@ angular.module('sg.graphene.sbml')
 
       // Update species node styles
       var renderInformation = arrayify(layout.annotation.listOfRenderInformation.renderInformation)[0];
+
       var lookup = {
         gradient: _.indexBy(arrayify(renderInformation.listOfGradientDefinitions.linearGradient), '_id'),
-        color: _.indexBy(arrayify(renderInformation.listOfColorDefinitions.colorDefinition), '_id'),
+        color: _.indexBy(arrayify(SgSbmlUtils.ensureExists(renderInformation, ['listOfColorDefinitions', 'colorDefinition'])), '_id'),
         glyph: _.indexBy(_.union(_.toArray(this.nodes.species), _.toArray(this.nodes.alias)), 'glyphId')
       };
 
@@ -388,7 +389,11 @@ angular.module('sg.graphene.sbml')
           });
           _.each(nodes, function(node) {
             if (node) {
-              node.display.stroke = lookup.color[r._stroke]._value;
+              if (lookup.color[r._stroke]) {
+                node.display.stroke = lookup.color[r._stroke]._value;
+              } else {
+                node.display.stroke = r._stroke;
+              }
               node.display.strokeWidth = parseInt(r['_stroke-width'], 10);
               if (lookup.gradient[r._fill]) {
                 node.display.gradient.start = lookup.gradient[r._fill].stop[0]['_stop-color'];
@@ -396,6 +401,9 @@ angular.module('sg.graphene.sbml')
               } else if (lookup.color[r._fill]) {
                 node.display.gradient.start = lookup.color[r._fill]._value;
                 node.display.gradient.stop = lookup.color[r._fill]._value;
+              } else {
+                node.display.gradient.start = r._fill;
+                node.display.gradient.stop = r._fill;
               }
             }
           });
