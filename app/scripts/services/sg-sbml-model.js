@@ -329,8 +329,8 @@ angular.module('sg.graphene.sbml')
 
     SgSbmlModel.prototype.broadcast = function() {
       _.each(this.subscribers, function(fn) {
-        fn();
-      });
+        fn(this);
+      }, this);
     };
 
     SgSbmlModel.prototype.getSbmlLayout = function() {
