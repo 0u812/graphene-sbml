@@ -1401,7 +1401,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            markerHeight="10" \n' +
     '            orient="auto">\n' +
     '            <path \n' +
-    '              fill="url(#markerGradient)" \n' +
+    '              fill="url({{$window.location.href}}#markerGradient)" \n' +
     '              stroke="#0013FF" \n' +
     '              transform="rotate(-90)" \n' +
     '              ng-attr-d="{{sgGeo.arrow({size: 10, type: \'triangle-down\'})}}">\n' +
@@ -1417,7 +1417,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            markerHeight="10" \n' +
     '            orient="auto">\n' +
     '            <path \n' +
-    '              fill="url(#markerGradient)" \n' +
+    '              fill="url({{$window.location.href}}#markerGradient)" \n' +
     '              stroke="#0013FF" \n' +
     '              transform="rotate(-90)" \n' +
     '              ng-attr-d="{{sgGeo.arrow({size: 10, type: \'triangle-down\'})}}"></path>\n' +
@@ -1468,7 +1468,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '                {{link.cp2.x}} {{link.cp2.y}}\n' +
     '                {{link.x2}} {{link.y2}}\n' +
     '              "\n' +
-    '              marker-end="url(#production)"\n' +
+    '              marker-end="url({{$window.location.href}}#production)"\n' +
     '              ng-attr-opacity="{{link.opacity}}"\n' +
     '              ng-attr-stroke="{{link.reaction.display.stroke}}"\n' +
     '              ng-attr-stroke-width="{{link.reaction.display.strokeWidth}}"\n' +
@@ -1501,7 +1501,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-if="false"\n' +
     '              class="reaction production link"\n' +
     '              ng-attr-opacity="{{link.opacity}}"\n' +
-    '              marker-end="url(#production)"\n' +
+    '              marker-end="url({{$window.location.href}}#production)"\n' +
     '              ng-attr-x1="{{link.x1}}"\n' +
     '              ng-attr-y1="{{link.y1}}"\n' +
     '              ng-attr-x2="{{link.x2}}"\n' +
@@ -1578,7 +1578,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-attr-y1="{{link.y1}}" \n' +
     '              ng-attr-x2="{{link.x2}}" \n' +
     '              ng-attr-y2="{{link.y2}}"\n' +
-    '              marker-end="url(#modifier)">\n' +
+    '              marker-end="url({{$window.location.href}}#modifier)">\n' +
     '            </line>\n' +
     '          </g>\n' +
     '          <g\n' +
@@ -1613,12 +1613,13 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-attr-y1="{{link.y1}}" \n' +
     '              ng-attr-x2="{{link.x2}}" \n' +
     '              ng-attr-y2="{{link.y2}}"\n' +
-    '              marker-end="url(#production)"></line>\n' +
+    '              marker-end="url({{$window.location.href}}#production)"></line>\n' +
     '          </g>\n' +
     '          <g \n' +
     '            sg-drag\n' +
     '            sg-drag-begin="node"\n' +
     '            sg-drag-move="_.bind(node.updatePosition, node)"\n' +
+    '            sg-drag-finish="_.bind(node.model.broadcast, node.model)"\n' +
     '            ng-repeat="node in model.nodes.species"\n' +
     '            context-menu\n' +
     '            data-target="speciesMenu{{node.id}}"\n' +
@@ -1635,7 +1636,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-attr-width="{{node.width}}" \n' +
     '              ng-attr-height="{{node.height}}"\n' +
     '              ng-attr-ry="{{node.height/2}}"\n' +
-    '              ng-attr-fill="url(#speciesGradient-{{node.id}})"\n' +
+    '              ng-attr-fill="url({{$window.location.href}}#speciesGradient-{{node.id}})"\n' +
     '              >\n' +
     '            </rect>\n' +
     '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x - node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthLeft, node)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{-node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>\n' +
@@ -1683,7 +1684,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-attr-width="{{node.width}}" \n' +
     '              ng-attr-height="{{node.height}}"\n' +
     '              ng-attr-ry="{{node.height/2}}"\n' +
-    '              ng-attr-fill="url(#aliasGradient-{{node.id}})"\n' +
+    '              ng-attr-fill="url({{$window.location.href}}#aliasGradient-{{node.id}})"\n' +
     '              >\n' +
     '            </rect>\n' +
     '            <rect\n' +

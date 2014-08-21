@@ -46,7 +46,7 @@
             markerHeight="10" 
             orient="auto">
             <path 
-              fill="url(#markerGradient)" 
+              fill="url({{$window.location.href}}#markerGradient)" 
               stroke="#0013FF" 
               transform="rotate(-90)" 
               ng-attr-d="{{sgGeo.arrow({size: 10, type: 'triangle-down'})}}">
@@ -62,7 +62,7 @@
             markerHeight="10" 
             orient="auto">
             <path 
-              fill="url(#markerGradient)" 
+              fill="url({{$window.location.href}}#markerGradient)" 
               stroke="#0013FF" 
               transform="rotate(-90)" 
               ng-attr-d="{{sgGeo.arrow({size: 10, type: 'triangle-down'})}}"></path>
@@ -113,7 +113,7 @@
                 {{link.cp2.x}} {{link.cp2.y}}
                 {{link.x2}} {{link.y2}}
               "
-              marker-end="url(#production)"
+              marker-end="url({{$window.location.href}}#production)"
               ng-attr-opacity="{{link.opacity}}"
               ng-attr-stroke="{{link.reaction.display.stroke}}"
               ng-attr-stroke-width="{{link.reaction.display.strokeWidth}}"
@@ -146,7 +146,7 @@
               ng-if="false"
               class="reaction production link"
               ng-attr-opacity="{{link.opacity}}"
-              marker-end="url(#production)"
+              marker-end="url({{$window.location.href}}#production)"
               ng-attr-x1="{{link.x1}}"
               ng-attr-y1="{{link.y1}}"
               ng-attr-x2="{{link.x2}}"
@@ -223,7 +223,7 @@
               ng-attr-y1="{{link.y1}}" 
               ng-attr-x2="{{link.x2}}" 
               ng-attr-y2="{{link.y2}}"
-              marker-end="url(#modifier)">
+              marker-end="url({{$window.location.href}}#modifier)">
             </line>
           </g>
           <g
@@ -258,12 +258,13 @@
               ng-attr-y1="{{link.y1}}" 
               ng-attr-x2="{{link.x2}}" 
               ng-attr-y2="{{link.y2}}"
-              marker-end="url(#production)"></line>
+              marker-end="url({{$window.location.href}}#production)"></line>
           </g>
           <g 
             sg-drag
             sg-drag-begin="node"
             sg-drag-move="_.bind(node.updatePosition, node)"
+            sg-drag-finish="_.bind(node.model.broadcast, node.model)"
             ng-repeat="node in model.nodes.species"
             context-menu
             data-target="speciesMenu{{node.id}}"
@@ -280,7 +281,7 @@
               ng-attr-width="{{node.width}}" 
               ng-attr-height="{{node.height}}"
               ng-attr-ry="{{node.height/2}}"
-              ng-attr-fill="url(#speciesGradient-{{node.id}})"
+              ng-attr-fill="url({{$window.location.href}}#speciesGradient-{{node.id}})"
               >
             </rect>
             <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x - node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthLeft, node)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{-node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>
@@ -328,7 +329,7 @@
               ng-attr-width="{{node.width}}" 
               ng-attr-height="{{node.height}}"
               ng-attr-ry="{{node.height/2}}"
-              ng-attr-fill="url(#aliasGradient-{{node.id}})"
+              ng-attr-fill="url({{$window.location.href}}#aliasGradient-{{node.id}})"
               >
             </rect>
             <rect
