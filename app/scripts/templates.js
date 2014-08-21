@@ -1663,6 +1663,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '            sg-drag\n' +
     '            sg-drag-begin="node"\n' +
     '            sg-drag-move="_.bind(node.updatePosition, node)"\n' +
+    '            sg-drag-finish="_.bind(node.model.broadcast, node.model)"\n' +
     '            ng-repeat="node in model.nodes.alias"\n' +
     '            context-menu\n' +
     '            data-target="aliasMenu{{node.id}}"\n' +

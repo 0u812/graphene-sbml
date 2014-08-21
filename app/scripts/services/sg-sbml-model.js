@@ -55,6 +55,7 @@ angular.module('sg.graphene.sbml')
       // Create a translator object
       this.translator = new SgSbmlTranslator(this);
 
+      this.subscribers = {};
       this.nodes = {
         species: {},
         alias: {},
@@ -320,6 +321,16 @@ angular.module('sg.graphene.sbml')
 
       return layout;
 
+    };
+
+    SgSbmlModel.prototype.subscribeToChanges = function(id, fn) {
+      this.subscribers[id] = fn;
+    };
+
+    SgSbmlModel.prototype.broadcast = function() {
+      _.each(this.subscribers, function(fn) {
+        fn();
+      });
     };
 
     SgSbmlModel.prototype.getSbmlLayout = function() {

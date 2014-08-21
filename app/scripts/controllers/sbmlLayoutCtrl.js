@@ -32,17 +32,22 @@ angular.module('sg.graphene.sbml')
     /*
      * Watchers
      */
-    $scope.history = new SgSbmlModelHistory();
 
     $scope.$watch('imports.sbml', function(newVal) {
       if (newVal) {
         $scope.model = new SgSbmlModel(newVal);
+        $scope.imports.model = $scope.model;
         $scope.layout = new SgLayout($scope.model);
         $scope.layout.addToTick(function() {
           _.each($scope.model.nodes.species, function(n) {
             n.updatePosition(n);
           });
           $scope.$digest();
+        });
+        $scope.history = new SgSbmlModelHistory();
+        $scope.history.limit = 20;
+        $scope.model.subscribeToChanges('AddToHistory', function() {
+          $scope.history.addHistory($scope.model);
         });
         if ($scope.model.getSbmlLayout()) {
         //if ($scope.model.getJdesignerLayout()) {

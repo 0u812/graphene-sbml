@@ -308,6 +308,7 @@
             sg-drag
             sg-drag-begin="node"
             sg-drag-move="_.bind(node.updatePosition, node)"
+            sg-drag-finish="_.bind(node.model.broadcast, node.model)"
             ng-repeat="node in model.nodes.alias"
             context-menu
             data-target="aliasMenu{{node.id}}"
