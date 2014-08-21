@@ -39,6 +39,9 @@ angular.module('sg.graphene.sbml')
         $scope.model = new SgSbmlModel(newVal);
         $scope.layout = new SgLayout($scope.model);
         $scope.layout.addToTick(function() {
+          _.each($scope.model.nodes.species, function(n) {
+            n.updatePosition(n);
+          });
           $scope.$digest();
         });
         if ($scope.model.getSbmlLayout()) {
