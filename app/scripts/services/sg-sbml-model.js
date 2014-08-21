@@ -342,7 +342,7 @@ angular.module('sg.graphene.sbml')
         var node = this.nodes.species[speciesId]; // Parent node
         if (node.glyphId) {
           // Create alias because already assigned glyph to parent
-          node = this.makeAliasNode(node, glyphId);
+          node = this.makeAliasNode(node);
         }
         node.glyphId = glyphId;
 
