@@ -39,18 +39,39 @@ angular.module('sg.graphene.sbml')
         console.log('Could not process SBML, using an empty model instead.');
       }
 
-      this.ensureComponentsExist();
+      this.ensureComponentsAreArrays();
 
       this.initialize();
 
     };
 
-    SgSbmlModel.prototype.ensureComponentsExist = function() {
+    SgSbmlModel.prototype.ensureComponentsAreArrays = function() {
       var model = this.sbml.sbml.model;
-      ensureExists(model, ['listOfParameters', 'parameter']);
-      ensureExists(model, ['listOfCompartments', 'compartment']);
-      ensureExists(model, ['listOfSpecies', 'species']);
-      ensureExists(model, ['listOfReactions', 'reaction']);
+      var entries = [
+        ['listOfParameters', 'parameter'],
+        ['listOfCompartments', 'compartment'],
+        ['listOfSpecies', 'species'],
+        ['listOfReactions', 'reaction']
+      ];
+      _.each(entries, function(entry) {
+        var parent = ensureExists(model, _.first(entry, entry.length - 1));
+        var child = parent[_.last(entry)];
+        if (_.isArray(child)) {
+          return;
+        } else if (_.isObject(child)) {
+          if (!_.values(child).length) {
+            parent[_.last(entry)] = [];
+            return;
+          } else {
+            parent[_.last(entry)] = arrayify(child);
+            return;
+          }
+        } else {
+          parent[_.last(entry)] = [];
+          return;
+        }
+
+      });
     };
 
     SgSbmlModel.prototype.initialize = function() {
