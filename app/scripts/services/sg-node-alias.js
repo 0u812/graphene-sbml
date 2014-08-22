@@ -67,6 +67,9 @@ angular.module('sg.graphene.sbml')
       // Update position of parent node
       this.aliasOf.updatePosition(this.aliasOf);
 
+      // Broadcast changes
+      this.model.broadcast();
+
       // Delete node
       delete this.model.nodes.alias[this.id];
 

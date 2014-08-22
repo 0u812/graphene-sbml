@@ -83,6 +83,9 @@ angular.module('sg.graphene.sbml')
         }, this);
       }, this);
 
+      // Broadcast changes
+      this.model.broadcast();
+
       // Delete species node
       delete this.model.nodes.species[this.id];
 

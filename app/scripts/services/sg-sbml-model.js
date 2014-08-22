@@ -129,6 +129,9 @@ angular.module('sg.graphene.sbml')
         newNode.height = this.size.species.height;
       } catch (e) {}
       this.nodes.species[newNode.id] = newNode;
+
+      this.broadcast();
+
       return newNode;
     };
 
@@ -146,6 +149,7 @@ angular.module('sg.graphene.sbml')
       aliasNode.y = species.y + 20;
 
       aliasNode.model = this;
+      this.broadcast();
       return aliasNode;
     };
 
@@ -159,6 +163,7 @@ angular.module('sg.graphene.sbml')
         newNode.height = this.size.reactions.height;
       } catch (e) {}
       this.nodes.reactions[newNode.id] = newNode;
+      this.broadcast();
       return newNode;
     };
 
@@ -215,6 +220,8 @@ angular.module('sg.graphene.sbml')
           reactionNode.modifiers.push(source);
         }, this);
       }
+
+      this.broadcast();
 
       return newLinks;
 
