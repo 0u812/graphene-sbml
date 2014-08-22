@@ -1639,10 +1639,10 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-attr-fill="url({{$window.location.href}}#speciesGradient-{{node.id}})"\n' +
     '              >\n' +
     '            </rect>\n' +
-    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x - node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthLeft, node)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{-node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>\n' +
-    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x + node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthRight, node)" ng-attr-x1="{{node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>\n' +
-    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x, y: node.y - node.height/2}" sg-drag-move="_.bind(node.resizeHeightBottom, node)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{-node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ns-resize;"></line>\n' +
-    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x, y: node.y + node.height/2}" sg-drag-move="_.bind(node.resizeHeightTop, node)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ns-resize;"></line>\n' +
+    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x - node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthLeft, node)" sg-drag-finish="_.bind(node.model.broadcast, node.model)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2 - 2.5}}" ng-attr-x2="{{-node.width/2}}" ng-attr-y2="{{node.height/2 + 2.5}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>\n' +
+    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x + node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthRight, node)" sg-drag-finish="_.bind(node.model.broadcast, node.model)" ng-attr-x1="{{node.width/2}}" ng-attr-y1="{{-node.height/2 - 2.5}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{node.height/2 + 2.5}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>\n' +
+    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x, y: node.y - node.height/2}" sg-drag-move="_.bind(node.resizeHeightBottom, node)" sg-drag-finish="_.bind(node.model.broadcast, node.model)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{-node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ns-resize;"></line>\n' +
+    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x, y: node.y + node.height/2}" sg-drag-move="_.bind(node.resizeHeightTop, node)" sg-drag-finish="_.bind(node.model.broadcast, node.model)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ns-resize;"></line>\n' +
     '            <g\n' +
     '              ng-if="node.fixed"\n' +
     '              ng-attr-transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"\n' +
@@ -1687,17 +1687,10 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '              ng-attr-fill="url({{$window.location.href}}#aliasGradient-{{node.id}})"\n' +
     '              >\n' +
     '            </rect>\n' +
-    '            <rect\n' +
-    '              ng-if="node.selected"\n' +
-    '              ng-attr-x="{{-node.width/2}}"\n' +
-    '              ng-attr-y="{{-node.height/2}}"\n' +
-    '              ng-attr-width="{{node.width}}"\n' +
-    '              ng-attr-height="{{node.height}}"\n' +
-    '              stroke="red"\n' +
-    '              stroke-width="5px"\n' +
-    '              fill="none"\n' +
-    '              >\n' +
-    '            </rect>\n' +
+    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x - node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthLeft, node)" sg-drag-finish="_.bind(node.model.broadcast, node.model)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2 - 2.5}}" ng-attr-x2="{{-node.width/2}}" ng-attr-y2="{{node.height/2 + 2.5}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>\n' +
+    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x + node.width/2, y: node.y}" sg-drag-move="_.bind(node.resizeWidthRight, node)" sg-drag-finish="_.bind(node.model.broadcast, node.model)" ng-attr-x1="{{node.width/2}}" ng-attr-y1="{{-node.height/2 - 2.5}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{node.height/2 + 2.5}}" stroke="red" stroke-width="5px" style="cursor: ew-resize;"></line>\n' +
+    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x, y: node.y - node.height/2}" sg-drag-move="_.bind(node.resizeHeightBottom, node)" sg-drag-finish="_.bind(node.model.broadcast, node.model)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{-node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{-node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ns-resize;"></line>\n' +
+    '            <line ng-if="node.selected" sg-drag sg-drag-begin="{x: node.x, y: node.y + node.height/2}" sg-drag-move="_.bind(node.resizeHeightTop, node)" sg-drag-finish="_.bind(node.model.broadcast, node.model)" ng-attr-x1="{{-node.width/2}}" ng-attr-y1="{{node.height/2}}" ng-attr-x2="{{node.width/2}}" ng-attr-y2="{{node.height/2}}" stroke="red" stroke-width="5px" style="cursor: ns-resize;"></line>\n' +
     '            <g\n' +
     '              ng-if="node.fixed"\n' +
     '              ng-attr-transform="translate({{node.width/2}},{{-node.height/2}}) scale(0.005)"\n' +
