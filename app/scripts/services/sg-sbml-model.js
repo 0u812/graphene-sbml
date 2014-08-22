@@ -110,8 +110,12 @@ angular.module('sg.graphene.sbml')
 
     SgSbmlModel.prototype.getReactions = function() {
       var model = this.sbml.sbml.model;
-      var reactions = (((model || {}).listOfReactions || {}).reaction || {}) || [];
-      return arrayify(reactions);
+      var reactions = (((model || {}).listOfReactions || {}).reaction || {});
+      if (!_.values(reactions).length) {
+        return [];
+      } else {
+        return arrayify(reactions);
+      }
     };
 
     SgSbmlModel.prototype.getModifiers = function() {
