@@ -44,8 +44,11 @@ angular.module('sg.graphene.sbml')
       'addSpecies': function($event) {
         var newNode = this.model.addSpeciesNode();
         var clientRect = $event.currentTarget.getBoundingClientRect();
-        newNode.x = (($event.pageX - clientRect.left) - this.translate.x) / this.scale;
-        newNode.y = (($event.pageY - clientRect.top) - this.translate.y) / this.scale;
+        newNode.updatePosition({
+          x: (($event.pageX - clientRect.left) - this.translate.x) / this.scale,
+          y: (($event.pageY - clientRect.top) - this.translate.y) / this.scale
+        });
+        this.model.broadcast();
       },
       'addUniUniReaction': function(node) {
         addReaction(node, 1, 1);
@@ -111,6 +114,7 @@ angular.module('sg.graphene.sbml')
           _.each(newLinks, function(l) {
             l.update();
           });
+          node.model.broadcast();
 
           nodeStack = [];
           AppState.clickMode = 'selected';
