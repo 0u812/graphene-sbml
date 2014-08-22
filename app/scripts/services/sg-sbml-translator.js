@@ -310,6 +310,12 @@ angular.module('sg.graphene.sbml')
       if (!SgSbmlUtils.arrayify(model.listOfCompartments.compartment).length) {
         delete model.listOfCompartments;
       }
+      if (!SgSbmlUtils.arrayify(model.listOfReactions.reaction).length) {
+        delete model.listOfReactions;
+      }
+      if (!SgSbmlUtils.arrayify(model.listOfSpecies.species).length) {
+        delete model.listOfSpecies;
+      }
       if (!SgSbmlUtils.arrayify(listOfReactionGlyphs.reactionGlyph).length) {
         delete layout.listOfReactionGlyphs;
       }
