@@ -49,6 +49,8 @@ angular.module('sg.graphene.sbml')
       var model = this.sbml.sbml.model;
       ensureExists(model, ['listOfParameters', 'parameter']);
       ensureExists(model, ['listOfCompartments', 'compartment']);
+      ensureExists(model, ['listOfSpecies', 'species']);
+      ensureExists(model, ['listOfReactions', 'reaction']);
     };
 
     SgSbmlModel.prototype.initialize = function() {
@@ -103,7 +105,7 @@ angular.module('sg.graphene.sbml')
         return [];
       } else {
         return arrayify(species);
-      };
+      }
     };
 
     SgSbmlModel.prototype.getReactions = function() {
