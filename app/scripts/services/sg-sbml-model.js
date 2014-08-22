@@ -98,8 +98,12 @@ angular.module('sg.graphene.sbml')
 
     SgSbmlModel.prototype.getSpecies = function() {
       var model = this.sbml.sbml.model;
-      var species = (((model || {}).listOfSpecies || {}).species || {}) || [];
-      return arrayify(species);
+      var species = (((model || {}).listOfSpecies || {}).species || {});
+      if (!_.values(species).length) {
+        return [];
+      } else {
+        return arrayify(species);
+      };
     };
 
     SgSbmlModel.prototype.getReactions = function() {
@@ -118,7 +122,7 @@ angular.module('sg.graphene.sbml')
           _id: idGenerator.generateSpeciesId(this),
           _boundaryCondition: false,
           _initialConcentration: 0,
-          _compartment: this.sbml.sbml.model.listOfCompartments.compartment[0]._id
+          _compartment: arrayify(this.sbml.sbml.model.listOfCompartments.compartment)[0]._id
         };
       }
       var newNode = new SgNodeSpecies(data._id);
