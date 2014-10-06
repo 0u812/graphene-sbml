@@ -243,9 +243,7 @@ angular.module('sg.graphene.sbml')
           var target = reactionNode;
           var link = this.addLink('modifier', source, target);
           source.reactions.push(reactionNode);
-          target.reactions.push(reactionNode);
           source.links.push(link);
-          target.links.push(link);
           newLinks.push(link);
           link.reaction = reactionNode;
           reactionNode.modifiers.push(source);
