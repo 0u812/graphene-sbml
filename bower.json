@@ -1,6 +1,6 @@
 {
   "name": "graphene-sbml",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": [
     "app/scripts/app.js",
     "app/scripts/templates.js",
