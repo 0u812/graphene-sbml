@@ -493,7 +493,11 @@ angular.module('sg.graphene.sbml')
         l.update();
       });
 
-      return layout;
+      if (!layout || _.isEmpty(layout)) {
+        return false;
+      } else {
+        return layout;
+      }
 
     };
 
