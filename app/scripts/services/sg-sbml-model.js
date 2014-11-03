@@ -20,7 +20,6 @@ angular.module('sg.graphene.sbml')
     idGenerator
   ) {
 
-    var x2js = SgSbmlUtils.x2js;
     var arrayify = SgSbmlUtils.arrayify;
     var ensureExists = SgSbmlUtils.ensureExists;
     var setPositionFromAttributes = SgSbmlUtils.setPositionFromAttributes;
@@ -28,50 +27,22 @@ angular.module('sg.graphene.sbml')
 
     var SgSbmlModel = function(sbmlStr) {
       if (!sbmlStr) {
-        this.sbml = SgSbmlTemplate.newTemplate();
+        this.sbml = new libsbml.SBMLDocument(2,4);
       } else {
-        this.sbml = x2js.xml_str2json(sbmlStr);
+        var reader = new libsbml.SBMLReader();
+        this.sbml = reader.readSBMLFromString(sbmlStr);
       }
+      this.model = this.sbml.getModel();
 
-      if (!this.sbml || !this.sbml.sbml || !this.sbml.sbml.model) {
-        // Super basic validation of valid sbml model
-        this.sbml = SgSbmlTemplate.newTemplate();
-        console.log('Could not process SBML, using an empty model instead.');
+      if (this.model.getId() === '') {
+        // Initialize new model if it doesn't exist
+        this.model = this.sbml.createModel();
+        this.model.setId('model1');
+        this.compartment = this.model.createCompartment();
+        this.compartment.setId('compartment');
       }
-
-      this.ensureComponentsAreArrays();
-
       this.initialize();
 
-    };
-
-    SgSbmlModel.prototype.ensureComponentsAreArrays = function() {
-      var model = this.sbml.sbml.model;
-      var entries = [
-        ['listOfParameters', 'parameter'],
-        ['listOfCompartments', 'compartment'],
-        ['listOfSpecies', 'species'],
-        ['listOfReactions', 'reaction']
-      ];
-      _.each(entries, function(entry) {
-        var parent = ensureExists(model, _.first(entry, entry.length - 1));
-        var child = parent[_.last(entry)];
-        if (_.isArray(child)) {
-          return;
-        } else if (_.isObject(child)) {
-          if (!_.values(child).length) {
-            parent[_.last(entry)] = [];
-            return;
-          } else {
-            parent[_.last(entry)] = arrayify(child);
-            return;
-          }
-        } else {
-          parent[_.last(entry)] = [];
-          return;
-        }
-
-      });
     };
 
     SgSbmlModel.prototype.initialize = function() {
@@ -95,6 +66,22 @@ angular.module('sg.graphene.sbml')
         source: [],
         sink: []
       };
+
+
+      _.range(this.model.getNumReactions(), function(i) {
+        var r = this.model.getReaction(i);
+        _.range(r.getNumReactants(), function(n) {
+          var s = r.getReactant(n);
+          this.addSpeciesNode(s);
+        });
+        _.range(r.getNumProducts(), function(n) {
+          var s = r.getProduct(n);
+          this.addSpeciesNode(s);
+        });
+        this.addReactionNode(r);
+        this.addReactionLinks(r);
+      });
+
       // Create species nodes
       var species = this.getSpecies();
       _.each(species, function(s) {
@@ -113,34 +100,6 @@ angular.module('sg.graphene.sbml')
 
     SgSbmlModel.prototype.createReaction = function(r) {
       return new SgSbmlReaction(this, r);
-    };
-
-    SgSbmlModel.prototype.getCompartments = function() {
-
-    };
-
-    SgSbmlModel.prototype.getSpecies = function() {
-      var model = this.sbml.sbml.model;
-      var species = (((model || {}).listOfSpecies || {}).species || {});
-      if (!_.values(species).length) {
-        return [];
-      } else {
-        return arrayify(species);
-      }
-    };
-
-    SgSbmlModel.prototype.getReactions = function() {
-      var model = this.sbml.sbml.model;
-      var reactions = (((model || {}).listOfReactions || {}).reaction || {});
-      if (!_.values(reactions).length) {
-        return [];
-      } else {
-        return arrayify(reactions);
-      }
-    };
-
-    SgSbmlModel.prototype.getModifiers = function() {
-
     };
 
     SgSbmlModel.prototype.addSpeciesNode = function(data) {

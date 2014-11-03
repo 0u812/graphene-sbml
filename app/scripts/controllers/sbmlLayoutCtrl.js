@@ -49,12 +49,12 @@ angular.module('sg.graphene.sbml')
         $scope.model.subscribeToChanges('AddToHistory', function() {
           $scope.history.addHistory($scope.model);
         });
-        if ($scope.model.getSbmlLayout()) {
-        //if ($scope.model.getJdesignerLayout()) {
+        //if ($scope.model.getSbmlLayout()) {
+        ////if ($scope.model.getJdesignerLayout()) {
 
-        } else {
-          $scope.layout.start();
-        }
+        //} else {
+        $scope.layout.start();
+        //}
       }
     });
 

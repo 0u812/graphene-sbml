@@ -24,6 +24,7 @@
     "$": false,
     "X2JS": false,
     "d3": false,
-    "Color": false
+    "Color": false,
+    "libsbml": false
   }
 }
