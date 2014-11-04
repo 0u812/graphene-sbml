@@ -68,32 +68,16 @@ angular.module('sg.graphene.sbml')
       };
 
 
-      _.range(this.model.getNumReactions(), function(i) {
-        var r = this.model.getReaction(i);
-        _.range(r.getNumReactants(), function(n) {
-          var s = r.getReactant(n);
-          this.addSpeciesNode(s);
-        });
-        _.range(r.getNumProducts(), function(n) {
-          var s = r.getProduct(n);
-          this.addSpeciesNode(s);
-        });
-        this.addReactionNode(r);
-        this.addReactionLinks(r);
-      });
-
-      // Create species nodes
-      var species = this.getSpecies();
-      _.each(species, function(s) {
+      // Add species nodes
+      _(this.model.getNumSpecies()).range().each(function(n) {
+        var s = this.model.getSpecies(n);
         this.addSpeciesNode(s);
       }, this);
 
-      // Create reaction nodes and links
-      var reactions = this.getReactions();
-      _.each(reactions, function(r) {
-        var newReaction = this.createReaction(r);
-        this.addReactionNode(newReaction);
-        this.addReactionLinks(newReaction.data);
+      _(this.model.getNumReactions()).range().each(function(i) {
+        var r = this.model.getReaction(i);
+        this.addReactionNode(r);
+        this.addReactionLinks(r);
       }, this);
 
     };
@@ -104,14 +88,11 @@ angular.module('sg.graphene.sbml')
 
     SgSbmlModel.prototype.addSpeciesNode = function(data) {
       if (!data) {
-        data = {
-          _id: idGenerator.generateSpeciesId(this),
-          _boundaryCondition: false,
-          _initialConcentration: 0,
-          _compartment: arrayify(this.sbml.sbml.model.listOfCompartments.compartment)[0]._id
-        };
+        data = this.model.createSpecies();
+        data.setId(idGenerator.generateSpeciesId(this));
+        data.setInitialAmount(0);
       }
-      var newNode = new SgNodeSpecies(data._id);
+      var newNode = new SgNodeSpecies(data.getId());
       newNode.data = data;
       newNode.model = this;
       try {
@@ -144,9 +125,8 @@ angular.module('sg.graphene.sbml')
     };
 
     SgSbmlModel.prototype.addReactionNode = function(reaction) {
-      var newNode = new SgNodeReaction(reaction.data._id);
-      newNode.sbmlReaction = reaction;
-      newNode.data = reaction.data;
+      var newNode = new SgNodeReaction(reaction.getId());
+      newNode.data = reaction;
       newNode.model = this;
       try {
         newNode.width = this.size.reactions.width;
