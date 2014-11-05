@@ -247,6 +247,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '                sg-drag\n' +
     '                sg-drag-begin="link.cp2"\n' +
     '                sg-drag-move="_.bind(link.updateCp2, link)"\n' +
+    '                sg-drag-finish="_.bind(link.model.broadcast, link.model)"\n' +
     '                style="cursor: pointer;"\n' +
     '              />\n' +
     '            </g>\n' +
@@ -302,6 +303,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '                sg-drag\n' +
     '                sg-drag-begin="link.cp1"\n' +
     '                sg-drag-move="_.bind(link.updateCp1, link)"\n' +
+    '                sg-drag-finish="_.bind(link.model.broadcast, link.model)"\n' +
     '                style="cursor: pointer;"\n' +
     '              />\n' +
     '            </g>\n' +
@@ -499,6 +501,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '                sg-drag\n' +
     '                sg-drag-begin="node.getCp(1)"\n' +
     '                sg-drag-move="_.bind(node.updateCp1, node)"\n' +
+    '                sg-drag-finish="_.bind(node.model.broadcast, node.model)"\n' +
     '                stroke="red"\n' +
     '                ng-attr-cx="{{node.getCp(1).x}}"\n' +
     '                ng-attr-cy="{{node.getCp(1).y}}"\n' +
@@ -509,6 +512,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '                sg-drag\n' +
     '                sg-drag-begin="node.getCp(2)"\n' +
     '                sg-drag-move="_.bind(node.updateCp2, node)"\n' +
+    '                sg-drag-finish="_.bind(node.model.broadcast, node.model)"\n' +
     '                stroke="red"\n' +
     '                ng-attr-cx="{{node.getCp(2).x}}"\n' +
     '                ng-attr-cy="{{node.getCp(2).y}}"\n' +

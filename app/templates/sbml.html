@@ -139,6 +139,7 @@
                 sg-drag
                 sg-drag-begin="link.cp2"
                 sg-drag-move="_.bind(link.updateCp2, link)"
+                sg-drag-finish="_.bind(link.model.broadcast, link.model)"
                 style="cursor: pointer;"
               />
             </g>
@@ -194,6 +195,7 @@
                 sg-drag
                 sg-drag-begin="link.cp1"
                 sg-drag-move="_.bind(link.updateCp1, link)"
+                sg-drag-finish="_.bind(link.model.broadcast, link.model)"
                 style="cursor: pointer;"
               />
             </g>
@@ -391,6 +393,7 @@
                 sg-drag
                 sg-drag-begin="node.getCp(1)"
                 sg-drag-move="_.bind(node.updateCp1, node)"
+                sg-drag-finish="_.bind(node.model.broadcast, node.model)"
                 stroke="red"
                 ng-attr-cx="{{node.getCp(1).x}}"
                 ng-attr-cy="{{node.getCp(1).y}}"
@@ -401,6 +404,7 @@
                 sg-drag
                 sg-drag-begin="node.getCp(2)"
                 sg-drag-move="_.bind(node.updateCp2, node)"
+                sg-drag-finish="_.bind(node.model.broadcast, node.model)"
                 stroke="red"
                 ng-attr-cx="{{node.getCp(2).x}}"
                 ng-attr-cy="{{node.getCp(2).y}}"
