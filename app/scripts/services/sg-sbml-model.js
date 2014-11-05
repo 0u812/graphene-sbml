@@ -69,13 +69,11 @@ angular.module('sg.graphene.sbml')
 
 
       // Add species nodes
-      _(this.model.getNumSpecies()).range().each(function(n) {
-        var s = this.model.getSpecies(n);
+      _.each(this.model.species, function(s) {
         this.addSpeciesNode(s);
       }, this);
 
-      _(this.model.getNumReactions()).range().each(function(i) {
-        var r = this.model.getReaction(i);
+      _.each(this.model.reactions, function(r) {
         this.addReactionNode(r);
         this.addReactionLinks(r);
       }, this);
@@ -141,8 +139,7 @@ angular.module('sg.graphene.sbml')
       var reactionNode = this.nodes.reactions[reaction.getId()];
       var newLinks = [];
 
-      _(reaction.getNumReactants()).range().each(function(n) {
-        var r = reaction.getReactant(n);
+      _.each(reaction.reactants, function(r) {
         var source = this.nodes.species[r.getSpecies()];
         var target = reactionNode;
         var link = this.addLink('reactant', source, target);
@@ -153,8 +150,7 @@ angular.module('sg.graphene.sbml')
         reactionNode.reactants.push(source);
       }, this);
 
-      _(reaction.getNumProducts()).range().each(function(n) {
-        var r = reaction.getProduct(n);
+      _.each(reaction.products, function(r) {
         var source = reactionNode;
         var target = this.nodes.species[r.getSpecies()];
         var link = this.addLink('product', source, target);
@@ -166,8 +162,7 @@ angular.module('sg.graphene.sbml')
       }, this);
 
 
-      _(reaction.getNumModifiers()).range().each(function(n) {
-        var r = reaction.getModifier(n);
+      _.each(reaction.modifiers, function(r) {
         var source = this.nodes.species[r.getSpecies()];
         var target = reactionNode;
         var link = this.addLink('modifier', source, target);
