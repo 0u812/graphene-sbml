@@ -1,3 +1,4 @@
+/* global Dropzone:false */
 'use strict';
 
 angular.module('sg.graphene.sbml')
@@ -13,6 +14,30 @@ angular.module('sg.graphene.sbml')
       }
     };
 
+    $scope.selected = {};
+
+    $scope.loadedFiles = [];
+    $scope.dropzone = new Dropzone(document.body, {
+      url: '/',
+      autoProcessQueue: false,
+      error: function(file, kresponseText, e) {
+        console.log('Error! ', e);
+      }
+    });
+
+    $scope.dropzone.on('addedfile', function(file) {
+      var fr = new FileReader();
+      fr.onload = function() {
+        $scope.loadedFiles.push({
+          name: file.name,
+          contents: fr.result
+        });
+        $scope.dropzone._finished(file, 'Done!');
+        $scope.$digest();
+      };
+      fr.readAsText(file);
+    });
+
     $scope.exports = {
       linkModifiers: $scope.linkModifiers,
       showReactionNodes: $scope.showReactionNodes,
@@ -22,8 +47,16 @@ angular.module('sg.graphene.sbml')
 
     if ($scope.sbmlUrl) {
       $http.get($scope.sbmlUrl).success(function(data) {
-        $scope.exports.sbml = data;
+        $scope.loadedFiles.push({
+          name: $scope.sbmlUrl,
+          contents: data
+        });
+        $scope.selected.file = 0;
       });
     }
-
+    $scope.$watch('selected.file', function(newVal) {
+      if (!_.isUndefined(newVal)) {
+        $scope.exports.sbml = $scope.loadedFiles[newVal].contents;
+      }
+    });
   });

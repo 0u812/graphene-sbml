@@ -10,6 +10,13 @@
   height=800;
   ">
   <div ng-controller="SbmlDataCtrl">
+    <div class="col-xs-2">
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="file in loadedFiles">
+          <a href="" ng-click="selected.file = $index">{{file.name}}</a>
+        </li>
+      </ul>
+    </div>
     <sg-graphene imports="exports" template="templates/sbml.html"></sg-graphene>
   </div>
 </div>
