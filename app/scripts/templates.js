@@ -410,7 +410,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '                text-anchor: middle;\n' +
     '                dominant-baseline: middle;\n' +
     '              "\n' +
-    '            >{{node.data._name || node.data._id | truncateTo:100}}</text>\n' +
+    '            >{{node.data.getName() || node.data.getId() | truncateTo:100}}</text>\n' +
     '            <title>ID: {{node.id}}, Name: {{node.name}}</title>\n' +
     '          </g>\n' +
     '          <g \n' +
@@ -458,7 +458,7 @@ angular.module('templates/sbml.html', []).run(['$templateCache', function($templ
     '                text-anchor: middle;\n' +
     '                dominant-baseline: middle;\n' +
     '              "\n' +
-    '            >{{node.aliasOf.data._name || node.aliasOf.data._id}}</text>\n' +
+    '            >{{node.aliasOf.data.getName() || node.aliasOf.data.getId()}}</text>\n' +
     '            <title>ID: {{node.id}}, Name: {{node.name}}</title>\n' +
     '          </g>\n' +
     '          <g \n' +

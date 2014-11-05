@@ -21,7 +21,9 @@ angular.module('sg.graphene.sbml')
       if (self.limit && (self.history.length >= self.limit)) {
         self.history.shift();
       }
-      self.history.push(model.translator.getSbmlString());
+      var writer = new libsbml.SBMLWriter();
+      var sbml = writer.writeSBMLToString(model.sbml);
+      self.history.push(sbml);
     };
 
     SgSbmlModelHistory.prototype.getHistory = function(ind) {

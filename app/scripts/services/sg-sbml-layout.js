@@ -44,8 +44,19 @@ angular.module('sg.graphene.sbml')
 
       // Fix for making sure px/py are same as x and y for nodes
       _.each(this.model.getAllNodes(), function(n) {
+        n.x = n.x || 100*Math.random();
+        n.y = n.y || 100*Math.random();
+
         n.px = n.x;
         n.py = n.y;
+      });
+
+      _.each(this.model.nodes.reactions, function(n) {
+        n.updatePosition();
+        n.updateCentroid();
+      });
+      _.each(this.model.getAllLinks(), function(l) {
+        l.update();
       });
 
       this.force

@@ -138,56 +138,45 @@ angular.module('sg.graphene.sbml')
     };
 
     SgSbmlModel.prototype.addReactionLinks = function(reaction) {
-      var species;
-
-      var reactionNode = this.nodes.reactions[reaction._id];
-
+      var reactionNode = this.nodes.reactions[reaction.getId()];
       var newLinks = [];
 
-      var reactant = reaction.listOfReactants;
-      if (reactant) {
-        species = arrayify(reactant.speciesReference);
-        _.each(species, function(r) {
-          var source = this.nodes.species[r._species];
-          var target = reactionNode;
-          var link = this.addLink('reactant', source, target);
-          source.reactions.push(reactionNode);
-          source.links.push(link);
-          newLinks.push(link);
-          link.reaction = reactionNode;
-          reactionNode.reactants.push(source);
-        }, this);
-      }
+      _(reaction.getNumReactants()).range().each(function(n) {
+        var r = reaction.getReactant(n);
+        var source = this.nodes.species[r.getSpecies()];
+        var target = reactionNode;
+        var link = this.addLink('reactant', source, target);
+        source.reactions.push(reactionNode);
+        source.links.push(link);
+        newLinks.push(link);
+        link.reaction = reactionNode;
+        reactionNode.reactants.push(source);
+      }, this);
 
-      var product = reaction.listOfProducts;
-      if (product) {
-        species = arrayify(product.speciesReference);
-        _.each(species, function(r) {
-          var source = reactionNode;
-          var target = this.nodes.species[r._species];
-          var link = this.addLink('product', source, target);
-          target.reactions.push(reactionNode);
-          target.links.push(link);
-          newLinks.push(link);
-          link.reaction = reactionNode;
-          reactionNode.products.push(target);
-        }, this);
-      }
+      _(reaction.getNumProducts()).range().each(function(n) {
+        var r = reaction.getProduct(n);
+        var source = reactionNode;
+        var target = this.nodes.species[r.getSpecies()];
+        var link = this.addLink('product', source, target);
+        target.reactions.push(reactionNode);
+        target.links.push(link);
+        newLinks.push(link);
+        link.reaction = reactionNode;
+        reactionNode.products.push(target);
+      }, this);
 
-      var modifier = reaction.listOfModifiers;
-      if (modifier) {
-        species = arrayify(modifier.modifierSpeciesReference);
-        _.each(species, function(r) {
-          var source = this.nodes.species[r._species];
-          var target = reactionNode;
-          var link = this.addLink('modifier', source, target);
-          source.reactions.push(reactionNode);
-          source.links.push(link);
-          newLinks.push(link);
-          link.reaction = reactionNode;
-          reactionNode.modifiers.push(source);
-        }, this);
-      }
+
+      _(reaction.getNumModifiers()).range().each(function(n) {
+        var r = reaction.getModifier(n);
+        var source = this.nodes.species[r.getSpecies()];
+        var target = reactionNode;
+        var link = this.addLink('modifier', source, target);
+        source.reactions.push(reactionNode);
+        source.links.push(link);
+        newLinks.push(link);
+        link.reaction = reactionNode;
+        reactionNode.modifiers.push(source);
+      }, this);
 
       this.broadcast();
 

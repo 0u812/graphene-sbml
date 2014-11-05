@@ -302,7 +302,7 @@
                 text-anchor: middle;
                 dominant-baseline: middle;
               "
-            >{{node.data._name || node.data._id | truncateTo:100}}</text>
+            >{{node.data.getName() || node.data.getId() | truncateTo:100}}</text>
             <title>ID: {{node.id}}, Name: {{node.name}}</title>
           </g>
           <g 
@@ -350,7 +350,7 @@
                 text-anchor: middle;
                 dominant-baseline: middle;
               "
-            >{{node.aliasOf.data._name || node.aliasOf.data._id}}</text>
+            >{{node.aliasOf.data.getName() || node.aliasOf.data.getId()}}</text>
             <title>ID: {{node.id}}, Name: {{node.name}}</title>
           </g>
           <g 
