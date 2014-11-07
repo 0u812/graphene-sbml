@@ -14,6 +14,9 @@
       <ul class="list-group">
         <li class="list-group-item" ng-repeat="file in loadedFiles">
           <a href="" ng-click="selected.file = $index">{{file.name}}</a>
+          <button ng-click="loadedFiles.splice($index, 1)" type="button" class="close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </li>
       </ul>
     </div>
