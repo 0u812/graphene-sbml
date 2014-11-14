@@ -8,9 +8,9 @@
  * Service in the sg.graphene.sbml.
  */
 angular.module('sg.graphene.sbml')
-  .factory('SgLayout', function () {
+  .factory('SgLayout', function() {
 
-    var SgLayout = function(model){
+    var SgLayout = function(model) {
       this.charge = -700;
       this.linkDistance = 40;
       this.gravity = 0.1;
@@ -19,6 +19,7 @@ angular.module('sg.graphene.sbml')
       this.model = model;
 
       this.confine = false;
+      this.tickFunctions = [];
 
       this.initialize();
     };
@@ -31,9 +32,9 @@ angular.module('sg.graphene.sbml')
         if (self.confine) {
           _.each(self.model.getAllNodes, function(n) {
             n.x = Math.max(n.width, Math.min(this.width -
-                                             n.width, n.x));
+              n.width, n.x));
             n.y = Math.max(n.height, Math.min(this.height -
-                                              n.height, n.y));
+              n.height, n.y));
           });
         }
       });
@@ -44,8 +45,8 @@ angular.module('sg.graphene.sbml')
 
       // Fix for making sure px/py are same as x and y for nodes
       _.each(this.model.getAllNodes(), function(n) {
-        n.x = n.x || 100*Math.random();
-        n.y = n.y || 100*Math.random();
+        n.x = n.x || 100 * Math.random();
+        n.y = n.y || 100 * Math.random();
 
         n.px = n.x;
         n.py = n.y;
@@ -67,10 +68,31 @@ angular.module('sg.graphene.sbml')
         .nodes(this.model.getAllNodes())
         .links(this.model.getAllLinks())
         .start();
+
+      this.addToTick(_.once(function() {
+        var texts = angular.element('svg text');
+        _.each(texts, function(t) {
+          var el = angular.element(t);
+          var n = el.scope().node;
+          if (n && n.reactions) {
+            var bb = t.getBBox();
+            n.height = bb.height + 10;
+            n.width = bb.width + 10;
+          }
+        });
+      }));
     };
 
+
     SgLayout.prototype.addToTick = function(fn) {
-      this.force.on('tick', fn);
+      this.tickFunctions.push(fn);
+      var self = this;
+
+      this.force.on('tick', function() {
+        _.each(self.tickFunctions, function(f) {
+          f();
+        });
+      });
     };
 
     return SgLayout;
